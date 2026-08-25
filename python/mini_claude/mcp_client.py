@@ -11,6 +11,7 @@ Each MCP tool is exposed with a "mcp__serverName__toolName" prefix to avoid conf
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import os
 import subprocess
@@ -123,22 +124,37 @@ class McpConnection:
             )
         return json.dumps(result)
 
-    def close(self) -> None:
-        """Kill the server process."""
-        if self._reader_task:
-            self._reader_task.cancel()
-            self._reader_task = None
-        if self._process:
-            try:
-                self._process.kill()
-            except ProcessLookupError:
-                pass
-            self._process = None
-        # Reject pending requests
+    async def close(self) -> None:
+        """Stop the server process and wait for asyncio transports to close."""
         for fut in self._pending.values():
             if not fut.done():
                 fut.set_exception(RuntimeError(f"MCP server '{self.server_name}' closed"))
         self._pending.clear()
+
+        proc = self._process
+        self._process = None
+        if proc:
+            if proc.stdin:
+                proc.stdin.close()
+                with contextlib.suppress(Exception):
+                    await proc.stdin.wait_closed()
+            if proc.returncode is None:
+                with contextlib.suppress(ProcessLookupError):
+                    proc.terminate()
+                try:
+                    await asyncio.wait_for(proc.wait(), timeout=2.0)
+                except asyncio.TimeoutError:
+                    with contextlib.suppress(ProcessLookupError):
+                        proc.kill()
+                    await proc.wait()
+
+        if self._reader_task:
+            self._reader_task.cancel()
+            try:
+                await self._reader_task
+            except asyncio.CancelledError:
+                pass
+            self._reader_task = None
 
 
 # ─── MCP Manager ─────────────────────────────────────────────
@@ -181,7 +197,7 @@ class McpManager:
                 print(f"[mcp] Connected to '{name}' — {len(server_tools)} tools", flush=True)
             except Exception as e:
                 print(f"[mcp] Failed to connect to '{name}': {e}", flush=True)
-                conn.close()
+                await conn.close()
 
     def get_tool_definitions(self) -> list[dict]:
         """Return tool definitions in Anthropic API format with mcp__ prefix."""
@@ -213,7 +229,7 @@ class McpManager:
     async def disconnect_all(self) -> None:
         """Disconnect all servers."""
         for conn in self._connections.values():
-            conn.close()
+            await conn.close()
         self._connections.clear()
         self._tools.clear()
         self._connected = False

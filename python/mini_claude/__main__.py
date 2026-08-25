@@ -5,13 +5,16 @@ from __future__ import annotations
 import argparse
 import asyncio
 import os
+import shlex
 import signal
 import sys
+from pathlib import Path
 
 from .agent import Agent
 from .ui import print_welcome, print_user_prompt, print_error, print_info, print_plan_for_approval, print_plan_approval_options
 from .session import load_session, get_latest_session_id
 from .memory import list_memories
+from .knowledge import get_knowledge_store, format_hits_for_tool, load_eval_cases, format_eval_report
 from .skills import discover_skills, resolve_skill_prompt, get_skill_by_name, execute_skill
 
 
@@ -49,6 +52,52 @@ def _resolve_permission_mode(args: argparse.Namespace) -> str:
     if args.auto:
         return "auto"
     return "default"
+
+
+def _find_project_env(start: Path | None = None) -> Path | None:
+    current = (start or Path.cwd()).resolve()
+    for directory in (current, *current.parents):
+        candidate = directory / ".env"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def _parse_dotenv_line(raw: str) -> tuple[str, str] | None:
+    line = raw.strip()
+    if not line or line.startswith("#"):
+        return None
+    if line.startswith("export "):
+        line = line[len("export "):].lstrip()
+    if "=" not in line:
+        return None
+
+    key, value = line.split("=", 1)
+    key = key.strip()
+    if not key:
+        return None
+
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+        value = value[1:-1]
+    else:
+        comment_idx = value.find(" #")
+        if comment_idx != -1:
+            value = value[:comment_idx].rstrip()
+    return key, value
+
+
+def _load_project_env() -> Path | None:
+    env_path = _find_project_env()
+    if not env_path:
+        return None
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        parsed = _parse_dotenv_line(line)
+        if not parsed:
+            continue
+        key, value = parsed
+        os.environ.setdefault(key, value)
+    return env_path
 
 
 async def run_repl(agent: Agent) -> None:
@@ -179,6 +228,74 @@ async def run_repl(agent: Agent) -> None:
                 for m in memories:
                     print(f"    [{m.type}] {m.name} — {m.description}")
             continue
+        if inp == "/kb" or inp.startswith("/kb "):
+            try:
+                parts = shlex.split(inp)
+                action = parts[1] if len(parts) > 1 else "list"
+                store = get_knowledge_store()
+                if action == "add":
+                    if len(parts) < 3:
+                        print_error("Usage: /kb add <file-path>")
+                    else:
+                        document = await store.add_document(" ".join(parts[2:]))
+                        agent.refresh_dynamic_system_context()
+                        print_info(
+                            f"Knowledge indexed: {document.id} — {document.name} "
+                            f"({document.chunk_count} chunks, {document.status})"
+                        )
+                elif action == "list":
+                    documents = store.list_documents()
+                    if not documents:
+                        print_info("No knowledge documents indexed yet.")
+                    else:
+                        print_info(f"{len(documents)} knowledge documents:")
+                        for document in documents:
+                            suffix = f" — {document.error}" if document.error else ""
+                            parser = f", {document.parser}" if document.parser else ""
+                            print(
+                                f"    [{document.status}] {document.id}  {document.name} "
+                                f"({document.chunk_count} chunks{parser}){suffix}"
+                            )
+                elif action == "search":
+                    if len(parts) < 3:
+                        print_error("Usage: /kb search <query>")
+                    else:
+                        query = " ".join(parts[2:])
+                        hits = await store.search(query)
+                        print(format_hits_for_tool(query, hits))
+                elif action == "remove":
+                    if len(parts) != 3:
+                        print_error("Usage: /kb remove <document-id>")
+                    else:
+                        answer = input(f"  Remove knowledge document {parts[2]}? (y/n): ").strip().lower()
+                        if answer.startswith("y"):
+                            removed = store.remove_document(parts[2])
+                            if removed:
+                                agent.refresh_dynamic_system_context()
+                            print_info("Knowledge document removed." if removed else "Knowledge document not found.")
+                elif action == "reindex":
+                    if len(parts) != 3:
+                        print_error("Usage: /kb reindex <document-id|all>")
+                    elif parts[2] == "all":
+                        documents = await store.reindex_all()
+                        agent.refresh_dynamic_system_context()
+                        print_info(f"Reindexed {len(documents)} knowledge documents.")
+                    else:
+                        document = await store.reindex_document(parts[2])
+                        agent.refresh_dynamic_system_context()
+                        print_info(f"Knowledge reindexed: {document.id} ({document.chunk_count} chunks)")
+                elif action == "eval":
+                    if len(parts) != 3:
+                        print_error("Usage: /kb eval <eval-json-path>")
+                    else:
+                        cases = load_eval_cases(parts[2])
+                        report = await store.evaluate(cases)
+                        print(format_eval_report(report))
+                else:
+                    print_error("Unknown /kb command. Use add, list, search, remove, reindex, or eval.")
+            except Exception as e:
+                print_error(str(e))
+            continue
         if inp == "/skills":
             skills = discover_skills()
             if not skills:
@@ -223,6 +340,7 @@ async def run_repl(agent: Agent) -> None:
 
 
 def main() -> None:
+    _load_project_env()
     args = parse_args()
 
     if args.help:
@@ -252,6 +370,12 @@ REPL commands:
   /goal               Show the active goal's status
   /loop [interval] <prompt>  Re-run a prompt on an interval (5m/2h) or self-paced
   /memory             List saved memories
+  /kb add <path>      Import and index a knowledge document
+  /kb list            List project knowledge documents
+  /kb search <query>  Test hybrid knowledge retrieval
+  /kb remove <id>     Remove a knowledge document
+  /kb reindex <id|all> Rebuild knowledge embeddings
+  /kb eval <path>     Evaluate retrieval against a JSON golden set
   /skills             List available skills
   /<skill-name>       Invoke a skill (e.g. /commit "fix types")
 

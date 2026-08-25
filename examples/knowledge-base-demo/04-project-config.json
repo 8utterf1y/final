@@ -1,0 +1,66 @@
+{
+  "project": {
+    "name": "interview-guide",
+    "description": "A demo intelligent interview platform used for RAG retrieval testing",
+    "defaultLanguage": "zh-CN",
+    "tenantIsolation": true
+  },
+  "fileUpload": {
+    "maxFileSizeMb": 20,
+    "allowedExtensions": ["pdf", "docx", "txt", "md", "html", "csv", "json", "jsonl"],
+    "requiredChecks": ["file_size", "extension", "mime_detection", "sha256_hash"],
+    "deduplicationScope": "tenant",
+    "objectKeyPattern": "tenant/{tenantId}/knowledge/{documentId}/{filename}",
+    "statusFlow": ["PENDING", "PROCESSING", "COMPLETED", "FAILED"]
+  },
+  "rag": {
+    "chunking": {
+      "defaultTargetTokens": 500,
+      "defaultOverlapTokens": 60,
+      "markdown": "heading-aware",
+      "html": "heading-aware-without-head",
+      "csv": "row-aware-with-repeated-header",
+      "json": "json-path-aware",
+      "jsonl": "record-aware",
+      "txt": "paragraph-recursive"
+    },
+    "embedding": {
+      "model": "text-embedding-v4",
+      "dimensions": 1024,
+      "batchSize": 10,
+      "retry": {
+        "maxAttempts": 3,
+        "initialBackoffMs": 500
+      }
+    },
+    "retrieval": {
+      "vectorCandidates": 20,
+      "lexicalCandidates": 20,
+      "fusion": "RRF",
+      "rrfK": 60,
+      "maxHitsPerDocument": 3
+    },
+    "rerank": {
+      "enabled": true,
+      "method": "local-feature-rerank",
+      "topK": 5,
+      "features": ["vector_score", "rrf_score", "term_coverage", "metadata_coverage", "exact_phrase"]
+    },
+    "answering": {
+      "requireCitation": true,
+      "untrustedReferenceBoundary": "knowledge-results",
+      "maxContextChars": 20000
+    }
+  },
+  "asyncTasks": {
+    "queue": "Redis Stream",
+    "claimIdleAfterMinutes": 5,
+    "claimCommand": "XAUTOCLAIM",
+    "deadLetterAfterAttempts": 5
+  },
+  "evaluation": {
+    "defaultTopK": 5,
+    "metrics": ["recall_at_k", "mrr", "precision_at_k"],
+    "termMatchModes": ["single_hit", "across_hits"]
+  }
+}

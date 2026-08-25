@@ -1,0 +1,51 @@
+Interview Platform Deployment Runbook
+
+Purpose
+
+This runbook describes how to deploy and recover the interview platform. It is intentionally written as plain text so the knowledge base can test paragraph-based chunking without Markdown headings.
+
+Pre-deployment checklist
+
+Confirm that PostgreSQL is reachable and the pgvector extension is installed. The knowledgebase module depends on vector indexes, and deployment should stop if the extension is missing. Confirm that Redis is reachable because resume parsing, knowledge indexing, report generation, and retry handling all depend on Redis Stream.
+
+Confirm that object storage credentials are valid. Development uses local RustFS, while production can use AWS S3, MinIO, or another S3-compatible service. The bucket must exist before the application starts. The application does not create production buckets automatically.
+
+Confirm that the LLM provider key is configured in the deployment environment. If the provider supports embedding dimensions, keep the configured dimensions stable. Changing embedding model or vector dimensions requires a full knowledge base reindex.
+
+Release process
+
+Deploy the API service first with database migrations enabled. The migration should create or update tables for resume, knowledge_document, knowledge_chunk, interview_session, interview_answer, evaluation_report, and task_state. The migration should be backward compatible with the previous worker version.
+
+Deploy workers after the API service is healthy. Workers may start processing PENDING jobs immediately, so they must run the same parsing and embedding configuration as the API service. A worker with a different embedding dimension must not write chunks into the active index.
+
+Deploy the frontend last. The frontend is stateless and can be rolled back independently as long as the API contract remains compatible.
+
+Worker recovery
+
+Redis Stream stores pending messages in the pending entries list until a worker acknowledges them. If a worker exits before ACK, the task remains visible in the pending list. A scheduled recovery worker checks idle tasks and uses XAUTOCLAIM to take ownership of messages idle for more than 5 minutes.
+
+When a task is claimed, the recovery worker increments attempt_count and writes a task event. If attempt_count is less than 5, the worker retries the task. If attempt_count reaches 5, the task is moved to FAILED and the last_error field is exposed in the admin UI.
+
+Knowledge indexing rollback
+
+Knowledge indexing uses active version switching. During reindex, new chunks are inserted with a new index_version. The document keeps serving the old active_version until all chunks and embeddings are written. Only after the final write succeeds does the system update active_version.
+
+If embedding fails halfway, the new version is deleted and the document status becomes FAILED, but the previous active_version remains searchable. This prevents a broken reindex from making an existing knowledge base disappear.
+
+Operational checks
+
+Search logs should include query text, selected document ids, vector candidate count, FTS candidate count, RRF score, rerank score, and final citation count. These logs are needed when users report that RAG missed an obvious answer.
+
+Task metrics should include queue lag, processing duration, retry count, failure rate, LLM latency, embedding token count, and parser error category. Parser errors are grouped by unsupported file type, empty file, timeout, malformed document, and text extraction failure.
+
+Incident playbook
+
+If users report that file upload succeeds but indexing never completes, inspect Redis Stream pending entries first. If pending entries are idle for more than 5 minutes, run the worker recovery process or check why XAUTOCLAIM is not being executed.
+
+If users report that answers lack citations, inspect whether retrieval returned evidence chunks. A citation problem can come from empty chunks, embedding mismatch, overly broad chunking, rerank dropping the relevant chunk, or answer generation ignoring citation rules.
+
+If users report that a specific term such as SHA-256, MIME, pgvector, or XAUTOCLAIM cannot be found, inspect FTS first. Exact technical terms should not rely only on vector similarity. Hybrid retrieval is required for this class of query.
+
+Rollback
+
+Rollback API and worker versions together when database or task payload format changes. For frontend-only issues, rollback the frontend build independently. For knowledge index issues, prefer reindexing the affected document over deleting the entire knowledge base.

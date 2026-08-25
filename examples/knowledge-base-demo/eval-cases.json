@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "query": "文件上传时如何做类型校验和去重？",
+      "expected_source_contains": "02-file-upload.html",
+      "expected_heading_contains": "文件上传",
+      "expected_terms": ["MIME", "SHA-256"],
+      "expected_terms_mode": "across_hits",
+      "top_k": 5
+    },
+    {
+      "query": "项目中哪个模块使用 pgvector 和 RRF？",
+      "expected_source_contains": "03-project-modules.csv",
+      "expected_terms": ["knowledgebase", "pgvector", "RRF"],
+      "top_k": 5
+    },
+    {
+      "query": "Worker 离线后如何接管未确认任务？",
+      "expected_source_contains": "05-deployment-runbook.txt",
+      "expected_terms": ["XAUTOCLAIM", "5 分钟"],
+      "top_k": 5
+    },
+    {
+      "query": "为什么文档解析不在 HTTP 请求中同步执行？",
+      "expected_source_contains": "06-decisions.jsonl",
+      "expected_terms": ["Redis Stream", "Embedding"],
+      "top_k": 5
+    },
+    {
+      "query": "RAG 默认的切片 token 数和 rerank 数量是多少？",
+      "expected_source_contains": "04-project-config.json",
+      "expected_terms": ["500", "5"],
+      "top_k": 5
+    },
+    {
+      "query": "CSV 和 JSONL 分别保存了哪些切片元数据？",
+      "expected_source_contains": "06-decisions.jsonl",
+      "expected_terms": ["row_start", "json_path", "record_start"],
+      "top_k": 5
+    },
+    {
+      "query": "文件基础设施模块负责哪些能力？",
+      "expected_source_contains": "03-project-modules.csv",
+      "expected_terms": ["MIME", "SHA-256", "Tika"],
+      "top_k": 5
+    },
+    {
+      "query": "知识库索引失败时为什么不会破坏旧索引？",
+      "expected_source_contains": "01-system-design.md",
+      "expected_terms": ["active version", "失败恢复"],
+      "expected_terms_mode": "across_hits",
+      "top_k": 5
+    }
+  ]
+}

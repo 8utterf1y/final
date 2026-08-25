@@ -14,16 +14,17 @@ from pathlib import Path
 
 from .memory import get_memory_dir
 from .frontmatter import parse_frontmatter
+from .knowledge import execute_knowledge_search
 
 # ─── Permission modes ──────────────────────────────────────
 
 PermissionMode = str  # "default" | "plan" | "acceptEdits" | "bypassPermissions" | "dontAsk" | "auto"
 
-READ_TOOLS = {"read_file", "list_files", "grep_search", "web_fetch"}
+READ_TOOLS = {"read_file", "list_files", "grep_search", "web_fetch", "knowledge_search"}
 EDIT_TOOLS = {"write_file", "edit_file"}
 
 # Concurrency-safe tools can run in parallel (read-only, no side effects)
-CONCURRENCY_SAFE_TOOLS = {"read_file", "list_files", "grep_search", "web_fetch"}
+CONCURRENCY_SAFE_TOOLS = {"read_file", "list_files", "grep_search", "web_fetch", "knowledge_search"}
 
 IS_WIN = sys.platform == "win32"
 
@@ -130,6 +131,54 @@ tool_definitions: list[ToolDef] = [
             },
             "required": ["url"],
         },
+    },
+    {
+        "name": "knowledge_search",
+        "description": (
+            "Search user-imported project knowledge using metadata routing, hybrid semantic/keyword retrieval, and reranking. "
+            "Use for imported external documentation, tutorials, standards, PDFs, Office files, "
+            "HTML, CSV, JSON, Markdown, and reference material; "
+            "use read_file or grep_search for facts available in the current codebase."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "A self-contained semantic search query"},
+                "document_ids": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional knowledge document IDs to search",
+                },
+                "source_dirs": {
+                    "type": "array", "items": {"type": "string"},
+                    "description": "Optional source-directory prefixes",
+                },
+                "mime_types": {
+                    "type": "array", "items": {"type": "string"},
+                    "description": "Optional exact MIME types",
+                },
+                "parsers": {
+                    "type": "array", "items": {"type": "string"},
+                    "description": "Optional parser names such as markitdown or builtin-html",
+                },
+                "tags": {
+                    "type": "array", "items": {"type": "string"},
+                    "description": "Optional document tags",
+                },
+                "chapter_numbers": {
+                    "type": "array", "items": {"type": "string"},
+                    "description": "Optional normalized chapter numbers, for example ['4']",
+                },
+                "top_k": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10,
+                    "description": "Maximum results to return (default 6)",
+                },
+            },
+            "required": ["query"],
+        },
+        "deferred": True,
     },
     {
         "name": "enter_plan_mode",
@@ -710,6 +759,9 @@ async def execute_tool(
             [{"name": t["name"], "description": t.get("description", ""), "input_schema": t["input_schema"]} for t in matches],
             indent=2,
         )
+
+    if name == "knowledge_search":
+        return await execute_knowledge_search(inp)
 
     handlers: dict = {
         "write_file": _write_file,

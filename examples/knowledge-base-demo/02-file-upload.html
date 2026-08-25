@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>文件上传与解析设计</title>
+  <style>body { font-family: system-ui; }</style>
+</head>
+<body>
+  <h1>02. 文件上传与解析设计</h1>
+
+  <h2>2.1 上传入口</h2>
+  <p>文件上传入口由 <code>FileController</code> 暴露，业务模块通过 <code>FileStorageService</code> 复用同一套基础设施。简历模块和知识库模块不会各自实现上传逻辑，差异只体现在上传后的业务任务类型。</p>
+  <p>接口收到 multipart 文件后，不直接把文件读入内存，而是使用流式读取。这样可以同时完成大小统计、hash 计算和临时文件写入，避免大文件造成堆内存压力。</p>
+
+  <h2>2.2 上传校验</h2>
+  <p>服务端先校验文件大小、扩展名和 MIME 类型。单文件默认上限为 20 MB，允许 PDF、DOCX、TXT 和 Markdown。扩展名仅用于初步判断，最终类型以内容检测结果为准。</p>
+  <p>MIME 检测优先使用文件头和内容签名，不能只信任浏览器传来的 <code>Content-Type</code>。例如攻击者可能把可执行文件改名为 <code>.pdf</code>，所以服务端必须二次确认。</p>
+  <p>校验失败要返回明确错误码：文件过大返回 <code>FILE_TOO_LARGE</code>，类型不支持返回 <code>UNSUPPORTED_FILE_TYPE</code>，空文件返回 <code>EMPTY_FILE</code>。</p>
+
+  <h2>2.3 Hash 去重</h2>
+  <p>上传流读取时同步计算 SHA-256。如果同一租户已存在相同 hash 且状态为 COMPLETED 的文档，则直接返回现有文档 ID，不重复上传和向量化。</p>
+  <p>去重范围必须包含 tenantId，不能跨租户复用文档 ID。不同租户上传同一份简历时，物理对象可以通过底层对象存储去重，但业务可见的文档记录必须隔离。</p>
+  <p>如果历史文档状态是 FAILED，系统允许重试索引。重试时复用原始文件对象，但创建新的 index version，只有新版本完整写入后才切换 active version。</p>
+
+  <h2>2.4 文本解析</h2>
+  <p>PDF 和 Office 文档使用 Apache Tika 或 MarkItDown 提取文本。解析器必须限制最大输出长度，并禁止递归提取嵌入附件。文本清洗会移除控制字符、图片 URL、本地 file URL 和过多空行。</p>
+  <p>解析任务不在 HTTP 请求中同步执行，因为 PDF、DOCX 和 PPTX 的解析耗时不可控。系统把解析任务投递到 Redis Stream，Worker 完成解析、切片和 Embedding 后再更新业务状态。</p>
+  <p>Markdown 和 HTML 文档优先保留标题层级。标题信息会写入 chunk metadata，用于后续 metadata routing 和答案引用。</p>
+
+  <h2>2.5 对象存储</h2>
+  <p>原始文件使用 <code>tenant/{tenantId}/knowledge/{documentId}/{filename}</code> 作为对象键。业务数据库不保存大二进制内容，只保存 bucket、object key、hash、MIME 和文件大小。</p>
+  <p>对象存储可以是 AWS S3、MinIO 或 RustFS。配置项包括 endpoint、region、bucket、accessKey、secretKey 和 pathStyleAccess。开发环境通常使用本地 RustFS，生产环境使用云厂商 S3 兼容服务。</p>
+
+  <h2>2.6 切片与索引</h2>
+  <p>知识库文件解析后会按照文件类型选择切片策略。Markdown 和 HTML 使用 heading-aware chunk，CSV 使用 row-aware chunk，JSON 使用 JSONPath chunk，TXT 使用段落递归切片。</p>
+  <p>默认 chunk 目标大小为 500 token，overlap 为 60 token。长段落会被拆分，短章节不会强行合并到不相关章节里，避免检索命中后上下文含义变得模糊。</p>
+
+  <h2>2.7 失败恢复</h2>
+  <p>索引状态为 PENDING、PROCESSING、COMPLETED 或 FAILED。重试时新切片先写入新版本，完成后再原子切换 active version，避免失败重建破坏旧索引。</p>
+  <p>Worker 崩溃后，未 ACK 的 Redis Stream 消息会留在 pending entries list。巡检任务通过 XAUTOCLAIM 接管超过 5 分钟未确认的任务，并增加 attempt count。</p>
+
+  <h2>2.8 安全边界</h2>
+  <p>解析出的文本属于不可信内容，不能当作系统提示执行。RAG 注入时必须用明确边界包裹，并提醒模型这是 reference data，不是 instruction。</p>
+  <p>下载原始文件时需要校验租户、文档归属和对象 key 前缀。即使用户猜到 object key，也不能绕过业务权限直接下载。</p>
+</body>
+</html>

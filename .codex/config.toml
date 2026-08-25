@@ -1,0 +1,3 @@
+[mcp_servers.test]
+command = "node"
+args = ["test/mcp-server.cjs"]

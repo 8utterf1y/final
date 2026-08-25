@@ -276,6 +276,7 @@ class Agent:
         # as a <system-reminder> (Claude Code's prependUserContext) — see chat.
         # Keeping project-specific content out of the system maximizes sharing.
         self._user_context_reminder = ""
+        self._has_custom_system_prompt = custom_system_prompt is not None
         if custom_system_prompt:
             self._static_system_prompt = custom_system_prompt
             self._dynamic_system_context = ""
@@ -408,6 +409,18 @@ class Agent:
 
     def set_plan_approval_fn(self, fn: Callable[[str], Awaitable[dict]]) -> None:
         self._plan_approval_fn = fn
+
+    def refresh_dynamic_system_context(self) -> None:
+        """Refresh project-scoped indexes after CLI-side mutations such as /kb add."""
+        if self._has_custom_system_prompt:
+            return
+        self._dynamic_system_context = build_dynamic_system_context()
+        self._base_system_prompt = self._static_system_prompt + "\n\n" + self._dynamic_system_context
+        self._system_prompt = self._base_system_prompt
+        if self.permission_mode == "plan":
+            self._system_prompt += self._build_plan_mode_prompt()
+        if self.use_openai and self._openai_messages:
+            self._openai_messages[0]["content"] = self._system_prompt
 
     # ─── Plan mode toggle ────────────────────────────────────
 

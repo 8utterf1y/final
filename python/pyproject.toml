@@ -14,6 +14,13 @@ dependencies = [
     "rich>=13.0.0",
 ]
 
+[project.optional-dependencies]
+rag = [
+    "markitdown>=0.1.2",
+    "hnswlib>=0.8.0",
+    "numpy>=1.26.0",
+]
+
 [project.scripts]
 mini-claude-py = "mini_claude.__main__:main"
 

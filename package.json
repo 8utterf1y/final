@@ -1,6 +1,6 @@
 {
   "name": "claude-code-from-scratch",
-  "version": "1.0.0",
+  "version": "9.9.9",
   "description": "A minimal coding agent inspired by Claude Code, built from scratch in ~3000 lines",
   "type": "module",
   "bin": {

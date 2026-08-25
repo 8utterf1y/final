@@ -1,0 +1,11 @@
+module,owner,layer,main_files,storage,async_dependency,retrieval,notes
+resume,backend,application,"modules/resume/ResumeController.java; modules/resume/service/ResumeService.java","resume table; object storage","Redis Stream resume_parse","none","上传简历后创建解析任务，解析完成后触发结构化分析"
+knowledgebase,backend,application,"modules/knowledgebase/KnowledgeBaseController.java; modules/knowledgebase/RagChatController.java","knowledge_document; knowledge_chunk; pgvector","Redis Stream knowledge_index","pgvector + FTS + RRF + rerank","负责上传知识库、切片、Embedding、混合检索、引用组装"
+interview,backend,domain,"modules/interview/InterviewController.java; modules/interview/service/InterviewSessionService.java","interview_session; interview_answer","none","knowledge_search optional","根据简历和知识库生成题目，保存候选人答案"
+evaluation,backend,domain,"modules/evaluation/EvaluationService.java; modules/evaluation/model/*","evaluation_report","Redis Stream report_build","rubric lookup","统一评分规则，输出结构化评分和可解释反馈"
+file-infrastructure,backend,infrastructure,"infrastructure/file/FileStorageService.java; infrastructure/file/FileParser.java","S3/RustFS object storage; file metadata","used by resume and knowledgebase","none","共享文件校验、MIME 检测、SHA-256 去重、Tika/MarkItDown 解析"
+llm-provider,backend,infrastructure,"infrastructure/llm/OpenAiProvider.java; infrastructure/llm/ClaudeProvider.java","llm_call_log","none","none","封装模型调用、超时、重试、JSON Schema 校验和成本统计"
+task-stream,backend,infrastructure,"infrastructure/task/RedisStreamTaskQueue.java; infrastructure/task/TaskWorker.java","Redis Stream PEL","XAUTOCLAIM","none","Worker 离线后接管未确认任务，超过 5 分钟进入重试流程"
+frontend-web,frontend,presentation,"src/pages/InterviewPage.tsx; src/pages/KnowledgeBasePage.tsx","browser state","none","none","提供上传、面试会话、报告查看和知识库管理界面"
+auth,backend,cross-cutting,"common/security/TenantContext.java; common/security/AuthFilter.java","user; tenant; role","none","none","所有文档、面试和报告查询都必须带 tenant scope"
+observability,backend,cross-cutting,"common/logging/TraceFilter.java; common/metrics/TaskMetrics.java","metrics backend","none","none","记录 traceId、任务耗时、LLM token、索引失败原因"
