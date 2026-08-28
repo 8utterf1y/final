@@ -30,6 +30,12 @@ from .memory import (
     format_memories_for_injection,
     MemoryPrefetch,
 )
+from .experience import (
+    ExperienceManager,
+    TaskJournal,
+    summarize_tool_input,
+    summarize_tool_result,
+)
 from .autonomy import (
     goal_directive,
     GOAL_EVALUATOR_SYSTEM,
@@ -206,6 +212,8 @@ class Agent:
         self.effective_window = _get_context_window(model) - 20000
         self.session_id = uuid.uuid4().hex[:8]
         self.session_start_time = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        self.experience_journal = TaskJournal(self.session_id)
+        self.experience_manager = ExperienceManager(self.experience_journal)
 
         self.total_input_tokens = 0
         self.total_output_tokens = 0
@@ -399,6 +407,46 @@ class Agent:
             return _sq_oai
         return None
 
+    def _build_experience_extractor(self):
+        """Longer side query for /experience save.
+
+        It shares the configured provider/model with the main agent, but has no
+        tools and is only invoked by an explicit command.
+        """
+        if self._anthropic_client:
+            client = self._anthropic_client
+            model = self.model
+
+            async def _extract(system: str, user_message: str, max_tokens: int) -> str:
+                resp = await client.messages.create(
+                    model=model,
+                    max_tokens=max_tokens,
+                    system=system,
+                    temperature=0,
+                    messages=[{"role": "user", "content": user_message}],
+                )
+                return "".join(b.text for b in resp.content if b.type == "text")
+
+            return _extract
+        if self._openai_client:
+            client = self._openai_client
+            model = self.model
+
+            async def _extract_oai(system: str, user_message: str, max_tokens: int) -> str:
+                resp = await client.chat.completions.create(
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=0,
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user_message},
+                    ],
+                )
+                return resp.choices[0].message.content or "" if resp.choices else ""
+
+            return _extract_oai
+        return None
+
     def abort(self) -> None:
         self._aborted = True
         if self._current_task and not self._current_task.done():
@@ -462,6 +510,8 @@ class Agent:
                 print(f"[mcp] Init failed: {e}", flush=True)
 
         self._aborted = False
+        if not self.is_sub_agent:
+            self.experience_journal.start_turn(user_message)
         coro = self._chat_openai(user_message) if self.use_openai else self._chat_anthropic(user_message)
         self._current_task = asyncio.current_task()
         try:
@@ -499,11 +549,26 @@ class Agent:
         else:
             print_assistant_text(text)
 
+    @staticmethod
+    def _assistant_text_from_anthropic_blocks(blocks: list[dict]) -> str:
+        return "\n".join(
+            str(block.get("text") or "")
+            for block in blocks
+            if isinstance(block, dict) and block.get("type") == "text" and block.get("text")
+        ).strip()
+
+    async def save_experience(self, *, from_turn: int | None = None):
+        return await self.experience_manager.save(
+            extractor=self._build_experience_extractor(),
+            from_turn=from_turn,
+        )
+
     # ─── REPL commands ────────────────────────────────────────
 
     def clear_history(self) -> None:
         self._anthropic_messages = []
         self._openai_messages = []
+        self.experience_journal.clear()
         if self.use_openai:
             self._openai_messages.append({"role": "system", "content": self._system_prompt})
         self.total_input_tokens = 0
@@ -1204,6 +1269,40 @@ class Agent:
             f"Preview (first 200 lines):\n{preview}"
         )
 
+    def _record_tool_request(self, name: str, inp: dict) -> None:
+        if self.is_sub_agent:
+            return
+        self.experience_journal.record(
+            "tool_call",
+            summarize_tool_input(name, inp),
+            tool_name=name,
+            tool_input=inp,
+        )
+
+    def _record_tool_result(self, name: str, inp: dict, result: str, duration_ms: int | None = None) -> None:
+        if self.is_sub_agent:
+            return
+        status, summary = summarize_tool_result(name, result)
+        self.experience_journal.record(
+            "tool_result",
+            summary,
+            tool_name=name,
+            tool_input=inp,
+            status=status,
+            duration_ms=duration_ms,
+        )
+
+    def _record_tool_denial(self, name: str, inp: dict, reason: str) -> None:
+        if self.is_sub_agent:
+            return
+        self.experience_journal.record(
+            "permission_denied",
+            reason,
+            tool_name=name,
+            tool_input=inp,
+            status="failure",
+        )
+
     # ─── Execute tool (handles agent/skill/plan mode internally) ─────
 
     async def _execute_tool_call(self, name: str, inp: dict) -> str:
@@ -1552,6 +1651,10 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                 "role": "assistant",
                 "content": [self._block_to_dict(b) for b in response.content],
             })
+            if not self.is_sub_agent:
+                assistant_text = self._assistant_text_from_anthropic_blocks(self._anthropic_messages[-1]["content"])
+                if assistant_text:
+                    self.experience_journal.record("assistant_message", assistant_text)
 
             if not tool_uses:
                 if not self.is_sub_agent:
@@ -1583,13 +1686,17 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                     break
                 inp = dict(tu.input) if hasattr(tu.input, 'items') else tu.input
                 print_tool_call(tu.name, inp)
+                self._record_tool_request(tu.name, inp)
 
                 # Was this tool already started during streaming?
                 early_task = early_executions.get(tu.id)
                 if early_task:
+                    started_at = time.time()
                     raw = await early_task
+                    duration_ms = int((time.time() - started_at) * 1000)
                     res = self._persist_large_result(tu.name, raw)
                     print_tool_result(tu.name, res)
+                    self._record_tool_result(tu.name, inp, res, duration_ms)
                     tool_results.append({"type": "tool_result", "tool_use_id": tu.id, "content": res})
                     continue
 
@@ -1601,6 +1708,7 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                     perm = check_permission(tu.name, inp, self.permission_mode, self._plan_file_path)
                 if perm["action"] == "deny":
                     print_info(f"Denied: {perm.get('message', '')}")
+                    self._record_tool_denial(tu.name, inp, perm.get("message", "Action denied."))
                     tool_results.append({"type": "tool_result", "tool_use_id": tu.id, "content": f"Action denied: {perm.get('message', '')}"})
                     continue
                 if perm["action"] == "confirm" and perm.get("message"):
@@ -1611,14 +1719,18 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                     if not cacheable or perm["message"] not in self._confirmed_paths:
                         confirmed = await self._confirm_dangerous(perm["message"])
                         if not confirmed:
+                            self._record_tool_denial(tu.name, inp, "User denied this action.")
                             tool_results.append({"type": "tool_result", "tool_use_id": tu.id, "content": "User denied this action."})
                             continue
                         if cacheable:
                             self._confirmed_paths.add(perm["message"])
 
+                started_at = time.time()
                 raw = await self._execute_tool_call(tu.name, inp)
+                duration_ms = int((time.time() - started_at) * 1000)
                 res = self._persist_large_result(tu.name, raw)
                 print_tool_result(tu.name, res)
+                self._record_tool_result(tu.name, inp, res, duration_ms)
 
                 if self._context_cleared:
                     self._context_cleared = False
@@ -1772,6 +1884,8 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
             message = choice.get("message", {})
 
             self._openai_messages.append(message)
+            if not self.is_sub_agent and message.get("content"):
+                self.experience_journal.record("assistant_message", str(message.get("content") or ""))
 
             tool_calls = message.get("tool_calls")
             if not tool_calls:
@@ -1808,6 +1922,7 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                     inp = {}
 
                 print_tool_call(fn_name, inp)
+                self._record_tool_request(fn_name, inp)
 
                 if self.permission_mode == "auto":
                     perm = await self._classify_tool_call(fn_name, inp)
@@ -1815,6 +1930,7 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                     perm = check_permission(fn_name, inp, self.permission_mode, self._plan_file_path)
                 if perm["action"] == "deny":
                     print_info(f"Denied: {perm.get('message', '')}")
+                    self._record_tool_denial(fn_name, inp, perm.get("message", "Action denied."))
                     oai_checked.append({"tc": tc, "fn": fn_name, "inp": inp, "allowed": False, "result": f"Action denied: {perm.get('message', '')}"})
                     continue
                 if perm["action"] == "confirm" and perm.get("message"):
@@ -1825,6 +1941,7 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                     if not cacheable or perm["message"] not in self._confirmed_paths:
                         confirmed = await self._confirm_dangerous(perm["message"])
                         if not confirmed:
+                            self._record_tool_denial(fn_name, inp, "User denied this action.")
                             oai_checked.append({"tc": tc, "fn": fn_name, "inp": inp, "allowed": False, "result": "User denied this action."})
                             continue
                         if cacheable:
@@ -1847,9 +1964,12 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
 
                 if batch["concurrent"]:
                     async def _run_oai_safe(ct_item: dict) -> tuple[dict, str]:
+                        started_at = time.time()
                         raw = await self._execute_tool_call(ct_item["fn"], ct_item["inp"])
+                        duration_ms = int((time.time() - started_at) * 1000)
                         res = self._persist_large_result(ct_item["fn"], raw)
                         print_tool_result(ct_item["fn"], res)
+                        self._record_tool_result(ct_item["fn"], ct_item["inp"], res, duration_ms)
                         return ct_item, res
 
                     results = await asyncio.gather(*[_run_oai_safe(ct) for ct in batch["items"]])
@@ -1858,11 +1978,15 @@ IMPORTANT: When your plan is complete, you MUST call exit_plan_mode. Do NOT ask 
                 else:
                     for ct in batch["items"]:
                         if not ct["allowed"]:
+                            self._record_tool_result(ct["fn"], ct["inp"], ct["result"], None)
                             self._openai_messages.append({"role": "tool", "tool_call_id": ct["tc"]["id"], "content": ct["result"]})
                             continue
+                        started_at = time.time()
                         raw = await self._execute_tool_call(ct["fn"], ct["inp"])
+                        duration_ms = int((time.time() - started_at) * 1000)
                         res = self._persist_large_result(ct["fn"], raw)
                         print_tool_result(ct["fn"], res)
+                        self._record_tool_result(ct["fn"], ct["inp"], res, duration_ms)
 
                         if self._context_cleared:
                             self._context_cleared = False

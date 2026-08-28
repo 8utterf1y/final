@@ -18,6 +18,18 @@ from .knowledge import get_knowledge_store, format_hits_for_tool, load_eval_case
 from .skills import discover_skills, resolve_skill_prompt, get_skill_by_name, execute_skill
 
 
+def _parse_optional_from_turn(parts: list[str]) -> int | None:
+    if "--from" not in parts:
+        return None
+    idx = parts.index("--from")
+    if idx + 1 >= len(parts):
+        raise ValueError("Usage: /experience save [--from <turn-id>]")
+    try:
+        return int(parts[idx + 1])
+    except ValueError as exc:
+        raise ValueError("--from must be an integer turn id.") from exc
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="mini-claude",
@@ -228,6 +240,58 @@ async def run_repl(agent: Agent) -> None:
                 for m in memories:
                     print(f"    [{m.type}] {m.name} — {m.description}")
             continue
+        if inp == "/experience" or inp.startswith("/experience "):
+            try:
+                parts = shlex.split(inp)
+                action = parts[1] if len(parts) > 1 else "list"
+                if action == "save":
+                    result = await agent.save_experience(from_turn=_parse_optional_from_turn(parts))
+                    if result.status == "saved":
+                        scope = f"turns {result.scope[0]}-{result.scope[1]}" if result.scope else "selected scope"
+                        doc = f", indexed as {result.document.id}" if result.document else ""
+                        print_info(
+                            f"Experience saved: {result.title} ({scope}, score {result.quality_score}{doc})"
+                        )
+                        if result.path:
+                            print(f"    {result.path}")
+                    else:
+                        print_info(f"Experience not saved: {result.title}")
+                    for warning in result.warnings:
+                        print(f"    Warning: {warning}")
+                    if result.status == "saved":
+                        agent.refresh_dynamic_system_context()
+                elif action == "list":
+                    entries = agent.experience_manager.list_entries()
+                    if not entries:
+                        print_info("No experiences saved yet.")
+                    else:
+                        print_info(f"{len(entries)} saved experiences:")
+                        for entry in entries[:20]:
+                            doc = f"  kb={entry.document_id}" if entry.document_id else ""
+                            print(f"    {entry.id}  {entry.title}{doc}")
+                elif action == "show":
+                    if len(parts) != 3:
+                        print_error("Usage: /experience show <id>")
+                    else:
+                        entry, content = agent.experience_manager.read_entry(parts[2])
+                        print_info(f"Experience: {entry.id} — {entry.title}")
+                        print(content)
+                elif action == "delete":
+                    if len(parts) != 3:
+                        print_error("Usage: /experience delete <id>")
+                    else:
+                        result = agent.experience_manager.delete_entry(parts[2])
+                        if result.deleted and result.entry:
+                            kb = " and knowledge index" if result.knowledge_removed else ""
+                            print_info(f"Deleted experience {result.entry.id}{kb}.")
+                            agent.refresh_dynamic_system_context()
+                        for warning in result.warnings:
+                            print(f"    Warning: {warning}")
+                else:
+                    print_error("Unknown /experience command. Use save, list, show, or delete.")
+            except Exception as e:
+                print_error(str(e))
+            continue
         if inp == "/kb" or inp.startswith("/kb "):
             try:
                 parts = shlex.split(inp)
@@ -370,6 +434,10 @@ REPL commands:
   /goal               Show the active goal's status
   /loop [interval] <prompt>  Re-run a prompt on an interval (5m/2h) or self-paced
   /memory             List saved memories
+  /experience save [--from <turn-id>] Extract and index the current task workflow
+  /experience list    List saved experience documents
+  /experience show <id> Show a saved experience document
+  /experience delete <id> Delete a saved experience and its knowledge index
   /kb add <path>      Import and index a knowledge document
   /kb list            List project knowledge documents
   /kb search <query>  Test hybrid knowledge retrieval
