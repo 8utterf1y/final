@@ -50,7 +50,7 @@ def start_case(connection: sqlite3.Connection, repo: Path, payload: dict[str, An
     }
     budget = {"max_context_nodes": 40, "max_investigation_nodes": 120, "max_tool_rounds": 8}
     timestamp = now()
-    connection.execute(
+    connection.execute( 
         "INSERT INTO review_cases VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
         (case_id, str(repo), snapshot["snapshot_id"], None, snapshot["revision"], mode,
          initial_stage, "active", json_dumps(scope), json_dumps(budget), timestamp, timestamp),
