@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "opencode-spec-review",
+          "version": "0.4.0",
+          "informationUri": "https://github.com/",
+          "rules": [
+            {
+              "id": "CLAIM-5fad4b5a3c9de6c9c367",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-5fad4b5a3c9de6c9c367"
+              }
+            },
+            {
+              "id": "CLAIM-f3596def4af3193aff69",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-f3596def4af3193aff69"
+              }
+            },
+            {
+              "id": "CLAIM-0b155c33fcd318596fd3",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-0b155c33fcd318596fd3"
+              }
+            },
+            {
+              "id": "CLAIM-5385d34115e004dc98d6",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-5385d34115e004dc98d6"
+              }
+            },
+            {
+              "id": "CLAIM-4bfcd15d2a888c7f839e",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-4bfcd15d2a888c7f839e"
+              }
+            },
+            {
+              "id": "CLAIM-348fd8c162d3d5966bbf",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-348fd8c162d3d5966bbf"
+              }
+            },
+            {
+              "id": "CLAIM-c78fc576250c468bdb9e",
+              "name": "RequirementCodeInconsistency",
+              "shortDescription": {
+                "text": "CLAIM-c78fc576250c468bdb9e"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CLAIM-5fad4b5a3c9de6c9c367",
+          "level": "error",
+          "message": {
+            "text": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/infrastructure.py"
+                },
+                "region": {
+                  "startLine": 85,
+                  "endLine": 99
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CLAIM-f3596def4af3193aff69",
+          "level": "error",
+          "message": {
+            "text": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/application.py"
+                },
+                "region": {
+                  "startLine": 182,
+                  "endLine": 214
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CLAIM-0b155c33fcd318596fd3",
+          "level": "error",
+          "message": {
+            "text": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/infrastructure.py"
+                },
+                "region": {
+                  "startLine": 101,
+                  "endLine": 107
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CLAIM-5385d34115e004dc98d6",
+          "level": "error",
+          "message": {
+            "text": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/application.py"
+                },
+                "region": {
+                  "startLine": 182,
+                  "endLine": 214
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CLAIM-4bfcd15d2a888c7f839e",
+          "level": "error",
+          "message": {
+            "text": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/infrastructure.py"
+                },
+                "region": {
+                  "startLine": 45,
+                  "endLine": 52
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CLAIM-348fd8c162d3d5966bbf",
+          "level": "error",
+          "message": {
+            "text": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/application.py"
+                },
+                "region": {
+                  "startLine": 88,
+                  "endLine": 100
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CLAIM-c78fc576250c468bdb9e",
+          "level": "error",
+          "message": {
+            "text": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。"
+          },
+          "properties": {
+            "case_id": "CASE-c8d0c6fc1a118af71ee9",
+            "attribution": "introduced"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "versions/v5_cancelled_payment_bypass/expense_app/application.py"
+                },
+                "region": {
+                  "startLine": 67,
+                  "endLine": 78
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

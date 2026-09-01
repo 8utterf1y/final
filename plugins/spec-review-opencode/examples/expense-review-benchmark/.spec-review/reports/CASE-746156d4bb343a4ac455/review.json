@@ -1,0 +1,2451 @@
+{
+  "schema_version": "0.3",
+  "tool": "opencode-spec-review",
+  "case_id": "CASE-746156d4bb343a4ac455",
+  "repo": "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark",
+  "base_revision": null,
+  "head_revision": "0101b531adf6af94136bab1b6b7a9ec10718aef6",
+  "mode": "auto",
+  "scope": {
+    "analysis_root": "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark",
+    "base_revision": null,
+    "documents": [
+      "requirements/EXPENSE_PAYMENT_REQUIREMENTS.md"
+    ],
+    "full_repository": false,
+    "head_revision": "0101b531adf6af94136bab1b6b7a9ec10718aef6",
+    "note": "未提供基准版本；需求声明将通过可选的路径范围关联到代码。",
+    "paths": [
+      "versions/v1_complete/expense_app"
+    ],
+    "review_type": "snapshot",
+    "sections": [],
+    "seed_count": 0
+  },
+  "result": {
+    "summary": "审查完成：consistent=113，inconsistent=0，uncertain=0，not_applicable=2。",
+    "verdict_counts": {
+      "consistent": 113,
+      "inconsistent": 0,
+      "uncertain": 0,
+      "not_applicable": 2
+    },
+    "claims": [
+      {
+        "claim_id": "CLAIM-b2c0c77457c23a8c3430",
+        "evidence_ids": [],
+        "reason": "文档信息表与修订记录为元数据声明，无可验证的实现行为，判定为不适用。",
+        "verdict": "not_applicable",
+        "section": "1. 文档信息"
+      },
+      {
+        "claim_id": "CLAIM-9c4a83e008de8542dc1a",
+        "evidence_ids": [],
+        "reason": "文档信息表与修订记录为元数据声明，无可验证的实现行为，判定为不适用。",
+        "verdict": "not_applicable",
+        "section": "1.1 修订记录"
+      },
+      {
+        "claim_id": "CLAIM-8200474518e08df41338",
+        "evidence_ids": [
+          "EVID-ae5cab5b773bc3608e0f",
+          "EVID-ee2ca5c3bf5e9997d5c6",
+          "EVID-0d255c1b112ac71a4630"
+        ],
+        "reason": "文档目的与本实现一致：服务完整覆盖提交、审批、取消、付款与审计业务链，未见超出文档边界的功能缺失。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-3cf2376927b96ded91cb",
+        "evidence_ids": [
+          "EVID-b174920e9d2b6cd83102",
+          "EVID-52e89ffc6b44cbb9f704",
+          "EVID-4fd29525084086c8d30f"
+        ],
+        "reason": "角色、状态与验收语义均可在领域模型与用例代码中定位到对应实现。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-94c469e0a45cb31018a0",
+        "evidence_ids": [
+          "EVID-b2d8bed1a3b0710e14d0",
+          "EVID-27ed1c608d97871a5904",
+          "EVID-ea7e4ee02e82636db7ab"
+        ],
+        "reason": "submit/approve_manager/approve_finance/reject/cancel/process 等符号可支撑按需求追溯。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-2ae638264f8a4afe6f98",
+        "evidence_ids": [
+          "EVID-fb9a1a5c505c50965727",
+          "EVID-8e7d45694c05a773effe",
+          "EVID-48f608146796f7b3ebc9"
+        ],
+        "reason": "需求声明与 ExpenseService/PayoutWorker/ExpenseRepository 等符号可建立稳定追溯映射。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-d88c9f8e9e4e8e971bb0",
+        "evidence_ids": [
+          "EVID-547e14337a1f44d7a230",
+          "EVID-4ae91734bd9a26d947e2",
+          "EVID-f2f785fbc9130db992db"
+        ],
+        "reason": "服务分别处理重复提交、审批权限、付款失败处置与状态审计四类目标问题。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-1b7c4a33d03e9e89bd0b",
+        "evidence_ids": [
+          "EVID-d6abb1dd7386cd6eab16",
+          "EVID-4fd539c29d1f565bbf7b",
+          "EVID-be73a2650935eb97d286"
+        ],
+        "reason": "create_or_get 在同一锁内完成查询与创建，保证同一提交请求不会创建多张报销单。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-baf766ed98b1e5e65f24",
+        "evidence_ids": [
+          "EVID-3086a4153c698c8a07b2",
+          "EVID-f5b0e10f7bb7c44b0eb0",
+          "EVID-91372e8c33447ad1f3c3"
+        ],
+        "reason": "_require_approver 在角色校验外增加 requester_id 比对，阻断自批。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-f0b0419b5e4cf16c900e",
+        "evidence_ids": [
+          "EVID-ff4e3434f18f3047f7a5",
+          "EVID-25161a21c8775ace7d0c",
+          "EVID-81fd226d0b77f2bb1d3e"
+        ],
+        "reason": "approve_manager 依据 LARGE_EXPENSE_THRESHOLD 决定一级或两级审批。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-fcf700831ee65d369950",
+        "evidence_ids": [
+          "EVID-c954385e06c3694a48fa",
+          "EVID-0305d98cb06b95bc0ef9",
+          "EVID-175c3a4cc0438217f4d7"
+        ],
+        "reason": "PayoutWorker.process 仅对 TransientPaymentError 做最多 3 次有界重试。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-5b03ba48f2b4e381f374",
+        "evidence_ids": [
+          "EVID-a198590aec52143735b4",
+          "EVID-d035e857cfcae5c453b3",
+          "EVID-add46e5295e182b0983d"
+        ],
+        "reason": "cancel 允许付款前取消；claim_for_payment 确保已取消单据不被后台付款。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-20334295b1cba51f0866",
+        "evidence_ids": [
+          "EVID-fb0b86a5250d37262850",
+          "EVID-d2de312e56625ff3eaf4",
+          "EVID-e0c72f17ea0f90692ef9"
+        ],
+        "reason": "所有成功状态转换统一经 _transition/_record 生成审计事件，metadata 仅含版本号。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-fdcf27c4365c8cbc3214",
+        "evidence_ids": [
+          "EVID-29d8fa8a6c0a42288e87",
+          "EVID-9d7671428fc4d6116581",
+          "EVID-c95b8fa1d44e3528f303"
+        ],
+        "reason": "submit 支持单币种（CNY）报销申请，币种校验在提交入口执行。",
+        "verdict": "consistent",
+        "section": "4.1 本期范围"
+      },
+      {
+        "claim_id": "CLAIM-629bbaef34d1ad784080",
+        "evidence_ids": [
+          "EVID-f49ed0e4e63a2cbc70af",
+          "EVID-b3c2c2ff42fb5c05e4ac",
+          "EVID-dd4751e019d9cc7b37b8"
+        ],
+        "reason": "大额申请进入 PENDING_FINANCE，由 approve_finance 二次审批。",
+        "verdict": "consistent",
+        "section": "4.1 本期范围"
+      },
+      {
+        "claim_id": "CLAIM-1e8fd7a8816699d0e263",
+        "evidence_ids": [
+          "EVID-bd00fe4f4016071548f6",
+          "EVID-23c3ef37a81ef4172f8c",
+          "EVID-5853d8d7cbbddf6742f7"
+        ],
+        "reason": "PayoutWorker 提供后台付款领取与有界重试能力。",
+        "verdict": "consistent",
+        "section": "4.1 本期范围"
+      },
+      {
+        "claim_id": "CLAIM-4c1e8b68aceaea56a377",
+        "evidence_ids": [
+          "EVID-78fb5f23bbc30f3d1af7",
+          "EVID-15ef0ef45ac0af0be85f",
+          "EVID-c08bbc26f65a031a3016"
+        ],
+        "reason": "未实现发票 OCR、税务计算等非本期功能，符合 §4.2 约定。",
+        "verdict": "consistent",
+        "section": "4.2 非本期范围"
+      },
+      {
+        "claim_id": "CLAIM-99e7818b00df49855651",
+        "evidence_ids": [
+          "EVID-48a6a8d8d4ea82db7bfe",
+          "EVID-5d316d4df948ed6b563e",
+          "EVID-bafbe49670d29d654d46"
+        ],
+        "reason": "本审查未将非范围功能的缺位判为需求缺失。",
+        "verdict": "consistent",
+        "section": "4.2 非本期范围"
+      },
+      {
+        "claim_id": "CLAIM-30d7dca0eca552d5982e",
+        "evidence_ids": [
+          "EVID-a964bf47066e35967d2c",
+          "EVID-f2b8c11a4469d5d2e0ce",
+          "EVID-1e49e0a4a85a1467a725"
+        ],
+        "reason": "角色权限与实现一致：EMPLOYEE 提交、MANAGER/FINANCE 审批、申请人取消，SYSTEM 为后台付款。",
+        "verdict": "consistent",
+        "section": "5. 角色与权限"
+      },
+      {
+        "claim_id": "CLAIM-38d5ed25980a96afa958",
+        "evidence_ids": [
+          "EVID-f41f78bee1033624f83f",
+          "EVID-af0861927949080cd611",
+          "EVID-7c7da14faa7c4abf98e7"
+        ],
+        "reason": "权限校验基于服务端传入的 Actor.roles（frozenset），不接受请求体自报角色。",
+        "verdict": "consistent",
+        "section": "5. 角色与权限"
+      },
+      {
+        "claim_id": "CLAIM-03998fe8feeca9232997",
+        "evidence_ids": [
+          "EVID-3c9e96ee765fcaf95074",
+          "EVID-baac0ffd352f0bb42e31",
+          "EVID-6eed6ef6a41f26c95611"
+        ],
+        "reason": "名词定义与实现一致：request_id 幂等键、总尝试次数 3、短暂/永久失败异常分类与枚举一致。",
+        "verdict": "consistent",
+        "section": "6. 名词说明"
+      },
+      {
+        "claim_id": "CLAIM-3ad85c84cf2293810d2d",
+        "evidence_ids": [
+          "EVID-b1b80ff6d665171a5a3b",
+          "EVID-8849576ccd3a1d71d29d",
+          "EVID-37329d3ddf992bf49add"
+        ],
+        "reason": "状态机与流程一致：提交→PENDING_MANAGER，驳回→REJECTED，取消→CANCELLED，经理按金额分级。",
+        "verdict": "consistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "claim_id": "CLAIM-e1974890e192fd4bec50",
+        "evidence_ids": [
+          "EVID-119658ca74a99dbbd1f1",
+          "EVID-ef17e2e3146682aa8fdf",
+          "EVID-0264829d7073444fb799"
+        ],
+        "reason": "APPROVED 下取消与 claim_for_payment 竞争，结果为 CANCELLED 或进入 PAYING→PAID/PAYMENT_FAILED。",
+        "verdict": "consistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "claim_id": "CLAIM-0931121a5737df649e93",
+        "evidence_ids": [
+          "EVID-6085e5b4e7118551cd32",
+          "EVID-a2abe9d6149ea87b91b8",
+          "EVID-371e7a2acd405741d858"
+        ],
+        "reason": "cancel 与 claim_for_payment 在同一仓库锁内做条件更新，互斥竞争成立。",
+        "verdict": "consistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "claim_id": "CLAIM-c89b7aa7c94c61b28280",
+        "evidence_ids": [
+          "EVID-9b83978aea07ad0e6978",
+          "EVID-faa47cb57cfd379c49c1",
+          "EVID-6c25daff8010709a1284"
+        ],
+        "reason": "create_or_get 命中已有 (requester_id, request_id) 时返回原单，重复提交被拦截。",
+        "verdict": "consistent",
+        "section": "业务场景"
+      },
+      {
+        "claim_id": "CLAIM-652103e1a398f831128a",
+        "evidence_ids": [
+          "EVID-4731ef58b1a46ad19983",
+          "EVID-d2ae9d6b060fee0e6bc2",
+          "EVID-2760ce40b70f25ae9e07"
+        ],
+        "reason": "唯一性键为 (requester_id, request_id)，保证 request_id 在同一申请人范围内唯一。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-b00dd0b79eb60768b477",
+        "evidence_ids": [
+          "EVID-224a5c67b08e1ed8985e",
+          "EVID-8e7dad1c00037024ffc2",
+          "EVID-e0d65370f5398419180a"
+        ],
+        "reason": "首次提交 created=True，返回新建单据。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-f72e3e53ee2aed29f8be",
+        "evidence_ids": [
+          "EVID-9030d5c5f7ba174896d2",
+          "EVID-1c4e1d4b8a4fbca3fc73",
+          "EVID-d967e2e3f24ac90d9856"
+        ],
+        "reason": "重复提交 created=False，返回既有单据且不新建。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-d0062f6b9a86496078ca",
+        "evidence_ids": [
+          "EVID-a68e583ddb96c8188d5c",
+          "EVID-ed5c859e94de846d38e3",
+          "EVID-edf1d7e75941210af991"
+        ],
+        "reason": "查询已有单据与创建新单据处于同一 with self._lock 临界区。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-c53b49298de69459a1f9",
+        "evidence_ids": [
+          "EVID-7b7ec7d9dcd52a80fe68",
+          "EVID-d30a64fd9f287cfc12e1",
+          "EVID-7363e41ea78379951240"
+        ],
+        "reason": "键含 requester_id，不同申请人可复用相同 request_id。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-340b7bc3998104db62d7",
+        "evidence_ids": [
+          "EVID-ea194d00aba3a1fa7f57",
+          "EVID-1d62f507240af73f4ec6",
+          "EVID-453e4ef5d706c2dd80fd"
+        ],
+        "reason": "串行重复调用由 create_or_get 返回同一 expense ID。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-14067cfe5acc7cfd1117",
+        "evidence_ids": [
+          "EVID-ab0a355db83ea850e07f",
+          "EVID-0dad384fd45f103f34b4",
+          "EVID-f0e9cc05f02de2c2401d"
+        ],
+        "reason": "RLock 串行化并发创建，并发重复调用最终只产生一张单据。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-42325a72ec3dfe35ddcb",
+        "evidence_ids": [
+          "EVID-5fbe0862c33cea3e5dba",
+          "EVID-ed7e9576beef9d719da8",
+          "EVID-97c4accaba88c4e8c8f9"
+        ],
+        "reason": "不同员工以各自 requester_id 为键，使用相同 request_id 各自生成一张单据。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-63afb2946381331013a9",
+        "evidence_ids": [
+          "EVID-64c42bb8f4180cece1b1",
+          "EVID-78860eef139ff9c1ad31",
+          "EVID-d056536fbd4db1611ecc"
+        ],
+        "reason": "_require_approver 同时校验审批角色与申请人身份，覆盖自批与越权。",
+        "verdict": "consistent",
+        "section": "业务场景"
+      },
+      {
+        "claim_id": "CLAIM-0beb94b40133c8e5414a",
+        "evidence_ids": [
+          "EVID-2bd0f7116f12e1bcf6de",
+          "EVID-3264247a5fdca85e436b",
+          "EVID-f49b4a8c2ed3f2d3cd17"
+        ],
+        "reason": "approve_manager 要求 Role.MANAGER 才可执行。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-f8ae8c146bb42717266b",
+        "evidence_ids": [
+          "EVID-342f0f2172a2c11fdbd2",
+          "EVID-858298471674f65c9df9",
+          "EVID-6baa9daa93d5354705f2"
+        ],
+        "reason": "approve_finance 要求 Role.FINANCE 才可执行。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-b343177bfb42dcccacde",
+        "evidence_ids": [
+          "EVID-7171170d5391a2d970e9",
+          "EVID-d531ee81c0fb4885bb0f",
+          "EVID-525d527d78f5e2358872"
+        ],
+        "reason": "actor.user_id == expense.requester_id 时抛 AuthorizationError，无论兼任何种角色。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-ed414bc9e839199c3a47",
+        "evidence_ids": [
+          "EVID-815fcdabcafc214ac4f9",
+          "EVID-2c9d912d2d701605aebb",
+          "EVID-595df93c93738ef8eb9f"
+        ],
+        "reason": "权限校验先于 _transition 执行，被拒审批不改变状态也不写成功事件。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-136e2f5d5bbe5e444af6",
+        "evidence_ids": [
+          "EVID-66f085c662801796f626",
+          "EVID-c7037128776c2370c53d",
+          "EVID-e112c61c9aedc2f21e18"
+        ],
+        "reason": "_transition 校验期望状态集，重复或跨级审批抛 StateConflictError。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-a3132d2f55900b9e7ce1",
+        "evidence_ids": [
+          "EVID-8695413e9e72fd26a984",
+          "EVID-b485e2ae56861f9b9abb",
+          "EVID-c999271ef60b8930adc5"
+        ],
+        "reason": "无 MANAGER/FINANCE 角色的员工审批被拒。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-f97ba33abbc7b5062968",
+        "evidence_ids": [
+          "EVID-88a92a4bde38dc275697",
+          "EVID-8c617518a3fa3b538f47",
+          "EVID-ecd64e15231f7ecab6d7"
+        ],
+        "reason": "具有 MANAGER 或 FINANCE 角色的申请人本人仍被拒。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-9fffe61c5361b08ccaaf",
+        "evidence_ids": [
+          "EVID-bc486807849882fa3f57",
+          "EVID-25c8f4cbb87ba8e57b21",
+          "EVID-426dba9854599585873e"
+        ],
+        "reason": "合法他人审批经 _transition 正常推进状态。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-3784ff06c0f198c93397",
+        "evidence_ids": [
+          "EVID-69c2cb87dc07c0261d2c",
+          "EVID-c216f5c73b1fff7206f7",
+          "EVID-ee846a4c8b3ca6cd91dd"
+        ],
+        "reason": "LARGE_EXPENSE_THRESHOLD = Decimal(\"1000.00\")。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-1954a4288ee6731f9e1e",
+        "evidence_ids": [
+          "EVID-d1401126378ae8738850",
+          "EVID-a2be203b16ba786df2c8",
+          "EVID-2bfdeb4d6696e4f3d801"
+        ],
+        "reason": "amount <= 1000.00 时经理通过后直接置 APPROVED。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-5209196af4bc0f0c5a79",
+        "evidence_ids": [
+          "EVID-69647932fbc095ea9239",
+          "EVID-20b2887cc464e1afcbbb",
+          "EVID-d69326a2e336cb820da1"
+        ],
+        "reason": "amount > 1000.00 时置 PENDING_FINANCE，须 approve_finance 通过才进入 APPROVED。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-35ba18a1e8d9324b057d",
+        "evidence_ids": [
+          "EVID-8d4b0ff19b09206b10bd",
+          "EVID-24c10b9328a54b0683b3",
+          "EVID-7ecf7e6d031c13b3137a"
+        ],
+        "reason": "阈值与金额均以 Decimal 比较，无二进制浮点近似。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-48fad03d2e323c010a08",
+        "evidence_ids": [
+          "EVID-18e31a80c8c8e194e6eb",
+          "EVID-356a707ff4e6156e5e5b",
+          "EVID-2c51dc6f8d30b74be756"
+        ],
+        "reason": "_validate_submission 校验 currency == \"CNY\"，其他币种抛 ValidationError。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-108e6db039a05ef27350",
+        "evidence_ids": [
+          "EVID-764128eb0f178156b14d",
+          "EVID-af36741ec0e1900ff061",
+          "EVID-765d2aa9bedae5b95c79"
+        ],
+        "reason": "边界 999.99/1000.00/1000.01 由 Decimal 严格比较满足。",
+        "verdict": "consistent",
+        "section": "边界示例"
+      },
+      {
+        "claim_id": "CLAIM-a090b492ed224639cdae",
+        "evidence_ids": [
+          "EVID-fb506e52c9c73f63ac2e",
+          "EVID-2744b03a1e6ee9498860",
+          "EVID-0bf2d80ba660af795d65"
+        ],
+        "reason": "cancel 与 claim_for_payment 在仓库层原子互斥，付款任务不依赖旧快照。",
+        "verdict": "consistent",
+        "section": "业务场景"
+      },
+      {
+        "claim_id": "CLAIM-125aa3d51cddae3f38db",
+        "evidence_ids": [
+          "EVID-5abf091595b21378727e",
+          "EVID-6496d11a2fd39c5feafd",
+          "EVID-5810e52df4289bf28601"
+        ],
+        "reason": "repository.cancel 校验当前用户为 requester_id。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-c1c8e1b57e7bf203e2ee",
+        "evidence_ids": [
+          "EVID-32a6f3b3e145ee841cf5",
+          "EVID-64a1503820bb89c249ef",
+          "EVID-6636d0b9b31b06b93233"
+        ],
+        "reason": "允许取消状态集合为 PENDING_MANAGER/PENDING_FINANCE/APPROVED。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-41e43ae24b0f297467b8",
+        "evidence_ids": [
+          "EVID-dad5f661bbc8ca978d7d",
+          "EVID-166b3e0b364fa19d48b0",
+          "EVID-c32aa73e722dfa257cd1"
+        ],
+        "reason": "PAYING/PAID/REJECTED/CANCELLED/PAYMENT_FAILED 状态取消被拒。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-d44e69086803ccc1eee3",
+        "evidence_ids": [
+          "EVID-f7e444569fd2d6940dc1",
+          "EVID-fb01cbc04c351ece8bdf",
+          "EVID-f6b25b75b8c0886151dd"
+        ],
+        "reason": "claim_for_payment 以 {APPROVED} 为期望状态原子转 PAYING，非 APPROVED 返回 None。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-0564fc2d0b529c2eae5c",
+        "evidence_ids": [
+          "EVID-78a585d09c66b5b493ca",
+          "EVID-af415c4c5ac6355fe994",
+          "EVID-af3c7472c8eb099e3bc8"
+        ],
+        "reason": "process 直接调用 claim_for_payment，未使用早先读取的对象快照。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-e140259fb80a4ef4efe3",
+        "evidence_ids": [
+          "EVID-b0a8aa732f6050a7824d",
+          "EVID-0f4fb832ece305664af5",
+          "EVID-01c8c652e8eb9bcb348f"
+        ],
+        "reason": "取消与付款抢占的条件更新在同一锁内串行化，仅允许一方成功。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-43c54a75fe37637e1613",
+        "evidence_ids": [
+          "EVID-77d97d86fc417a255213",
+          "EVID-cc512f2a10c8c0822b58",
+          "EVID-b041184c3b80700b2f3f"
+        ],
+        "reason": "已取消单据状态非 APPROVED，claim 返回 None，付款网关不被调用。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-88f32cabded6ff48d4ae",
+        "evidence_ids": [
+          "EVID-95905c96c8c2527cc683",
+          "EVID-fc03404caeee4a986b8a",
+          "EVID-cd2de9b3af89c9f4d962"
+        ],
+        "reason": "竞争最终状态只能是 CANCELLED 或从 PAYING 继续完成的付款结果，不存在已取消却扣款。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-8e48ab63c4d6ec6333fc",
+        "evidence_ids": [
+          "EVID-31bb03d96b09165b3aab",
+          "EVID-66ea3b1ecc14b560c8bd",
+          "EVID-39674de018ad47570106"
+        ],
+        "reason": "process 以 expense_id 作为网关幂等键调用 gateway.pay。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-2679dca7649b46562a08",
+        "evidence_ids": [
+          "EVID-80981ddd4a57da69af1d",
+          "EVID-00e2585f4ccda602a26b",
+          "EVID-0acf54c46f0efc800492"
+        ],
+        "reason": "付款成功立即 return，经 transition 置 PAID 并记录 payment_reference。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-edd6354ca85dea61a866",
+        "evidence_ids": [
+          "EVID-622b055f338afe7efc59",
+          "EVID-c774611d0300eb691f8a",
+          "EVID-3142d7081294fa6f5d43"
+        ],
+        "reason": "仅捕获 TransientPaymentError 进入重试分支。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-24f70fd179aca8189c4a",
+        "evidence_ids": [
+          "EVID-9f2972766e34e7ecec76",
+          "EVID-0e8c3f1c992a02dee595",
+          "EVID-314bd2c74f1daae10dd5"
+        ],
+        "reason": "PermanentPaymentError 触发 break，随后置 PAYMENT_FAILED，不重试。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-a4b4461c5d0edcc4fa77",
+        "evidence_ids": [
+          "EVID-3c3677de88facd908729",
+          "EVID-2ae637c60e2161852495",
+          "EVID-22eefe3769db42adb5a7"
+        ],
+        "reason": "for attempt in range(1, 4) 限定总尝试次数上限为 3。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-4fb99f5d2928e2fe2cbd",
+        "evidence_ids": [
+          "EVID-1b8b5f7cf2be1fee7ad1",
+          "EVID-fad268559b5bd673cc27",
+          "EVID-8754d4482897bce4c755"
+        ],
+        "reason": "sleep(2 ** (attempt - 1)) 产生 1 秒、2 秒等待序列，最后一次失败后不等待。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-985a4f9bfca171e1af5c",
+        "evidence_ids": [
+          "EVID-c956af06920e04606500",
+          "EVID-c66585281e14b562f213",
+          "EVID-b427f01a2fff35f21e25"
+        ],
+        "reason": "三次短暂性失败耗尽循环后置 PAYMENT_FAILED。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-8dc743a5c737878f03ad",
+        "evidence_ids": [
+          "EVID-ffdfe0ecbbeaae16ba19",
+          "EVID-a6849e484e41df237ca4",
+          "EVID-05899d42003fdc21ec2e"
+        ],
+        "reason": "验收矩阵五种网关结果序列与循环及异常分支一一对应。",
+        "verdict": "consistent",
+        "section": "验收矩阵"
+      },
+      {
+        "claim_id": "CLAIM-9b27e3dc6e54a9cf40e7",
+        "evidence_ids": [
+          "EVID-70f696ef42de189eba96",
+          "EVID-40eb4f2e32c8cf0dd3c2",
+          "EVID-e2a6d32b988e7dc7dc7e"
+        ],
+        "reason": "每次成功状态转换均经 _transition/_record 生成一条审计事件。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-7d58a27f9584a33d7cdb",
+        "evidence_ids": [
+          "EVID-bd26782a3cc1cec46415",
+          "EVID-4d3316a8431a3ac458bb",
+          "EVID-d9814b6c4e5164fcc3d5"
+        ],
+        "reason": "AuditEvent 含 expense_id、actor_id、event_type、from_status、to_status、occurred_at。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-934b0066dfb7a80a2c8e",
+        "evidence_ids": [
+          "EVID-ee90029e65ac9f75e591",
+          "EVID-557c083bc3d0e7424acf",
+          "EVID-5a61f2e0aeea76e0d747"
+        ],
+        "reason": "付款审计 actor_id 固定使用 SYSTEM_ACTOR_ID 常量，代表系统后台操作而非人工审批者。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-1abe1b3c14024345eb77",
+        "evidence_ids": [
+          "EVID-b20867b042bfafe1d96b",
+          "EVID-3800f14980f8e00f7083",
+          "EVID-3eb7efdfa502f8bbe7ca"
+        ],
+        "reason": "权限或状态校验失败在写事件前抛异常，不产生成功转换事件。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-722e42583cdc2d18187b",
+        "evidence_ids": [
+          "EVID-853f649601d9c90ec052",
+          "EVID-7970b88c3b4470f3aad5",
+          "EVID-35a0ec3944df36de8cea"
+        ],
+        "reason": "审计 metadata 仅含 {\"version\": ...}，不含事由原文、银行账户、证件或附件内容。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-768900eee178df619113",
+        "evidence_ids": [
+          "EVID-b2aa2db4a82a1e80bed2",
+          "EVID-f191e54fb21a47a47574",
+          "EVID-b5898313bd35fe557937"
+        ],
+        "reason": "各阶段转换事件均带 occurred_at，可按时序完整追溯。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-997839719bc344ecfe1a",
+        "evidence_ids": [
+          "EVID-148ba956acbbba62bacf",
+          "EVID-83c969f868f5ebeaea68",
+          "EVID-1dd5c9913cf5a76b0c63"
+        ],
+        "reason": "REJECT、CANCEL、PAYMENT_FAILED 均有对应审计事件。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-ebaf5c4d1edc910aaf52",
+        "evidence_ids": [
+          "EVID-c27b3318786ff6beaf2a",
+          "EVID-1792135a88f46c3f2862",
+          "EVID-b9c5aeb8d615a910f049"
+        ],
+        "reason": "审计 metadata 未写入 purpose、bank_account 或原始请求体。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-19cdfb60af834e119872",
+        "evidence_ids": [
+          "EVID-beef7af96dc4534df9ad",
+          "EVID-59f291d2fc6e09708177",
+          "EVID-b11484fd0279b9881ffc"
+        ],
+        "reason": "Expense 数据类字段（id/requester_id/request_id/amount/currency/purpose/status/payment_reference/version）与数据模型一致。",
+        "verdict": "consistent",
+        "section": "9.1 Expense"
+      },
+      {
+        "claim_id": "CLAIM-5c478b16e1d2d9e46d4d",
+        "evidence_ids": [
+          "EVID-d317613a251eacf1042b",
+          "EVID-6a6cb6e60e9fa351169f",
+          "EVID-a6f45ecdd45759a9a342"
+        ],
+        "reason": "_by_request 复合键配合 RLock 提供等价原子唯一性保证。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-7553c957fe7889ade089",
+        "evidence_ids": [
+          "EVID-56d52d38766791788bef",
+          "EVID-787052c11c49235c9731",
+          "EVID-26db3192f90675c84fdd"
+        ],
+        "reason": "_validate_submission 要求 amount 为正的有限 Decimal，金额以 Decimal 存储保证精度。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-24234264359547e347d6",
+        "evidence_ids": [
+          "EVID-ac5eba643079df7f5ab0",
+          "EVID-9f8011228b33ac3933e3",
+          "EVID-c7b4398d14eb84cb8d26"
+        ],
+        "reason": "payment_reference 仅在付款成功 transition 中传入，取消/审批转换保持为空。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-8d84921a97975020cd1e",
+        "evidence_ids": [
+          "EVID-ebe2fb4a8ecb0422c6b1",
+          "EVID-5989bc0f69c02bef24eb",
+          "EVID-6513227db26cbf35d2c9"
+        ],
+        "reason": "所有状态更新均通过 with self._lock 内带期望状态的条件检查完成。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-31c9b3121511eef8a615",
+        "evidence_ids": [
+          "EVID-f0c6f14823d45526776f",
+          "EVID-af74a82a616ad5e5d6a1",
+          "EVID-ed9bc901c2a6b9cc142c"
+        ],
+        "reason": "ExpenseService.submit 签名与 submit_expense(actor, request_id, amount, currency, purpose) -> Expense 一致。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-9cc7025c86c5c9c6416b",
+        "evidence_ids": [
+          "EVID-7892e2444336c69fe0e9",
+          "EVID-5179b806c55861bfe54d",
+          "EVID-5b961f560196106f4744"
+        ],
+        "reason": "无 EMPLOYEE 角色时抛 AuthorizationError；Actor 由服务端传入。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-cf280f0f378ed6f59416",
+        "evidence_ids": [
+          "EVID-c49c2b84e238077c3290",
+          "EVID-608e33bf60a9e3abb544",
+          "EVID-75a4ac6efeaf5615220d"
+        ],
+        "reason": "request_id 空白时抛 ValidationError。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-bb21bf84e4c559da8c09",
+        "evidence_ids": [
+          "EVID-9dfbf297e457afd6bab6",
+          "EVID-91006905509521af1cae",
+          "EVID-6d1db02c5fa47a59e80d"
+        ],
+        "reason": "amount 非正数或非法时抛 ValidationError。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-cede151bd28b03a9449f",
+        "evidence_ids": [
+          "EVID-289664ee1cacd0c670c2",
+          "EVID-cd4ae37ae890c0856adb",
+          "EVID-85908fb90cef3eadf58c"
+        ],
+        "reason": "币种非 CNY 时抛 ValidationError。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-c0c5a872bf241ccfad74",
+        "evidence_ids": [
+          "EVID-f1dcfc25c3fa07d673f4",
+          "EVID-96b7a232330fced25477",
+          "EVID-56a8e7c137288c2ff13b"
+        ],
+        "reason": "approve_manager/approve_finance/reject 签名与契约一致。",
+        "verdict": "consistent",
+        "section": "10.2 审批"
+      },
+      {
+        "claim_id": "CLAIM-d747af5d1e92b0d4bba4",
+        "evidence_ids": [
+          "EVID-d4ea353b1d1daae206a4",
+          "EVID-ce1bb941b8fc9b35ccec",
+          "EVID-51532286dfedb787ce55"
+        ],
+        "reason": "reject 不把自由文本理由写入审计事件，仅产生事件类型与状态转换。",
+        "verdict": "consistent",
+        "section": "10.2 审批"
+      },
+      {
+        "claim_id": "CLAIM-e24df0f3ca25d49c2718",
+        "evidence_ids": [
+          "EVID-479c0ca5538a058478b7",
+          "EVID-2b6f50582f0b922ca91b",
+          "EVID-edfd3211bc0c72095d40"
+        ],
+        "reason": "ExpenseService.cancel(actor, expense_id) 签名与契约一致。",
+        "verdict": "consistent",
+        "section": "10.3 取消"
+      },
+      {
+        "claim_id": "CLAIM-2cb777f1176fc6a8eafa",
+        "evidence_ids": [
+          "EVID-c25bc3e1d04566ff0861",
+          "EVID-37b45fe3de4960011376",
+          "EVID-eb02cda50a73c20e15a5"
+        ],
+        "reason": "取消失败抛 StateConflictError（权限或状态冲突），不静默成功。",
+        "verdict": "consistent",
+        "section": "10.3 取消"
+      },
+      {
+        "claim_id": "CLAIM-5bbac221545995316266",
+        "evidence_ids": [
+          "EVID-fc897a891cd307595d2b",
+          "EVID-77e5b963e00249812ec4",
+          "EVID-4e7c82dadd08a7483f80"
+        ],
+        "reason": "PayoutWorker.process(expense_id) -> PaymentOutcome 签名与契约一致。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-06b7e79b1f03e5f877c6",
+        "evidence_ids": [
+          "EVID-65270178a46885a77c9c",
+          "EVID-a915a09f6a17409669e3",
+          "EVID-05b8fb86eee7efc2834b"
+        ],
+        "reason": "claim 返回 None 时 process 返回 PaymentOutcome.SKIPPED。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-70de201ff745bff8ed2a",
+        "evidence_ids": [
+          "EVID-960a0e2158f042073992",
+          "EVID-644af545e629c962997a",
+          "EVID-ad604dc1211d8e7e429d"
+        ],
+        "reason": "付款成功路径返回 PaymentOutcome.PAID。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-00fed1b7496aa43328d0",
+        "evidence_ids": [
+          "EVID-86b948094bd273f63f4d",
+          "EVID-eece9cdf367cbd93146e",
+          "EVID-2560f7415d784e03a1ff"
+        ],
+        "reason": "永久性失败或重试耗尽路径返回 PaymentOutcome.FAILED。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-0913720eb62474ebcbd8",
+        "evidence_ids": [
+          "EVID-b2aa0be6585e88820a6d",
+          "EVID-203f35215be225000f98",
+          "EVID-cab33727e8dc11641612"
+        ],
+        "reason": "ValidationError/AuthorizationError/StateConflictError/TransientPaymentError/PermanentPaymentError 均已定义并按对应场景抛出。",
+        "verdict": "consistent",
+        "section": "11. 异常处理"
+      },
+      {
+        "claim_id": "CLAIM-5c9fdfceb050159ad2d9",
+        "evidence_ids": [
+          "EVID-2eb9c7ce1f45b441c0f2",
+          "EVID-480172cd2e057af719b9",
+          "EVID-97f933ac3d224a5f4841"
+        ],
+        "reason": "审计与日志元数据不含报销事由原文。",
+        "verdict": "consistent",
+        "section": "NFR-01 安全"
+      },
+      {
+        "claim_id": "CLAIM-e752a51da2e3fb6f03b8",
+        "evidence_ids": [
+          "EVID-f822354deb684c6b5102",
+          "EVID-d248dd082c938f7755c0",
+          "EVID-acda503329197c80ea40"
+        ],
+        "reason": "错误信息为固定中文描述，不暴露仓库内部结构或付款网关密钥。",
+        "verdict": "consistent",
+        "section": "NFR-01 安全"
+      },
+      {
+        "claim_id": "CLAIM-e309f418bb89373e6590",
+        "evidence_ids": [
+          "EVID-8911795257fb6c02933b",
+          "EVID-e4b91d899c361d55950a",
+          "EVID-be2316f959e5193112f9"
+        ],
+        "reason": "幂等创建（create_or_get）、取消、付款抢占均在锁内原子完成。",
+        "verdict": "consistent",
+        "section": "NFR-02 并发一致性"
+      },
+      {
+        "claim_id": "CLAIM-5a99cc4ed8e44ba22ed8",
+        "evidence_ids": [
+          "EVID-2c496b0713ade4a0881b",
+          "EVID-ed273e2096899f9149c9",
+          "EVID-88c0fc100355ae9a948d"
+        ],
+        "reason": "并发控制使用显式 RLock 与 Barrier，不依赖单进程或 Python GIL。",
+        "verdict": "consistent",
+        "section": "NFR-02 并发一致性"
+      },
+      {
+        "claim_id": "CLAIM-28818f9b40760a5ce520",
+        "evidence_ids": [
+          "EVID-5520033868b7fe3e38b5",
+          "EVID-c22c89f26218b4b6b389",
+          "EVID-a42d1624a13bf9025746"
+        ],
+        "reason": "付款网关、时钟、等待器、审计接收器均通过构造函数注入，可替换。",
+        "verdict": "consistent",
+        "section": "NFR-03 可测试性"
+      },
+      {
+        "claim_id": "CLAIM-5126e998a9e49a7e07fa",
+        "evidence_ids": [
+          "EVID-c1e8a4394b86ba9e1689",
+          "EVID-2453254f868008913402",
+          "EVID-6756c55e19a8fddd38bf"
+        ],
+        "reason": "提供 create_barrier 与可注入组件，支撑并发幂等和取消/付款竞争自动化测试。",
+        "verdict": "consistent",
+        "section": "NFR-03 可测试性"
+      },
+      {
+        "claim_id": "CLAIM-db95c179148e4db3d874",
+        "evidence_ids": [
+          "EVID-21d1ad4ea9c6b71552bb",
+          "EVID-62e3c3a724974d9c7c73",
+          "EVID-38929fd89dbadae77990"
+        ],
+        "reason": "提交/审批/取消为纯内存操作，无外部调用拖慢服务端 P95。",
+        "verdict": "consistent",
+        "section": "NFR-04 性能基线"
+      },
+      {
+        "claim_id": "CLAIM-d1dec3e76303de9d2eea",
+        "evidence_ids": [
+          "EVID-9b39ac97504b5d394b08",
+          "EVID-b8eafdb686880f48c632",
+          "EVID-758b558b0b8e08465a5b"
+        ],
+        "reason": "原子性由独立的锁与条件更新保证，未为性能基线牺牲。",
+        "verdict": "consistent",
+        "section": "NFR-04 性能基线"
+      },
+      {
+        "claim_id": "CLAIM-0d3200ea5029d9445b87",
+        "evidence_ids": [
+          "EVID-64653f11d7988ebdc635",
+          "EVID-2cf7521c9e2eeec4f1e5",
+          "EVID-becf38b0e5ea9ee1ab68"
+        ],
+        "reason": "服务通过可替换的 CounterMetrics 适配层在提交/审批/取消/付款路径上报计数指标。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-df7b33e1f6090e3d336d",
+        "evidence_ids": [
+          "EVID-78d49319b3abc964e7b6",
+          "EVID-8ba23aaf74570929ac93",
+          "EVID-2c70ca86bbc6bcbd7f86"
+        ],
+        "reason": "submit 成功路径在提交后调用 metrics.increment 上报提交计数。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-dc937c39357ca85a34e6",
+        "evidence_ids": [
+          "EVID-13756351ecb4e0848b87",
+          "EVID-2fd83c40f26c9001c89f",
+          "EVID-c08ac67237adf5dcf98d"
+        ],
+        "reason": "审批拒绝等审计类计数由计数器语义覆盖，指标名与命名空间在指标适配层绑定。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-f89e118cf1afe378f437",
+        "evidence_ids": [
+          "EVID-290f665b2d347938c882",
+          "EVID-634e66e2ccccc4541b36",
+          "EVID-4135048aaffacda97753"
+        ],
+        "reason": "cancel 成功路径调用 metrics.increment 上报取消计数。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-a14b2c513d51c222c40d",
+        "evidence_ids": [
+          "EVID-982180ef07bec51aca84",
+          "EVID-5c18b755683a50ddac4c",
+          "EVID-8be631ca84a85b32f7ae"
+        ],
+        "reason": "付款尝试在 PayoutWorker.process 的成功、重试、失败各分支均上报计数。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-30c5015af38d273f939f",
+        "evidence_ids": [
+          "EVID-099c7c7c19912af08ed5",
+          "EVID-4e67c1dd14b70689ce09",
+          "EVID-34c473c67cbf289a8cbb"
+        ],
+        "reason": "短暂性失败分支上报重试计数。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-9a1560c390a49aca4fb7",
+        "evidence_ids": [
+          "EVID-27089d67c5783d82b7aa",
+          "EVID-45bd379c4378a8d5e02e",
+          "EVID-5100a1dae8bdf700486f"
+        ],
+        "reason": "永久性失败分支计入付款失败计数路径。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-36027d5053243350e30f",
+        "evidence_ids": [
+          "EVID-08937e02fcbf7f686a52",
+          "EVID-56044ad15c9b079cc1ea",
+          "EVID-ef002c5825d1bf9a6a59"
+        ],
+        "reason": "付款失败统一上报失败计数。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-385767e89cb1cd0ab574",
+        "evidence_ids": [
+          "EVID-bc3c85c708a7977f66a9",
+          "EVID-be563709f556a543ee30",
+          "EVID-99a14e5f12938d69a30c"
+        ],
+        "reason": "计数键仅使用固定指标名，未使用 expense_id/requester_id/purpose 作为高基数标签。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-423dc7ef14b97cf20088",
+        "evidence_ids": [
+          "EVID-f792f6a91893bcb71f4e",
+          "EVID-de32e5f06ec3c9f2a257",
+          "EVID-49326d1955442f4bb4a2"
+        ],
+        "reason": "追溯矩阵关键证据 create_or_get 与 claim_for_payment 均存在且语义符合。",
+        "verdict": "consistent",
+        "section": "14. 验收与追溯矩阵"
+      },
+      {
+        "claim_id": "CLAIM-f8c7f0e1823387c5bd9a",
+        "evidence_ids": [
+          "EVID-8067f2cd906d7d6f2fca",
+          "EVID-6e4f56cb51553a302b29",
+          "EVID-8b6c28b838524768b268"
+        ],
+        "reason": "FR-01 至 FR-06 实现与必要测试目标一致，未发现不一致证据。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-e3defc0b72f346441e71",
+        "evidence_ids": [
+          "EVID-a1725ad2bebf64cffc84",
+          "EVID-3eca937fae1de4087a85",
+          "EVID-0f44704c7e973ccf8e13"
+        ],
+        "reason": "未发现自批、已取消单据付款或重复建单风险路径。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-b26a9e694076e87be4c6",
+        "evidence_ids": [
+          "EVID-bc376dced8b3b8efca1b",
+          "EVID-d1fa2fa66ef144a8483e",
+          "EVID-700c5cb2efe747de184e"
+        ],
+        "reason": "重试次数上限与 1/2 秒等待序列在 process 中以常量和循环显式表达。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-70bde7cd28248b08b543",
+        "evidence_ids": [
+          "EVID-e5e879ccd2e585209665",
+          "EVID-fc9b07dd38dc18a4f99a",
+          "EVID-852a97f2daa84f4f5e0a"
+        ],
+        "reason": "审计数据仅含版本号元数据，可满足敏感信息检查。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-e7d11ab94017fbf25f18",
+        "evidence_ids": [
+          "EVID-9138eca3d78820d43df5",
+          "EVID-52ebe3094c1254d8bd41",
+          "EVID-3c8daccfb7b7f4054d7b"
+        ],
+        "reason": "本审查对未能充分证明的边界保持审慎表述，不将‘未找到’直接当作‘未实现’。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      }
+    ],
+    "findings": []
+  },
+  "coverage": {
+    "expected": 115,
+    "submitted": 115,
+    "remaining": 0,
+    "missing_claim_ids": []
+  },
+  "stage_results": {
+    "l3_review": {
+      "claims": [
+        {
+          "claim_id": "CLAIM-b2c0c77457c23a8c3430",
+          "evidence_ids": [],
+          "reason": "文档信息表与修订记录为元数据声明，无可验证的实现行为，判定为不适用。",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim_id": "CLAIM-9c4a83e008de8542dc1a",
+          "evidence_ids": [],
+          "reason": "文档信息表与修订记录为元数据声明，无可验证的实现行为，判定为不适用。",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim_id": "CLAIM-8200474518e08df41338",
+          "evidence_ids": [
+            "EVID-ae5cab5b773bc3608e0f",
+            "EVID-ee2ca5c3bf5e9997d5c6",
+            "EVID-0d255c1b112ac71a4630"
+          ],
+          "reason": "文档目的与本实现一致：服务完整覆盖提交、审批、取消、付款与审计业务链，未见超出文档边界的功能缺失。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-3cf2376927b96ded91cb",
+          "evidence_ids": [
+            "EVID-b174920e9d2b6cd83102",
+            "EVID-52e89ffc6b44cbb9f704",
+            "EVID-4fd29525084086c8d30f"
+          ],
+          "reason": "角色、状态与验收语义均可在领域模型与用例代码中定位到对应实现。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-94c469e0a45cb31018a0",
+          "evidence_ids": [
+            "EVID-b2d8bed1a3b0710e14d0",
+            "EVID-27ed1c608d97871a5904",
+            "EVID-ea7e4ee02e82636db7ab"
+          ],
+          "reason": "submit/approve_manager/approve_finance/reject/cancel/process 等符号可支撑按需求追溯。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2ae638264f8a4afe6f98",
+          "evidence_ids": [
+            "EVID-fb9a1a5c505c50965727",
+            "EVID-8e7d45694c05a773effe",
+            "EVID-48f608146796f7b3ebc9"
+          ],
+          "reason": "需求声明与 ExpenseService/PayoutWorker/ExpenseRepository 等符号可建立稳定追溯映射。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d88c9f8e9e4e8e971bb0",
+          "evidence_ids": [
+            "EVID-547e14337a1f44d7a230",
+            "EVID-4ae91734bd9a26d947e2",
+            "EVID-f2f785fbc9130db992db"
+          ],
+          "reason": "服务分别处理重复提交、审批权限、付款失败处置与状态审计四类目标问题。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-1b7c4a33d03e9e89bd0b",
+          "evidence_ids": [
+            "EVID-d6abb1dd7386cd6eab16",
+            "EVID-4fd539c29d1f565bbf7b",
+            "EVID-be73a2650935eb97d286"
+          ],
+          "reason": "create_or_get 在同一锁内完成查询与创建，保证同一提交请求不会创建多张报销单。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-baf766ed98b1e5e65f24",
+          "evidence_ids": [
+            "EVID-3086a4153c698c8a07b2",
+            "EVID-f5b0e10f7bb7c44b0eb0",
+            "EVID-91372e8c33447ad1f3c3"
+          ],
+          "reason": "_require_approver 在角色校验外增加 requester_id 比对，阻断自批。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f0b0419b5e4cf16c900e",
+          "evidence_ids": [
+            "EVID-ff4e3434f18f3047f7a5",
+            "EVID-25161a21c8775ace7d0c",
+            "EVID-81fd226d0b77f2bb1d3e"
+          ],
+          "reason": "approve_manager 依据 LARGE_EXPENSE_THRESHOLD 决定一级或两级审批。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-fcf700831ee65d369950",
+          "evidence_ids": [
+            "EVID-c954385e06c3694a48fa",
+            "EVID-0305d98cb06b95bc0ef9",
+            "EVID-175c3a4cc0438217f4d7"
+          ],
+          "reason": "PayoutWorker.process 仅对 TransientPaymentError 做最多 3 次有界重试。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5b03ba48f2b4e381f374",
+          "evidence_ids": [
+            "EVID-a198590aec52143735b4",
+            "EVID-d035e857cfcae5c453b3",
+            "EVID-add46e5295e182b0983d"
+          ],
+          "reason": "cancel 允许付款前取消；claim_for_payment 确保已取消单据不被后台付款。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-20334295b1cba51f0866",
+          "evidence_ids": [
+            "EVID-fb0b86a5250d37262850",
+            "EVID-d2de312e56625ff3eaf4",
+            "EVID-e0c72f17ea0f90692ef9"
+          ],
+          "reason": "所有成功状态转换统一经 _transition/_record 生成审计事件，metadata 仅含版本号。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-fdcf27c4365c8cbc3214",
+          "evidence_ids": [
+            "EVID-29d8fa8a6c0a42288e87",
+            "EVID-9d7671428fc4d6116581",
+            "EVID-c95b8fa1d44e3528f303"
+          ],
+          "reason": "submit 支持单币种（CNY）报销申请，币种校验在提交入口执行。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-629bbaef34d1ad784080",
+          "evidence_ids": [
+            "EVID-f49ed0e4e63a2cbc70af",
+            "EVID-b3c2c2ff42fb5c05e4ac",
+            "EVID-dd4751e019d9cc7b37b8"
+          ],
+          "reason": "大额申请进入 PENDING_FINANCE，由 approve_finance 二次审批。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-1e8fd7a8816699d0e263",
+          "evidence_ids": [
+            "EVID-bd00fe4f4016071548f6",
+            "EVID-23c3ef37a81ef4172f8c",
+            "EVID-5853d8d7cbbddf6742f7"
+          ],
+          "reason": "PayoutWorker 提供后台付款领取与有界重试能力。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4c1e8b68aceaea56a377",
+          "evidence_ids": [
+            "EVID-78fb5f23bbc30f3d1af7",
+            "EVID-15ef0ef45ac0af0be85f",
+            "EVID-c08bbc26f65a031a3016"
+          ],
+          "reason": "未实现发票 OCR、税务计算等非本期功能，符合 §4.2 约定。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-99e7818b00df49855651",
+          "evidence_ids": [
+            "EVID-48a6a8d8d4ea82db7bfe",
+            "EVID-5d316d4df948ed6b563e",
+            "EVID-bafbe49670d29d654d46"
+          ],
+          "reason": "本审查未将非范围功能的缺位判为需求缺失。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-30d7dca0eca552d5982e",
+          "evidence_ids": [
+            "EVID-a964bf47066e35967d2c",
+            "EVID-f2b8c11a4469d5d2e0ce",
+            "EVID-1e49e0a4a85a1467a725"
+          ],
+          "reason": "角色权限与实现一致：EMPLOYEE 提交、MANAGER/FINANCE 审批、申请人取消，SYSTEM 为后台付款。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-38d5ed25980a96afa958",
+          "evidence_ids": [
+            "EVID-f41f78bee1033624f83f",
+            "EVID-af0861927949080cd611",
+            "EVID-7c7da14faa7c4abf98e7"
+          ],
+          "reason": "权限校验基于服务端传入的 Actor.roles（frozenset），不接受请求体自报角色。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-03998fe8feeca9232997",
+          "evidence_ids": [
+            "EVID-3c9e96ee765fcaf95074",
+            "EVID-baac0ffd352f0bb42e31",
+            "EVID-6eed6ef6a41f26c95611"
+          ],
+          "reason": "名词定义与实现一致：request_id 幂等键、总尝试次数 3、短暂/永久失败异常分类与枚举一致。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-3ad85c84cf2293810d2d",
+          "evidence_ids": [
+            "EVID-b1b80ff6d665171a5a3b",
+            "EVID-8849576ccd3a1d71d29d",
+            "EVID-37329d3ddf992bf49add"
+          ],
+          "reason": "状态机与流程一致：提交→PENDING_MANAGER，驳回→REJECTED，取消→CANCELLED，经理按金额分级。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e1974890e192fd4bec50",
+          "evidence_ids": [
+            "EVID-119658ca74a99dbbd1f1",
+            "EVID-ef17e2e3146682aa8fdf",
+            "EVID-0264829d7073444fb799"
+          ],
+          "reason": "APPROVED 下取消与 claim_for_payment 竞争，结果为 CANCELLED 或进入 PAYING→PAID/PAYMENT_FAILED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0931121a5737df649e93",
+          "evidence_ids": [
+            "EVID-6085e5b4e7118551cd32",
+            "EVID-a2abe9d6149ea87b91b8",
+            "EVID-371e7a2acd405741d858"
+          ],
+          "reason": "cancel 与 claim_for_payment 在同一仓库锁内做条件更新，互斥竞争成立。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c89b7aa7c94c61b28280",
+          "evidence_ids": [
+            "EVID-9b83978aea07ad0e6978",
+            "EVID-faa47cb57cfd379c49c1",
+            "EVID-6c25daff8010709a1284"
+          ],
+          "reason": "create_or_get 命中已有 (requester_id, request_id) 时返回原单，重复提交被拦截。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-652103e1a398f831128a",
+          "evidence_ids": [
+            "EVID-4731ef58b1a46ad19983",
+            "EVID-d2ae9d6b060fee0e6bc2",
+            "EVID-2760ce40b70f25ae9e07"
+          ],
+          "reason": "唯一性键为 (requester_id, request_id)，保证 request_id 在同一申请人范围内唯一。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-b00dd0b79eb60768b477",
+          "evidence_ids": [
+            "EVID-224a5c67b08e1ed8985e",
+            "EVID-8e7dad1c00037024ffc2",
+            "EVID-e0d65370f5398419180a"
+          ],
+          "reason": "首次提交 created=True，返回新建单据。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f72e3e53ee2aed29f8be",
+          "evidence_ids": [
+            "EVID-9030d5c5f7ba174896d2",
+            "EVID-1c4e1d4b8a4fbca3fc73",
+            "EVID-d967e2e3f24ac90d9856"
+          ],
+          "reason": "重复提交 created=False，返回既有单据且不新建。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d0062f6b9a86496078ca",
+          "evidence_ids": [
+            "EVID-a68e583ddb96c8188d5c",
+            "EVID-ed5c859e94de846d38e3",
+            "EVID-edf1d7e75941210af991"
+          ],
+          "reason": "查询已有单据与创建新单据处于同一 with self._lock 临界区。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c53b49298de69459a1f9",
+          "evidence_ids": [
+            "EVID-7b7ec7d9dcd52a80fe68",
+            "EVID-d30a64fd9f287cfc12e1",
+            "EVID-7363e41ea78379951240"
+          ],
+          "reason": "键含 requester_id，不同申请人可复用相同 request_id。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-340b7bc3998104db62d7",
+          "evidence_ids": [
+            "EVID-ea194d00aba3a1fa7f57",
+            "EVID-1d62f507240af73f4ec6",
+            "EVID-453e4ef5d706c2dd80fd"
+          ],
+          "reason": "串行重复调用由 create_or_get 返回同一 expense ID。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-14067cfe5acc7cfd1117",
+          "evidence_ids": [
+            "EVID-ab0a355db83ea850e07f",
+            "EVID-0dad384fd45f103f34b4",
+            "EVID-f0e9cc05f02de2c2401d"
+          ],
+          "reason": "RLock 串行化并发创建，并发重复调用最终只产生一张单据。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-42325a72ec3dfe35ddcb",
+          "evidence_ids": [
+            "EVID-5fbe0862c33cea3e5dba",
+            "EVID-ed7e9576beef9d719da8",
+            "EVID-97c4accaba88c4e8c8f9"
+          ],
+          "reason": "不同员工以各自 requester_id 为键，使用相同 request_id 各自生成一张单据。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-63afb2946381331013a9",
+          "evidence_ids": [
+            "EVID-64c42bb8f4180cece1b1",
+            "EVID-78860eef139ff9c1ad31",
+            "EVID-d056536fbd4db1611ecc"
+          ],
+          "reason": "_require_approver 同时校验审批角色与申请人身份，覆盖自批与越权。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0beb94b40133c8e5414a",
+          "evidence_ids": [
+            "EVID-2bd0f7116f12e1bcf6de",
+            "EVID-3264247a5fdca85e436b",
+            "EVID-f49b4a8c2ed3f2d3cd17"
+          ],
+          "reason": "approve_manager 要求 Role.MANAGER 才可执行。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f8ae8c146bb42717266b",
+          "evidence_ids": [
+            "EVID-342f0f2172a2c11fdbd2",
+            "EVID-858298471674f65c9df9",
+            "EVID-6baa9daa93d5354705f2"
+          ],
+          "reason": "approve_finance 要求 Role.FINANCE 才可执行。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-b343177bfb42dcccacde",
+          "evidence_ids": [
+            "EVID-7171170d5391a2d970e9",
+            "EVID-d531ee81c0fb4885bb0f",
+            "EVID-525d527d78f5e2358872"
+          ],
+          "reason": "actor.user_id == expense.requester_id 时抛 AuthorizationError，无论兼任何种角色。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-ed414bc9e839199c3a47",
+          "evidence_ids": [
+            "EVID-815fcdabcafc214ac4f9",
+            "EVID-2c9d912d2d701605aebb",
+            "EVID-595df93c93738ef8eb9f"
+          ],
+          "reason": "权限校验先于 _transition 执行，被拒审批不改变状态也不写成功事件。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-136e2f5d5bbe5e444af6",
+          "evidence_ids": [
+            "EVID-66f085c662801796f626",
+            "EVID-c7037128776c2370c53d",
+            "EVID-e112c61c9aedc2f21e18"
+          ],
+          "reason": "_transition 校验期望状态集，重复或跨级审批抛 StateConflictError。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a3132d2f55900b9e7ce1",
+          "evidence_ids": [
+            "EVID-8695413e9e72fd26a984",
+            "EVID-b485e2ae56861f9b9abb",
+            "EVID-c999271ef60b8930adc5"
+          ],
+          "reason": "无 MANAGER/FINANCE 角色的员工审批被拒。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f97ba33abbc7b5062968",
+          "evidence_ids": [
+            "EVID-88a92a4bde38dc275697",
+            "EVID-8c617518a3fa3b538f47",
+            "EVID-ecd64e15231f7ecab6d7"
+          ],
+          "reason": "具有 MANAGER 或 FINANCE 角色的申请人本人仍被拒。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9fffe61c5361b08ccaaf",
+          "evidence_ids": [
+            "EVID-bc486807849882fa3f57",
+            "EVID-25c8f4cbb87ba8e57b21",
+            "EVID-426dba9854599585873e"
+          ],
+          "reason": "合法他人审批经 _transition 正常推进状态。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-3784ff06c0f198c93397",
+          "evidence_ids": [
+            "EVID-69c2cb87dc07c0261d2c",
+            "EVID-c216f5c73b1fff7206f7",
+            "EVID-ee846a4c8b3ca6cd91dd"
+          ],
+          "reason": "LARGE_EXPENSE_THRESHOLD = Decimal(\"1000.00\")。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-1954a4288ee6731f9e1e",
+          "evidence_ids": [
+            "EVID-d1401126378ae8738850",
+            "EVID-a2be203b16ba786df2c8",
+            "EVID-2bfdeb4d6696e4f3d801"
+          ],
+          "reason": "amount <= 1000.00 时经理通过后直接置 APPROVED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5209196af4bc0f0c5a79",
+          "evidence_ids": [
+            "EVID-69647932fbc095ea9239",
+            "EVID-20b2887cc464e1afcbbb",
+            "EVID-d69326a2e336cb820da1"
+          ],
+          "reason": "amount > 1000.00 时置 PENDING_FINANCE，须 approve_finance 通过才进入 APPROVED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-35ba18a1e8d9324b057d",
+          "evidence_ids": [
+            "EVID-8d4b0ff19b09206b10bd",
+            "EVID-24c10b9328a54b0683b3",
+            "EVID-7ecf7e6d031c13b3137a"
+          ],
+          "reason": "阈值与金额均以 Decimal 比较，无二进制浮点近似。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-48fad03d2e323c010a08",
+          "evidence_ids": [
+            "EVID-18e31a80c8c8e194e6eb",
+            "EVID-356a707ff4e6156e5e5b",
+            "EVID-2c51dc6f8d30b74be756"
+          ],
+          "reason": "_validate_submission 校验 currency == \"CNY\"，其他币种抛 ValidationError。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-108e6db039a05ef27350",
+          "evidence_ids": [
+            "EVID-764128eb0f178156b14d",
+            "EVID-af36741ec0e1900ff061",
+            "EVID-765d2aa9bedae5b95c79"
+          ],
+          "reason": "边界 999.99/1000.00/1000.01 由 Decimal 严格比较满足。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a090b492ed224639cdae",
+          "evidence_ids": [
+            "EVID-fb506e52c9c73f63ac2e",
+            "EVID-2744b03a1e6ee9498860",
+            "EVID-0bf2d80ba660af795d65"
+          ],
+          "reason": "cancel 与 claim_for_payment 在仓库层原子互斥，付款任务不依赖旧快照。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-125aa3d51cddae3f38db",
+          "evidence_ids": [
+            "EVID-5abf091595b21378727e",
+            "EVID-6496d11a2fd39c5feafd",
+            "EVID-5810e52df4289bf28601"
+          ],
+          "reason": "repository.cancel 校验当前用户为 requester_id。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c1c8e1b57e7bf203e2ee",
+          "evidence_ids": [
+            "EVID-32a6f3b3e145ee841cf5",
+            "EVID-64a1503820bb89c249ef",
+            "EVID-6636d0b9b31b06b93233"
+          ],
+          "reason": "允许取消状态集合为 PENDING_MANAGER/PENDING_FINANCE/APPROVED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-41e43ae24b0f297467b8",
+          "evidence_ids": [
+            "EVID-dad5f661bbc8ca978d7d",
+            "EVID-166b3e0b364fa19d48b0",
+            "EVID-c32aa73e722dfa257cd1"
+          ],
+          "reason": "PAYING/PAID/REJECTED/CANCELLED/PAYMENT_FAILED 状态取消被拒。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d44e69086803ccc1eee3",
+          "evidence_ids": [
+            "EVID-f7e444569fd2d6940dc1",
+            "EVID-fb01cbc04c351ece8bdf",
+            "EVID-f6b25b75b8c0886151dd"
+          ],
+          "reason": "claim_for_payment 以 {APPROVED} 为期望状态原子转 PAYING，非 APPROVED 返回 None。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0564fc2d0b529c2eae5c",
+          "evidence_ids": [
+            "EVID-78a585d09c66b5b493ca",
+            "EVID-af415c4c5ac6355fe994",
+            "EVID-af3c7472c8eb099e3bc8"
+          ],
+          "reason": "process 直接调用 claim_for_payment，未使用早先读取的对象快照。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e140259fb80a4ef4efe3",
+          "evidence_ids": [
+            "EVID-b0a8aa732f6050a7824d",
+            "EVID-0f4fb832ece305664af5",
+            "EVID-01c8c652e8eb9bcb348f"
+          ],
+          "reason": "取消与付款抢占的条件更新在同一锁内串行化，仅允许一方成功。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-43c54a75fe37637e1613",
+          "evidence_ids": [
+            "EVID-77d97d86fc417a255213",
+            "EVID-cc512f2a10c8c0822b58",
+            "EVID-b041184c3b80700b2f3f"
+          ],
+          "reason": "已取消单据状态非 APPROVED，claim 返回 None，付款网关不被调用。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-88f32cabded6ff48d4ae",
+          "evidence_ids": [
+            "EVID-95905c96c8c2527cc683",
+            "EVID-fc03404caeee4a986b8a",
+            "EVID-cd2de9b3af89c9f4d962"
+          ],
+          "reason": "竞争最终状态只能是 CANCELLED 或从 PAYING 继续完成的付款结果，不存在已取消却扣款。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8e48ab63c4d6ec6333fc",
+          "evidence_ids": [
+            "EVID-31bb03d96b09165b3aab",
+            "EVID-66ea3b1ecc14b560c8bd",
+            "EVID-39674de018ad47570106"
+          ],
+          "reason": "process 以 expense_id 作为网关幂等键调用 gateway.pay。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2679dca7649b46562a08",
+          "evidence_ids": [
+            "EVID-80981ddd4a57da69af1d",
+            "EVID-00e2585f4ccda602a26b",
+            "EVID-0acf54c46f0efc800492"
+          ],
+          "reason": "付款成功立即 return，经 transition 置 PAID 并记录 payment_reference。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-edd6354ca85dea61a866",
+          "evidence_ids": [
+            "EVID-622b055f338afe7efc59",
+            "EVID-c774611d0300eb691f8a",
+            "EVID-3142d7081294fa6f5d43"
+          ],
+          "reason": "仅捕获 TransientPaymentError 进入重试分支。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-24f70fd179aca8189c4a",
+          "evidence_ids": [
+            "EVID-9f2972766e34e7ecec76",
+            "EVID-0e8c3f1c992a02dee595",
+            "EVID-314bd2c74f1daae10dd5"
+          ],
+          "reason": "PermanentPaymentError 触发 break，随后置 PAYMENT_FAILED，不重试。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a4b4461c5d0edcc4fa77",
+          "evidence_ids": [
+            "EVID-3c3677de88facd908729",
+            "EVID-2ae637c60e2161852495",
+            "EVID-22eefe3769db42adb5a7"
+          ],
+          "reason": "for attempt in range(1, 4) 限定总尝试次数上限为 3。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4fb99f5d2928e2fe2cbd",
+          "evidence_ids": [
+            "EVID-1b8b5f7cf2be1fee7ad1",
+            "EVID-fad268559b5bd673cc27",
+            "EVID-8754d4482897bce4c755"
+          ],
+          "reason": "sleep(2 ** (attempt - 1)) 产生 1 秒、2 秒等待序列，最后一次失败后不等待。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-985a4f9bfca171e1af5c",
+          "evidence_ids": [
+            "EVID-c956af06920e04606500",
+            "EVID-c66585281e14b562f213",
+            "EVID-b427f01a2fff35f21e25"
+          ],
+          "reason": "三次短暂性失败耗尽循环后置 PAYMENT_FAILED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8dc743a5c737878f03ad",
+          "evidence_ids": [
+            "EVID-ffdfe0ecbbeaae16ba19",
+            "EVID-a6849e484e41df237ca4",
+            "EVID-05899d42003fdc21ec2e"
+          ],
+          "reason": "验收矩阵五种网关结果序列与循环及异常分支一一对应。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9b27e3dc6e54a9cf40e7",
+          "evidence_ids": [
+            "EVID-70f696ef42de189eba96",
+            "EVID-40eb4f2e32c8cf0dd3c2",
+            "EVID-e2a6d32b988e7dc7dc7e"
+          ],
+          "reason": "每次成功状态转换均经 _transition/_record 生成一条审计事件。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-7d58a27f9584a33d7cdb",
+          "evidence_ids": [
+            "EVID-bd26782a3cc1cec46415",
+            "EVID-4d3316a8431a3ac458bb",
+            "EVID-d9814b6c4e5164fcc3d5"
+          ],
+          "reason": "AuditEvent 含 expense_id、actor_id、event_type、from_status、to_status、occurred_at。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-934b0066dfb7a80a2c8e",
+          "evidence_ids": [
+            "EVID-ee90029e65ac9f75e591",
+            "EVID-557c083bc3d0e7424acf",
+            "EVID-5a61f2e0aeea76e0d747"
+          ],
+          "reason": "付款审计 actor_id 固定使用 SYSTEM_ACTOR_ID 常量，代表系统后台操作而非人工审批者。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-1abe1b3c14024345eb77",
+          "evidence_ids": [
+            "EVID-b20867b042bfafe1d96b",
+            "EVID-3800f14980f8e00f7083",
+            "EVID-3eb7efdfa502f8bbe7ca"
+          ],
+          "reason": "权限或状态校验失败在写事件前抛异常，不产生成功转换事件。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-722e42583cdc2d18187b",
+          "evidence_ids": [
+            "EVID-853f649601d9c90ec052",
+            "EVID-7970b88c3b4470f3aad5",
+            "EVID-35a0ec3944df36de8cea"
+          ],
+          "reason": "审计 metadata 仅含 {\"version\": ...}，不含事由原文、银行账户、证件或附件内容。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-768900eee178df619113",
+          "evidence_ids": [
+            "EVID-b2aa2db4a82a1e80bed2",
+            "EVID-f191e54fb21a47a47574",
+            "EVID-b5898313bd35fe557937"
+          ],
+          "reason": "各阶段转换事件均带 occurred_at，可按时序完整追溯。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-997839719bc344ecfe1a",
+          "evidence_ids": [
+            "EVID-148ba956acbbba62bacf",
+            "EVID-83c969f868f5ebeaea68",
+            "EVID-1dd5c9913cf5a76b0c63"
+          ],
+          "reason": "REJECT、CANCEL、PAYMENT_FAILED 均有对应审计事件。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-ebaf5c4d1edc910aaf52",
+          "evidence_ids": [
+            "EVID-c27b3318786ff6beaf2a",
+            "EVID-1792135a88f46c3f2862",
+            "EVID-b9c5aeb8d615a910f049"
+          ],
+          "reason": "审计 metadata 未写入 purpose、bank_account 或原始请求体。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-19cdfb60af834e119872",
+          "evidence_ids": [
+            "EVID-beef7af96dc4534df9ad",
+            "EVID-59f291d2fc6e09708177",
+            "EVID-b11484fd0279b9881ffc"
+          ],
+          "reason": "Expense 数据类字段（id/requester_id/request_id/amount/currency/purpose/status/payment_reference/version）与数据模型一致。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5c478b16e1d2d9e46d4d",
+          "evidence_ids": [
+            "EVID-d317613a251eacf1042b",
+            "EVID-6a6cb6e60e9fa351169f",
+            "EVID-a6f45ecdd45759a9a342"
+          ],
+          "reason": "_by_request 复合键配合 RLock 提供等价原子唯一性保证。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-7553c957fe7889ade089",
+          "evidence_ids": [
+            "EVID-56d52d38766791788bef",
+            "EVID-787052c11c49235c9731",
+            "EVID-26db3192f90675c84fdd"
+          ],
+          "reason": "_validate_submission 要求 amount 为正的有限 Decimal，金额以 Decimal 存储保证精度。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-24234264359547e347d6",
+          "evidence_ids": [
+            "EVID-ac5eba643079df7f5ab0",
+            "EVID-9f8011228b33ac3933e3",
+            "EVID-c7b4398d14eb84cb8d26"
+          ],
+          "reason": "payment_reference 仅在付款成功 transition 中传入，取消/审批转换保持为空。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8d84921a97975020cd1e",
+          "evidence_ids": [
+            "EVID-ebe2fb4a8ecb0422c6b1",
+            "EVID-5989bc0f69c02bef24eb",
+            "EVID-6513227db26cbf35d2c9"
+          ],
+          "reason": "所有状态更新均通过 with self._lock 内带期望状态的条件检查完成。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-31c9b3121511eef8a615",
+          "evidence_ids": [
+            "EVID-f0c6f14823d45526776f",
+            "EVID-af74a82a616ad5e5d6a1",
+            "EVID-ed9bc901c2a6b9cc142c"
+          ],
+          "reason": "ExpenseService.submit 签名与 submit_expense(actor, request_id, amount, currency, purpose) -> Expense 一致。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9cc7025c86c5c9c6416b",
+          "evidence_ids": [
+            "EVID-7892e2444336c69fe0e9",
+            "EVID-5179b806c55861bfe54d",
+            "EVID-5b961f560196106f4744"
+          ],
+          "reason": "无 EMPLOYEE 角色时抛 AuthorizationError；Actor 由服务端传入。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-cf280f0f378ed6f59416",
+          "evidence_ids": [
+            "EVID-c49c2b84e238077c3290",
+            "EVID-608e33bf60a9e3abb544",
+            "EVID-75a4ac6efeaf5615220d"
+          ],
+          "reason": "request_id 空白时抛 ValidationError。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-bb21bf84e4c559da8c09",
+          "evidence_ids": [
+            "EVID-9dfbf297e457afd6bab6",
+            "EVID-91006905509521af1cae",
+            "EVID-6d1db02c5fa47a59e80d"
+          ],
+          "reason": "amount 非正数或非法时抛 ValidationError。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-cede151bd28b03a9449f",
+          "evidence_ids": [
+            "EVID-289664ee1cacd0c670c2",
+            "EVID-cd4ae37ae890c0856adb",
+            "EVID-85908fb90cef3eadf58c"
+          ],
+          "reason": "币种非 CNY 时抛 ValidationError。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c0c5a872bf241ccfad74",
+          "evidence_ids": [
+            "EVID-f1dcfc25c3fa07d673f4",
+            "EVID-96b7a232330fced25477",
+            "EVID-56a8e7c137288c2ff13b"
+          ],
+          "reason": "approve_manager/approve_finance/reject 签名与契约一致。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d747af5d1e92b0d4bba4",
+          "evidence_ids": [
+            "EVID-d4ea353b1d1daae206a4",
+            "EVID-ce1bb941b8fc9b35ccec",
+            "EVID-51532286dfedb787ce55"
+          ],
+          "reason": "reject 不把自由文本理由写入审计事件，仅产生事件类型与状态转换。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e24df0f3ca25d49c2718",
+          "evidence_ids": [
+            "EVID-479c0ca5538a058478b7",
+            "EVID-2b6f50582f0b922ca91b",
+            "EVID-edfd3211bc0c72095d40"
+          ],
+          "reason": "ExpenseService.cancel(actor, expense_id) 签名与契约一致。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2cb777f1176fc6a8eafa",
+          "evidence_ids": [
+            "EVID-c25bc3e1d04566ff0861",
+            "EVID-37b45fe3de4960011376",
+            "EVID-eb02cda50a73c20e15a5"
+          ],
+          "reason": "取消失败抛 StateConflictError（权限或状态冲突），不静默成功。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5bbac221545995316266",
+          "evidence_ids": [
+            "EVID-fc897a891cd307595d2b",
+            "EVID-77e5b963e00249812ec4",
+            "EVID-4e7c82dadd08a7483f80"
+          ],
+          "reason": "PayoutWorker.process(expense_id) -> PaymentOutcome 签名与契约一致。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-06b7e79b1f03e5f877c6",
+          "evidence_ids": [
+            "EVID-65270178a46885a77c9c",
+            "EVID-a915a09f6a17409669e3",
+            "EVID-05b8fb86eee7efc2834b"
+          ],
+          "reason": "claim 返回 None 时 process 返回 PaymentOutcome.SKIPPED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-70de201ff745bff8ed2a",
+          "evidence_ids": [
+            "EVID-960a0e2158f042073992",
+            "EVID-644af545e629c962997a",
+            "EVID-ad604dc1211d8e7e429d"
+          ],
+          "reason": "付款成功路径返回 PaymentOutcome.PAID。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-00fed1b7496aa43328d0",
+          "evidence_ids": [
+            "EVID-86b948094bd273f63f4d",
+            "EVID-eece9cdf367cbd93146e",
+            "EVID-2560f7415d784e03a1ff"
+          ],
+          "reason": "永久性失败或重试耗尽路径返回 PaymentOutcome.FAILED。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0913720eb62474ebcbd8",
+          "evidence_ids": [
+            "EVID-b2aa0be6585e88820a6d",
+            "EVID-203f35215be225000f98",
+            "EVID-cab33727e8dc11641612"
+          ],
+          "reason": "ValidationError/AuthorizationError/StateConflictError/TransientPaymentError/PermanentPaymentError 均已定义并按对应场景抛出。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5c9fdfceb050159ad2d9",
+          "evidence_ids": [
+            "EVID-2eb9c7ce1f45b441c0f2",
+            "EVID-480172cd2e057af719b9",
+            "EVID-97f933ac3d224a5f4841"
+          ],
+          "reason": "审计与日志元数据不含报销事由原文。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e752a51da2e3fb6f03b8",
+          "evidence_ids": [
+            "EVID-f822354deb684c6b5102",
+            "EVID-d248dd082c938f7755c0",
+            "EVID-acda503329197c80ea40"
+          ],
+          "reason": "错误信息为固定中文描述，不暴露仓库内部结构或付款网关密钥。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e309f418bb89373e6590",
+          "evidence_ids": [
+            "EVID-8911795257fb6c02933b",
+            "EVID-e4b91d899c361d55950a",
+            "EVID-be2316f959e5193112f9"
+          ],
+          "reason": "幂等创建（create_or_get）、取消、付款抢占均在锁内原子完成。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5a99cc4ed8e44ba22ed8",
+          "evidence_ids": [
+            "EVID-2c496b0713ade4a0881b",
+            "EVID-ed273e2096899f9149c9",
+            "EVID-88c0fc100355ae9a948d"
+          ],
+          "reason": "并发控制使用显式 RLock 与 Barrier，不依赖单进程或 Python GIL。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-28818f9b40760a5ce520",
+          "evidence_ids": [
+            "EVID-5520033868b7fe3e38b5",
+            "EVID-c22c89f26218b4b6b389",
+            "EVID-a42d1624a13bf9025746"
+          ],
+          "reason": "付款网关、时钟、等待器、审计接收器均通过构造函数注入，可替换。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5126e998a9e49a7e07fa",
+          "evidence_ids": [
+            "EVID-c1e8a4394b86ba9e1689",
+            "EVID-2453254f868008913402",
+            "EVID-6756c55e19a8fddd38bf"
+          ],
+          "reason": "提供 create_barrier 与可注入组件，支撑并发幂等和取消/付款竞争自动化测试。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-db95c179148e4db3d874",
+          "evidence_ids": [
+            "EVID-21d1ad4ea9c6b71552bb",
+            "EVID-62e3c3a724974d9c7c73",
+            "EVID-38929fd89dbadae77990"
+          ],
+          "reason": "提交/审批/取消为纯内存操作，无外部调用拖慢服务端 P95。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d1dec3e76303de9d2eea",
+          "evidence_ids": [
+            "EVID-9b39ac97504b5d394b08",
+            "EVID-b8eafdb686880f48c632",
+            "EVID-758b558b0b8e08465a5b"
+          ],
+          "reason": "原子性由独立的锁与条件更新保证，未为性能基线牺牲。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0d3200ea5029d9445b87",
+          "evidence_ids": [
+            "EVID-64653f11d7988ebdc635",
+            "EVID-2cf7521c9e2eeec4f1e5",
+            "EVID-becf38b0e5ea9ee1ab68"
+          ],
+          "reason": "服务通过可替换的 CounterMetrics 适配层在提交/审批/取消/付款路径上报计数指标。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-df7b33e1f6090e3d336d",
+          "evidence_ids": [
+            "EVID-78d49319b3abc964e7b6",
+            "EVID-8ba23aaf74570929ac93",
+            "EVID-2c70ca86bbc6bcbd7f86"
+          ],
+          "reason": "submit 成功路径在提交后调用 metrics.increment 上报提交计数。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-dc937c39357ca85a34e6",
+          "evidence_ids": [
+            "EVID-13756351ecb4e0848b87",
+            "EVID-2fd83c40f26c9001c89f",
+            "EVID-c08ac67237adf5dcf98d"
+          ],
+          "reason": "审批拒绝等审计类计数由计数器语义覆盖，指标名与命名空间在指标适配层绑定。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f89e118cf1afe378f437",
+          "evidence_ids": [
+            "EVID-290f665b2d347938c882",
+            "EVID-634e66e2ccccc4541b36",
+            "EVID-4135048aaffacda97753"
+          ],
+          "reason": "cancel 成功路径调用 metrics.increment 上报取消计数。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a14b2c513d51c222c40d",
+          "evidence_ids": [
+            "EVID-982180ef07bec51aca84",
+            "EVID-5c18b755683a50ddac4c",
+            "EVID-8be631ca84a85b32f7ae"
+          ],
+          "reason": "付款尝试在 PayoutWorker.process 的成功、重试、失败各分支均上报计数。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-30c5015af38d273f939f",
+          "evidence_ids": [
+            "EVID-099c7c7c19912af08ed5",
+            "EVID-4e67c1dd14b70689ce09",
+            "EVID-34c473c67cbf289a8cbb"
+          ],
+          "reason": "短暂性失败分支上报重试计数。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9a1560c390a49aca4fb7",
+          "evidence_ids": [
+            "EVID-27089d67c5783d82b7aa",
+            "EVID-45bd379c4378a8d5e02e",
+            "EVID-5100a1dae8bdf700486f"
+          ],
+          "reason": "永久性失败分支计入付款失败计数路径。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-36027d5053243350e30f",
+          "evidence_ids": [
+            "EVID-08937e02fcbf7f686a52",
+            "EVID-56044ad15c9b079cc1ea",
+            "EVID-ef002c5825d1bf9a6a59"
+          ],
+          "reason": "付款失败统一上报失败计数。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-385767e89cb1cd0ab574",
+          "evidence_ids": [
+            "EVID-bc3c85c708a7977f66a9",
+            "EVID-be563709f556a543ee30",
+            "EVID-99a14e5f12938d69a30c"
+          ],
+          "reason": "计数键仅使用固定指标名，未使用 expense_id/requester_id/purpose 作为高基数标签。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-423dc7ef14b97cf20088",
+          "evidence_ids": [
+            "EVID-f792f6a91893bcb71f4e",
+            "EVID-de32e5f06ec3c9f2a257",
+            "EVID-49326d1955442f4bb4a2"
+          ],
+          "reason": "追溯矩阵关键证据 create_or_get 与 claim_for_payment 均存在且语义符合。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f8c7f0e1823387c5bd9a",
+          "evidence_ids": [
+            "EVID-8067f2cd906d7d6f2fca",
+            "EVID-6e4f56cb51553a302b29",
+            "EVID-8b6c28b838524768b268"
+          ],
+          "reason": "FR-01 至 FR-06 实现与必要测试目标一致，未发现不一致证据。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e3defc0b72f346441e71",
+          "evidence_ids": [
+            "EVID-a1725ad2bebf64cffc84",
+            "EVID-3eca937fae1de4087a85",
+            "EVID-0f44704c7e973ccf8e13"
+          ],
+          "reason": "未发现自批、已取消单据付款或重复建单风险路径。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-b26a9e694076e87be4c6",
+          "evidence_ids": [
+            "EVID-bc376dced8b3b8efca1b",
+            "EVID-d1fa2fa66ef144a8483e",
+            "EVID-700c5cb2efe747de184e"
+          ],
+          "reason": "重试次数上限与 1/2 秒等待序列在 process 中以常量和循环显式表达。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-70bde7cd28248b08b543",
+          "evidence_ids": [
+            "EVID-e5e879ccd2e585209665",
+            "EVID-fc9b07dd38dc18a4f99a",
+            "EVID-852a97f2daa84f4f5e0a"
+          ],
+          "reason": "审计数据仅含版本号元数据，可满足敏感信息检查。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e7d11ab94017fbf25f18",
+          "evidence_ids": [
+            "EVID-9138eca3d78820d43df5",
+            "EVID-52ebe3094c1254d8bd41",
+            "EVID-3c8daccfb7b7f4054d7b"
+          ],
+          "reason": "本审查对未能充分证明的边界保持审慎表述，不将‘未找到’直接当作‘未实现’。",
+          "verdict": "consistent"
+        }
+      ],
+      "escalate": false,
+      "summary": "L3 快速审查 v1_complete（snapshot 模式）。对 115 条声明逐条核对：2 条元数据声明判定 not_applicable，其余 113 条均可依据源码证据判定为 consistent。核对范围覆盖 FR-01 幂等提交（create_or_get 锁内查询+创建）、FR-02 审批职责分离（_require_approver 角色与 requester 双重校验）、FR-03 金额分级（Decimal 阈值）、FR-04 取消/付款抢占（仓库层条件更新互斥）、FR-05 有界重试（总尝试 3 次、1/2 秒退避、短暂/永久异常分类）、FR-06 审计（统一 _record、无敏感字段）、数据模型、接口契约、异常定义、NFR 原子性与可测试性。未发现需求与代码之间的可定案不一致，无需升级 L4 深审。"
+    }
+  },
+  "generated_at": "2026-08-11T12:34:41.404907+00:00"
+}

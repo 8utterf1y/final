@@ -1,0 +1,3526 @@
+{
+  "schema_version": "0.3",
+  "tool": "opencode-spec-review",
+  "case_id": "CASE-c8d0c6fc1a118af71ee9",
+  "repo": "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark",
+  "base_revision": null,
+  "head_revision": "0101b531adf6af94136bab1b6b7a9ec10718aef6",
+  "mode": "auto",
+  "scope": {
+    "analysis_root": "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark",
+    "base_revision": null,
+    "documents": [
+      "requirements/EXPENSE_PAYMENT_REQUIREMENTS.md"
+    ],
+    "full_repository": false,
+    "head_revision": "0101b531adf6af94136bab1b6b7a9ec10718aef6",
+    "note": "未提供基准版本；需求声明将通过可选的路径范围关联到代码。",
+    "paths": [
+      "versions/v5_cancelled_payment_bypass/expense_app"
+    ],
+    "review_type": "snapshot",
+    "sections": [],
+    "seed_count": 0
+  },
+  "result": {
+    "summary": "审查完成：consistent=106，inconsistent=7，uncertain=0，not_applicable=2。",
+    "verdict_counts": {
+      "consistent": 106,
+      "inconsistent": 7,
+      "uncertain": 0,
+      "not_applicable": 2
+    },
+    "claims": [
+      {
+        "claim_id": "CLAIM-ab5b164223295ddb6ff9",
+        "evidence_ids": [],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "not_applicable",
+        "section": "1. 文档信息"
+      },
+      {
+        "claim_id": "CLAIM-9899eaf45dc221f18f34",
+        "evidence_ids": [],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "not_applicable",
+        "section": "1.1 修订记录"
+      },
+      {
+        "claim_id": "CLAIM-dc8be3b02d873f3473de",
+        "evidence_ids": [
+          "EVID-be67f28b45d2ea38ca01",
+          "EVID-823fc56e3a3c1494bd2e",
+          "EVID-3527ec5dd8390b244cde",
+          "EVID-28454bb3f53819782f03",
+          "EVID-cc6d550f88a61cfe161c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-c2cda3b9692cce6ee435",
+        "evidence_ids": [
+          "EVID-16461eb7885549aecc76",
+          "EVID-53f9b41ea2fd8bf3f4bd",
+          "EVID-9f601b23d6e4b7da6baa",
+          "EVID-25b009496c4814b3cf6b",
+          "EVID-2b5f44f5724da6e9eed4"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-f17ec78faea8c4a9d3ec",
+        "evidence_ids": [
+          "EVID-f49139ad0bbd6e3661e2",
+          "EVID-7ba2e271a9384212c950",
+          "EVID-5434c98a0e7275dc3fe3",
+          "EVID-9a78fe218d1fc8cfae85",
+          "EVID-bab5d38f79e1c9d76887"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-3b2bb395d219618e21b7",
+        "evidence_ids": [
+          "EVID-e70b57500bb2d67d509b",
+          "EVID-b39190e259cf6f18970c",
+          "EVID-89ce3e4cbaaa88d59030",
+          "EVID-a69bc332624dbdb24a6c",
+          "EVID-cb495874cf82f0f430cc"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "2. 文档目的"
+      },
+      {
+        "claim_id": "CLAIM-23f5f907c14e107659f7",
+        "evidence_ids": [
+          "EVID-efd047abc7b8ae948229",
+          "EVID-b64e4b264d7effa52677",
+          "EVID-ea692af3ae28101e0669",
+          "EVID-d8aa78d635a8036918b3",
+          "EVID-087091f57a25537b49dc"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-b0bfa5500b4fe0c24caa",
+        "evidence_ids": [
+          "EVID-5e1ba56d2a3d4053540f",
+          "EVID-fd2c6a6e911cbfc1abf1",
+          "EVID-e610737b58a33a19b3ea",
+          "EVID-701a3a7ed2fd1f79f1f0",
+          "EVID-ff8a64bc9bedbd5a4ca7"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-6b7505dbac61b1858d2d",
+        "evidence_ids": [
+          "EVID-f7257beca8f95eebe7f9",
+          "EVID-d3dab9af5bfe978d28af",
+          "EVID-872569aeaffd56e757ef",
+          "EVID-da321f3cfe50cffd352b",
+          "EVID-1167096085b81033ff0f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-ea73994076760f30af99",
+        "evidence_ids": [
+          "EVID-79f37558601e33373670",
+          "EVID-575538f4735d25390af5",
+          "EVID-cbbd655ffaf79c47b625",
+          "EVID-ddc940815e8441a98907",
+          "EVID-e86145715d733f821186"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-8e97263ce1369a4f6349",
+        "evidence_ids": [
+          "EVID-25065887d935e3c30b5e",
+          "EVID-0f0e6e79ead3910c2a38",
+          "EVID-666c418b59f488e2fe96",
+          "EVID-652b31cb2fad05d19752",
+          "EVID-64643b3573004b57d978"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+        "evidence_ids": [
+          "EVID-d7430315a03e42406651",
+          "EVID-49bb88a87d3d368c969c",
+          "EVID-4eb3127975259fb0ad2b",
+          "EVID-2cbab8600cda55a0038b",
+          "EVID-25302ba17ffc442c6aaf"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-a6d06c1b59919e2421c1",
+        "evidence_ids": [
+          "EVID-dc803349e30c36618018",
+          "EVID-26a2e8f18f0ec8fb60f7",
+          "EVID-f43103cecbe77b8eedae",
+          "EVID-f21dd687dbb3930b05ad",
+          "EVID-1d3d44b58906eb063f2c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "claim_id": "CLAIM-eeddcd3cc46949d1fc1a",
+        "evidence_ids": [
+          "EVID-3cfe77722e225548d63c",
+          "EVID-86be404044b1884f4a16",
+          "EVID-96e3512ff35c70376f30",
+          "EVID-a9b7de4f9dbe9c1dec92",
+          "EVID-d5e0289c08530b73f143"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "4.1 本期范围"
+      },
+      {
+        "claim_id": "CLAIM-4ec9892c72d3c4b16c47",
+        "evidence_ids": [
+          "EVID-6fc707724cffc5f3371c",
+          "EVID-09b0ece0d5018ce1264d",
+          "EVID-6d5cc39c28651022436b",
+          "EVID-9cc8a04765e5126890d8",
+          "EVID-46f2b359551d501c59c6"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "4.1 本期范围"
+      },
+      {
+        "claim_id": "CLAIM-9016a094d1dda255fbb4",
+        "evidence_ids": [
+          "EVID-5e2c53aa5735a349a189",
+          "EVID-263774db69084ba85a11",
+          "EVID-d810800a8ce77c1adf42",
+          "EVID-91ce414fca09c5e028d3",
+          "EVID-6cc2d553879baf47204a"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "4.1 本期范围"
+      },
+      {
+        "claim_id": "CLAIM-632f25da686931ec4f56",
+        "evidence_ids": [
+          "EVID-c3e04e06a4b626c9346c",
+          "EVID-2caf684e28ff5a765148",
+          "EVID-c7fd086dc8ae08c919c1",
+          "EVID-730ceb3efaa0bc850023",
+          "EVID-2fdf4932c16b3d3c538f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "4.2 非本期范围"
+      },
+      {
+        "claim_id": "CLAIM-d81010b4526273ae4e90",
+        "evidence_ids": [
+          "EVID-8e2427076c9095faf20d",
+          "EVID-3bcf47d25019f498cf04",
+          "EVID-bd86fe243f3b1d648b0b",
+          "EVID-7dfecb33fb3af7c53132",
+          "EVID-7ef8ccc24f7424bf97da"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "4.2 非本期范围"
+      },
+      {
+        "claim_id": "CLAIM-0656af3445a9bf846197",
+        "evidence_ids": [
+          "EVID-ec97f3264fac932713a2",
+          "EVID-9b65a57c70634ecace0d",
+          "EVID-1238e10e208d51f343ab",
+          "EVID-8b33ad38dcf34b3ba51a",
+          "EVID-7ecb352353fb95cbbebe"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "5. 角色与权限"
+      },
+      {
+        "claim_id": "CLAIM-f3240faab97a58c49c2a",
+        "evidence_ids": [
+          "EVID-1186a7cacd88800207fb",
+          "EVID-0f64e8c470193f7cc9dd",
+          "EVID-d89ebb155cfb1fedef40",
+          "EVID-10ea9d500062e4b8ef57",
+          "EVID-39a70663db975127f68e"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "5. 角色与权限"
+      },
+      {
+        "claim_id": "CLAIM-19ef04f1b48d7fc492d2",
+        "evidence_ids": [
+          "EVID-96afd6eb640905499fcb",
+          "EVID-292ff42a0fd820c8a54c",
+          "EVID-a694607a103e574fc092",
+          "EVID-3067a7f21b976f76b070",
+          "EVID-c00efba7eb78e59b5b97"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "6. 名词说明"
+      },
+      {
+        "claim_id": "CLAIM-60b7206b0e6a94d146b1",
+        "evidence_ids": [
+          "EVID-084016c64f31bd652cc8",
+          "EVID-07d07b18c36a2ad0c408",
+          "EVID-24a9fcf5da0baa868ae4",
+          "EVID-25d9d74a17e846526f58",
+          "EVID-7b8a200733ddf6a6833e"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "claim_id": "CLAIM-73ff078f787e2ad13870",
+        "evidence_ids": [
+          "EVID-3417537d73315bf58410",
+          "EVID-39968b8f97a2d51d80c8",
+          "EVID-f1007268443885f526b0",
+          "EVID-53da6c265f25518b3c02",
+          "EVID-25a60d4ed018e7324c0c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-f3596def4af3193aff69",
+        "evidence_ids": [
+          "EVID-51609b4bfe69ba121858",
+          "EVID-5f39d07111eece3fc55a",
+          "EVID-9eb4bc225e362ad11572",
+          "EVID-814f97268d0e37ff8b3e",
+          "EVID-985e80d990b668f69d70"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "claim_id": "CLAIM-bbdf7890f3f872f176d9",
+        "evidence_ids": [
+          "EVID-2236322d0a833796c217",
+          "EVID-5580cc7bee072d08eb6c",
+          "EVID-545809bf59a2606f0920",
+          "EVID-f2192ee02219493971f7",
+          "EVID-8fa1ea7016bd36e303e4"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "业务场景"
+      },
+      {
+        "claim_id": "CLAIM-2bf4bd751a29848d96da",
+        "evidence_ids": [
+          "EVID-fbbfd520b020cbf7203c",
+          "EVID-17b41d8ee600bf733e57",
+          "EVID-543426270db6cc541e64",
+          "EVID-85280616288034d47987",
+          "EVID-1e52b2d0f44ad4a695c1"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-4b41350572d120849c73",
+        "evidence_ids": [
+          "EVID-96cbf97063a4c9c2254e",
+          "EVID-5fd72afb207b3a6f734a",
+          "EVID-6d7b76e8df8c636a6a31",
+          "EVID-537c25ac117a9a815b70",
+          "EVID-cd0c02e1c473368ffb5a"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-6de5ad3decde6c5df948",
+        "evidence_ids": [
+          "EVID-ee54562753c1933ba942",
+          "EVID-07ed204b6093732bcd0a",
+          "EVID-0eabdc5bfdb1a7c2fbf3",
+          "EVID-8e0323d216a5b8c38c32",
+          "EVID-5ce267d3e287f7ba3033"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-a96c121530d640f11835",
+        "evidence_ids": [
+          "EVID-c13be7965f11fbfc0a0c",
+          "EVID-02ba53d1172daab665b5",
+          "EVID-41b301a0e5dd231b0cb5",
+          "EVID-ffd9e8605400beab0fee",
+          "EVID-f2f7e5758ae0080554b3"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-22ab4dfd6d2be177d2ed",
+        "evidence_ids": [
+          "EVID-f1584ca8975e2f69e279",
+          "EVID-2a7e03086ecd6b9db9f5",
+          "EVID-d75cb179e8e096bb5682",
+          "EVID-7efc9213b631586655d6",
+          "EVID-4d54c20a45619f86cfe7"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-ffd71bb3657882293ecc",
+        "evidence_ids": [
+          "EVID-fc0a8744832bfcee461d",
+          "EVID-10e846bff363695db570",
+          "EVID-28d5f6b22fa33f028496",
+          "EVID-2dc56276daf5df75c798",
+          "EVID-f658aada0bbdf16df892"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-e6967053fb75e565a5d5",
+        "evidence_ids": [
+          "EVID-3d265c49022aeece798a",
+          "EVID-64d7344f1d3e84fd8f5c",
+          "EVID-13572261344995575f61",
+          "EVID-99f6deb2ecf0662f435e",
+          "EVID-4ba5097ef64950d0515e"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-66a3ee6008ff79fa9033",
+        "evidence_ids": [
+          "EVID-2d63242192a8256bc301",
+          "EVID-414085cbc284e15c3305",
+          "EVID-f4f504da75c3f7feccd1",
+          "EVID-19929ec6f4e6f60b4c0c",
+          "EVID-c1d6ff58ae3c9e0dc0ce"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-0e1e805ed10a58f56888",
+        "evidence_ids": [
+          "EVID-49fa6757beae63124a92",
+          "EVID-17f19a27b55026ffae72",
+          "EVID-4ba2ee1e21fe3bbe89ca",
+          "EVID-2790ecd8717ad6c1cc27",
+          "EVID-2a7209f94257d604370f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "业务场景"
+      },
+      {
+        "claim_id": "CLAIM-18ea5ed7bfd34964a445",
+        "evidence_ids": [
+          "EVID-55db535f42b49a951822",
+          "EVID-303a3377eb3e1c732fc2",
+          "EVID-3f74139fdffe9b7c0d08",
+          "EVID-af2f6b88305e098bb3e4",
+          "EVID-edc689d7fcd0bd0dadc9"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-c4df3fd49d2779f586b7",
+        "evidence_ids": [
+          "EVID-3f55392c163dad177af4",
+          "EVID-1206a680b7fd3571b360",
+          "EVID-0254d2c4d0dc1fa4f807",
+          "EVID-fe168d0ee08f6b65cefe",
+          "EVID-fbf856d3bd85265ce45f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-684a8693095793741b2c",
+        "evidence_ids": [
+          "EVID-395f25bd5859a172527a",
+          "EVID-75ee49ad2e291d3ef7d0",
+          "EVID-a7a189bf5b8077b320b5",
+          "EVID-8c6126943000926b6116",
+          "EVID-a79017371031fb441f98"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-0754bdd04f791ce898e4",
+        "evidence_ids": [
+          "EVID-675116d964910c656712",
+          "EVID-4b378f771df6ed8c7a80",
+          "EVID-1bf46de5905781057131",
+          "EVID-88ea112d71fe25042e6c",
+          "EVID-b948d45a61c998fd77a8"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-48c48ddb70ad041c4ed6",
+        "evidence_ids": [
+          "EVID-63515d17fdc09ff551a4",
+          "EVID-dec4c06b8843519f64d0",
+          "EVID-d663c91959ee05af86c6",
+          "EVID-cab5a9fc172897f271cd",
+          "EVID-bcaf855059b7a629d8a1"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-8b0a5c8cde5613361c81",
+        "evidence_ids": [
+          "EVID-77307d71adf1c7d2ecab",
+          "EVID-b725be50edaa5f8770cd",
+          "EVID-e4ef44a6c888912f1d57",
+          "EVID-531dc054c3968611329e",
+          "EVID-3c88325da0abbda81b9e"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-c323c2a88af016ba9fb0",
+        "evidence_ids": [
+          "EVID-09ff2f2ff07516b8ce39",
+          "EVID-d8c97427a2b96d667411",
+          "EVID-4ae25194bf0f930e23ce",
+          "EVID-f79b819549f1304aa1e7",
+          "EVID-e24a8ec247d4dfd0f7ec"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-4ee7f552b775c87b9ecc",
+        "evidence_ids": [
+          "EVID-9a733c8b7631c6c51910",
+          "EVID-1f9d830cc8ecadf96abb",
+          "EVID-3374dcd23ada8776512c",
+          "EVID-be2288da13e281afcf94",
+          "EVID-528855fb5ef3478c1ed3"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-24269c69a4382eb4444b",
+        "evidence_ids": [
+          "EVID-072bf1b17438457e0fcb",
+          "EVID-64a8c20c72d723eb643b",
+          "EVID-7c63a144ec96bfd9df28",
+          "EVID-0502dabd99d2496a8bd4",
+          "EVID-7d9c65b52f7e0116af25"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-231d946487cac71dd136",
+        "evidence_ids": [
+          "EVID-912147c761b0ad458c6a",
+          "EVID-90d4dd37905f0b363978",
+          "EVID-5265973572dfb57bfb91",
+          "EVID-dc6ee96275bf7ff05b67",
+          "EVID-740d8b29a8acccd3bf04"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-4268336979e39926d84f",
+        "evidence_ids": [
+          "EVID-b63d71a6ed4e25eca29c",
+          "EVID-c266884de36f08f25cd6",
+          "EVID-620d8b802a99bbe054e0",
+          "EVID-3f3a622c7d9406b95af4",
+          "EVID-961f99899219212f4e37"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-ed72f57e18e12eb7288e",
+        "evidence_ids": [
+          "EVID-d1230b003a85c6d07de6",
+          "EVID-67c18a4aefcda2737e28",
+          "EVID-0828feb5c7041c4ec012",
+          "EVID-fe21902bb9d8edcffd8a",
+          "EVID-995a45dbaf0da4bac06c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-4fb0fa7465d4382d1a4e",
+        "evidence_ids": [
+          "EVID-86021bb0ed6df94111c1",
+          "EVID-3d18240e802daff3370b",
+          "EVID-e8e13b5e28d1642481d8",
+          "EVID-8f5fd61af6b9075e8817",
+          "EVID-cc2741818239e8198f34"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "规则"
+      },
+      {
+        "claim_id": "CLAIM-2b619069d6d6c38b6ac0",
+        "evidence_ids": [
+          "EVID-d40d3122e842c8040617",
+          "EVID-708eec4fb0dd950393ef",
+          "EVID-db32daa157079ebc6997",
+          "EVID-fba7bc3220496e56e2d3",
+          "EVID-fea33f3321f7e00b057c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "边界示例"
+      },
+      {
+        "claim_id": "CLAIM-6be002a33a782c947619",
+        "evidence_ids": [
+          "EVID-955d509586586211608b",
+          "EVID-d35f5cb19b4aa12163a7",
+          "EVID-703db8e71b75568ea357",
+          "EVID-801af4b1fd4233221d67",
+          "EVID-e775244cfdb4cf48fb7d"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "业务场景"
+      },
+      {
+        "claim_id": "CLAIM-883d4a737c316d0a41f2",
+        "evidence_ids": [
+          "EVID-9f92162b330dd4f4477f",
+          "EVID-e004c9b3e5c7d72bd07a",
+          "EVID-51dbb1c2196d33e8148b",
+          "EVID-f74fb46668aad52a29ef",
+          "EVID-e801990481bd8c0a5464"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-a4c75e2d4371504819e0",
+        "evidence_ids": [
+          "EVID-d3d893ffbbd67ce08b06",
+          "EVID-e7698cfbca57ed58ff85",
+          "EVID-3b66841a5cbbe44dbe89",
+          "EVID-4f515bdf696223408e28",
+          "EVID-86a6a26226186fad24c3"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-640800e6fe187bc4fa71",
+        "evidence_ids": [
+          "EVID-8c09451ca7f17b2bf896",
+          "EVID-f1b78931b9a974761ec7",
+          "EVID-c3728018b24846bc8ad3",
+          "EVID-4e8d32a9c4636fd80902",
+          "EVID-00fc0137c6ac894ae607"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-0b155c33fcd318596fd3",
+        "evidence_ids": [
+          "EVID-f37d09a9029386a0aa63",
+          "EVID-d1e40fad066795d82bde",
+          "EVID-e4628c5e5a0eb7bc923d",
+          "EVID-f0a3796fd3e07c57baff",
+          "EVID-1ea18dffbcb4f538854a"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-48f6520553ad39389ee4",
+        "evidence_ids": [
+          "EVID-592f250d4c8f0d1f0a28",
+          "EVID-3077075c1b9c6e44d1f4",
+          "EVID-dbbac4de51f8479e6b70",
+          "EVID-ccfacfe0639fe5738aa4",
+          "EVID-f6dd924a1cc1f244befa"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-5385d34115e004dc98d6",
+        "evidence_ids": [
+          "EVID-5043f2c131417a283dbd",
+          "EVID-3b0620931e73654e19bb",
+          "EVID-48148e01a54fca75ec58",
+          "EVID-4042a79076d8147cee40",
+          "EVID-0f2e7785b32f2825ddb3"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "处理规则"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+        "evidence_ids": [
+          "EVID-19582711d0905a146525",
+          "EVID-756bcb0ae982c6fe0c6c",
+          "EVID-ff1ed99ede82fca86c66",
+          "EVID-5737dc039c42ce133972",
+          "EVID-8551c39f71ddc7743b25"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "验收标准"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+        "evidence_ids": [
+          "EVID-0e934587bd0ff60f14e9",
+          "EVID-36133a03d415776a298d",
+          "EVID-a9b380104581d73b857a",
+          "EVID-afa1a78abff0a71fa27e",
+          "EVID-b4b293809fcf4e79f868"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-d10b3d18cce47fd54e01",
+        "evidence_ids": [
+          "EVID-387726de09d5f9073289",
+          "EVID-7de8b5236355803e5d39",
+          "EVID-9412cd1b255cde1aee90",
+          "EVID-d58fc878c14e06e83745",
+          "EVID-1b224d850f1e41f9c1f6"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-446c51b9c37b2fc51f9f",
+        "evidence_ids": [
+          "EVID-47511f0ad45b19ac3887",
+          "EVID-665c8b46abea6f86e120",
+          "EVID-7b6e06ea594cf8c9fc28",
+          "EVID-4bbafcb88e4239c12972",
+          "EVID-492b0e43f6cc68ecc3a4"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-f7154e2dfe9357173782",
+        "evidence_ids": [
+          "EVID-8594dc1e9f36fb526e2d",
+          "EVID-1d331f58dfc884cda6f4",
+          "EVID-b14c90a1e0c13fed9c63",
+          "EVID-43a7b197b0e3380e17c8",
+          "EVID-c91475386b0b0b0d26c8"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-4b543717c82b6b8fb949",
+        "evidence_ids": [
+          "EVID-b51b0a65caf5c2bd9018",
+          "EVID-40b51506a44d2af65f59",
+          "EVID-ee90f481878b23971721",
+          "EVID-06f8c991eec3ae321d81",
+          "EVID-33cdc612811fb85706cf"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-54417072f57abf302ea3",
+        "evidence_ids": [
+          "EVID-bcc992184fb055d7e647",
+          "EVID-6d68513ce95a8d1870c1",
+          "EVID-06e53bab5014ab173271",
+          "EVID-f02b221be518377dbb77",
+          "EVID-187ca122832ad2f3dbbf"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-da9344b298f43a08d15d",
+        "evidence_ids": [
+          "EVID-d4f2e9895dd92c568da4",
+          "EVID-560383de455355426eee",
+          "EVID-ac2f4c2969ea81e53c90",
+          "EVID-9cad92b834be041142a2",
+          "EVID-68e0b8f9f8b04c86089c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-8bf5d72aef56c2764af6",
+        "evidence_ids": [
+          "EVID-482c53e25ec20cb49873",
+          "EVID-35a74446c6bf9365fea6",
+          "EVID-57a8322a62fe157e380c",
+          "EVID-058140e17f809dfa66af",
+          "EVID-3e2ba0fa5bf201326115"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-53865599fb17067b31ba",
+        "evidence_ids": [
+          "EVID-89a6d27785a6ec4e2b59",
+          "EVID-e39c07dc89960d5b2714",
+          "EVID-5a124172bfb8735ec799",
+          "EVID-a5bd26425181b048f77e",
+          "EVID-3b4f061a00819c396469"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收矩阵"
+      },
+      {
+        "claim_id": "CLAIM-e8b7ff07da581a31c6d0",
+        "evidence_ids": [
+          "EVID-dfcac094bbd1496b6add",
+          "EVID-5dcd612f22ca040874e3",
+          "EVID-338cfeaf328d21fad42f",
+          "EVID-ca9961bda10dd0c7b4ac",
+          "EVID-880df4bb07f5e3218fe7"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-c7a81cd5e40a65f36aca",
+        "evidence_ids": [
+          "EVID-15e96893953796399a33",
+          "EVID-0b543904d149dfae4ca6",
+          "EVID-15b412cf207f42f801fe",
+          "EVID-04d7196bae8f6ce88bc7",
+          "EVID-fcbf96ecb50d621c0492"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-898faefafb60ec0c471f",
+        "evidence_ids": [
+          "EVID-3c5ca5b0d6581482d3a9",
+          "EVID-5afed913b5035ec6f2e6",
+          "EVID-4eaeb14ab8ac2d02d7e9",
+          "EVID-5bf5b321692b64fcaa8e",
+          "EVID-2834e5df451bd1e79450"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-7362b600c31a71ac899e",
+        "evidence_ids": [
+          "EVID-29d4921ff9823122eeb8",
+          "EVID-915f343063e6975ddbaf",
+          "EVID-f74662c5cdf4a9f0eb42",
+          "EVID-9e1bf91ca55e01354f56",
+          "EVID-87745c5674b1390d6164"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-9583c1a3b18ac2010c90",
+        "evidence_ids": [
+          "EVID-8e45fdfb26debc876c1e",
+          "EVID-ff613088200d51a78802",
+          "EVID-896390a6428352cad4e9",
+          "EVID-04b4814c7dad69e0edf8",
+          "EVID-132878bf845fbfa66f30"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "处理规则"
+      },
+      {
+        "claim_id": "CLAIM-9ef254ca9e61cd39a3e1",
+        "evidence_ids": [
+          "EVID-148c5631b7d68f6b37b5",
+          "EVID-fc943a58f7199ffc48c0",
+          "EVID-959c3aa80af06eb8283b",
+          "EVID-a33dfb5f7ba42f15285c",
+          "EVID-dfba4c7ba14f62215616"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-45c83b658fbb7a070017",
+        "evidence_ids": [
+          "EVID-5a95a9b2afc23510ca5d",
+          "EVID-22fd34ec6299de2afb67",
+          "EVID-10181b1aa2ae309e2062",
+          "EVID-a830ac728dce624d5681",
+          "EVID-c26c76fe44eaee151c66"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-15c7dd32c3327cd92599",
+        "evidence_ids": [
+          "EVID-781625c38433c5ae1636",
+          "EVID-7987de9f5705091291ed",
+          "EVID-d42aae7ab119bb464fcc",
+          "EVID-2d8add14e916ebba65bd",
+          "EVID-f665df031f1c4a9ec143"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "验收标准"
+      },
+      {
+        "claim_id": "CLAIM-a029bb8e20e88517996f",
+        "evidence_ids": [
+          "EVID-22de8abb76105af79cd7",
+          "EVID-eed975eb4e2aac10aa1a",
+          "EVID-50091bf484f1a2fa1a8b",
+          "EVID-4d868641c8f4de9ed9dd",
+          "EVID-dd62fb4ee64c3e102292"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "9.1 Expense"
+      },
+      {
+        "claim_id": "CLAIM-0b79a10df9143d5bde5b",
+        "evidence_ids": [
+          "EVID-66505edfb0a5e7ee9d8b",
+          "EVID-39217ed96d7b81c746f9",
+          "EVID-f48d1da37a402fe06e8a",
+          "EVID-4342e15466c2ac9ff32b",
+          "EVID-25a4682a3fddc8d45170"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-604359af4233fb1fecad",
+        "evidence_ids": [
+          "EVID-b507ed91fc283e17f9dc",
+          "EVID-246e70ee0e0474634b87",
+          "EVID-5753b62a54c2d59887cf",
+          "EVID-9a97167d1caea7fa22e4",
+          "EVID-f4e69e67bd764fd7a615"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-5688a1f146de3d59a8ad",
+        "evidence_ids": [
+          "EVID-e54ba82f4b33fadae77e",
+          "EVID-560fcf8a07ec43765dd1",
+          "EVID-bb624baedbbe246f81d3",
+          "EVID-31ac5c952392debee019",
+          "EVID-6c90d427e5bb25e5a40f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-4abbc28b728ecb84052e",
+        "evidence_ids": [
+          "EVID-f2bb8b8cc4f4f3ce54ff",
+          "EVID-26b31dc73f0321a8c24f",
+          "EVID-668247013de810c1b754",
+          "EVID-26482699671a82d08b82",
+          "EVID-2a6f45c017ad6bbe8f46"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "9.2 数据约束"
+      },
+      {
+        "claim_id": "CLAIM-a644f1d63888628a35c7",
+        "evidence_ids": [
+          "EVID-59911ecec241b98b9e6c",
+          "EVID-fc050cbd097f1d9dea7b",
+          "EVID-685786799f71d5dc76c9",
+          "EVID-e176c8f22107185e4801",
+          "EVID-5524428694fb05d281c3"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-30c4320b3c25dec2fdf2",
+        "evidence_ids": [
+          "EVID-cc882643cb386e921b2e",
+          "EVID-854188f944fe24e10674",
+          "EVID-609308fa5dd9367c8581",
+          "EVID-7902384d552dd61690d7",
+          "EVID-00b936cae7bcc4b38ac2"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-d9d402ac948e8b8ec9b8",
+        "evidence_ids": [
+          "EVID-f66ea9ac659a9ee9fd47",
+          "EVID-06a7b9839d35ebf355e8",
+          "EVID-bef0450a72c5593c4cd3",
+          "EVID-3af2fb484cdf928f0ca9",
+          "EVID-62277c22aa2740ae50e1"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-449fe410856a0dcbae46",
+        "evidence_ids": [
+          "EVID-33cfbca4a47cfd5bf73f",
+          "EVID-19c8c93b4ce9848f7ade",
+          "EVID-7c9f27d75be37da8e63c",
+          "EVID-895eff18985d085931c8",
+          "EVID-5934fe09c957b3ec62b5"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-2067cbacdcd5ceb4dca6",
+        "evidence_ids": [
+          "EVID-1ccd59531ffc8dbb8a4a",
+          "EVID-f758d8be93b98c782311",
+          "EVID-f0e9e04ff007fc873f2d",
+          "EVID-243d21ff8e3f628f06bd",
+          "EVID-60440b080eddc4fe01d5"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.1 提交报销"
+      },
+      {
+        "claim_id": "CLAIM-181555f1074283acf625",
+        "evidence_ids": [
+          "EVID-b43dff5a2394b4eddb1e",
+          "EVID-5c9a2c22c54a95e4f4f0",
+          "EVID-514c8f9e3820480d2de4",
+          "EVID-fe4dfe8efbec38950545",
+          "EVID-38766a3651cd68eeed64"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.2 审批"
+      },
+      {
+        "claim_id": "CLAIM-56398239a65eeee7d634",
+        "evidence_ids": [
+          "EVID-f6504f1d948db77a8e75",
+          "EVID-1d23fa052440d247032c",
+          "EVID-faa885335fe391312f03",
+          "EVID-3fd72fd4c4f8b78577a5",
+          "EVID-6413cb39cda38a022efb"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.2 审批"
+      },
+      {
+        "claim_id": "CLAIM-07f3eb6e777a052ee94e",
+        "evidence_ids": [
+          "EVID-cfaf566ccaf3d921639d",
+          "EVID-8181ccbbeac6729411e9",
+          "EVID-49441a5e86d97aabb7ef",
+          "EVID-6ca2ea8681217fe05778",
+          "EVID-f34b02d14b441eea3453"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.3 取消"
+      },
+      {
+        "claim_id": "CLAIM-f1923ce0159e82f9fd9f",
+        "evidence_ids": [
+          "EVID-1e86c7c31bf9cd1fa558",
+          "EVID-be2bac4e5f1a1bd21812",
+          "EVID-218ddff651988cc65c00",
+          "EVID-ba9abf818a2ecd856bf3",
+          "EVID-3b620d80f22a2f6b4b18"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.3 取消"
+      },
+      {
+        "claim_id": "CLAIM-e275d896421ff403c13f",
+        "evidence_ids": [
+          "EVID-6c884aaf662594bce92f",
+          "EVID-039e6be954871e1cf082",
+          "EVID-92797e42b4050b48ccc1",
+          "EVID-6558d5c6fd0521ffc87a",
+          "EVID-4a758ac06335695b0a76"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-c78fc576250c468bdb9e",
+        "evidence_ids": [
+          "EVID-54f933318095034096e9",
+          "EVID-ed0388ffcdd829de56ad",
+          "EVID-20e74234ac2e51a7d920",
+          "EVID-ff1b1a9a6bfcffd1d33d",
+          "EVID-cc3d8dc41ea3edc1abe4"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-84a823ff340629540d16",
+        "evidence_ids": [
+          "EVID-812e68da055b12452698",
+          "EVID-fea6f2e5b500429e1b69",
+          "EVID-6d3b811b0898036d26cb",
+          "EVID-f2fbc6b2b0801666b685",
+          "EVID-788d89a757eaa993e534"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-1036b0ccce0be8b7bded",
+        "evidence_ids": [
+          "EVID-2d36ad877fe5ad73c572",
+          "EVID-4359e7653dca5e4937fc",
+          "EVID-8c8a46186461aad28ad5",
+          "EVID-5a8ef2e9397f701f383c",
+          "EVID-0f56acbe867867970b55"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "10.4 后台付款"
+      },
+      {
+        "claim_id": "CLAIM-42bc479a462ad85a1c49",
+        "evidence_ids": [
+          "EVID-7224a370ff8c3f313bfa",
+          "EVID-e7c87eca69fd08fd5260",
+          "EVID-4d14b264352007df57f1",
+          "EVID-af7e032ef37a60223d60",
+          "EVID-41c3962f95501a074dfd"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "11. 异常处理"
+      },
+      {
+        "claim_id": "CLAIM-f3ce632c8dcd3b6f00a2",
+        "evidence_ids": [
+          "EVID-06af14f7e3de2abe8534",
+          "EVID-b8dc2b213d816213dfd7",
+          "EVID-9d09adda988ad93a4c22",
+          "EVID-b15ac7f85ff6d1bc69a9",
+          "EVID-9e769a657b7493bf899c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-01 安全"
+      },
+      {
+        "claim_id": "CLAIM-e82ce3daed96cb6b8ac2",
+        "evidence_ids": [
+          "EVID-f4e9fc28e1a3d81547b6",
+          "EVID-33b2bba4584323356978",
+          "EVID-487411d4c1efffb26c13",
+          "EVID-9538f7b6fa517112a4cc",
+          "EVID-661eab76fa76fc07eb44"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-01 安全"
+      },
+      {
+        "claim_id": "CLAIM-5555e47b59be088e00ae",
+        "evidence_ids": [
+          "EVID-b3f6e4861f4c16e8d2c1",
+          "EVID-e772a194be3f82473b0f",
+          "EVID-8aecf897541b6d3ea409",
+          "EVID-f54b06f0948d501f5ea0",
+          "EVID-b8b9dc66ddbb65337631"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-02 并发一致性"
+      },
+      {
+        "claim_id": "CLAIM-cf2d43596dc431c116da",
+        "evidence_ids": [
+          "EVID-e3c1eb80156998e8f051",
+          "EVID-0444b324016f0bc285b1",
+          "EVID-39773360d01a1b0f30c3",
+          "EVID-323befb2ab88fa834ad6",
+          "EVID-88071adfab86097f848c"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-02 并发一致性"
+      },
+      {
+        "claim_id": "CLAIM-2efeea84213aaf9848fe",
+        "evidence_ids": [
+          "EVID-cda54410dd0e6a350872",
+          "EVID-63aebf1506baccbb1ed3",
+          "EVID-41bc4b6ac640750807c6",
+          "EVID-25f79e0bab791b73bdda",
+          "EVID-db27622fa2922972f047"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-03 可测试性"
+      },
+      {
+        "claim_id": "CLAIM-39eed7f91f9edfca31fe",
+        "evidence_ids": [
+          "EVID-6c4787a8c47f506b7119",
+          "EVID-66b5982aafb8fb47c163",
+          "EVID-5df92e27140ae15e66ec",
+          "EVID-2e3a511dc7b4cf0bc1b4",
+          "EVID-976ca747c50fed85bf65"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-03 可测试性"
+      },
+      {
+        "claim_id": "CLAIM-191229d2498e988d12fe",
+        "evidence_ids": [
+          "EVID-66d14bb7a06b21408e91",
+          "EVID-1d2e581a082e86b2dbf5",
+          "EVID-b7b7472dd3df5721d0f7",
+          "EVID-58ddaf3c412b2e90204c",
+          "EVID-72821b712bd8f5c14bf6"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-04 性能基线"
+      },
+      {
+        "claim_id": "CLAIM-853177410dfdf8ee938a",
+        "evidence_ids": [
+          "EVID-2d678dbf63e4bb7387dd",
+          "EVID-d642c0863a060b5281f4",
+          "EVID-bbc401a2e0ed83266930",
+          "EVID-50bc1c5988a6c02a27e6",
+          "EVID-3222b7554d42c177233a"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "NFR-04 性能基线"
+      },
+      {
+        "claim_id": "CLAIM-25c6907c56658d515c08",
+        "evidence_ids": [
+          "EVID-52f953c50582d10c961f",
+          "EVID-57111666f148a5f7e43d",
+          "EVID-8029e5b35219c0810449",
+          "EVID-bb18c90418743121a5e4",
+          "EVID-b459ea9cd8c7f2e3ce13"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-7f2e7e5fa62cc7a2cf48",
+        "evidence_ids": [
+          "EVID-c60e176620a068ad822d",
+          "EVID-0e2a38ae28d093635ee3",
+          "EVID-d5541d91ab7370d6f7ec",
+          "EVID-d964a86841811e62564e",
+          "EVID-a1e99d02eef325f1a20f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-f85577d43aa2bf6f7318",
+        "evidence_ids": [
+          "EVID-df9e5f2faad08e34b259",
+          "EVID-1f16d99bd30aac87223c",
+          "EVID-e01e756500d14442306f",
+          "EVID-c025946731163a55f70a",
+          "EVID-8236bdd7c94a7efb0a28"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-bc85747900b844259698",
+        "evidence_ids": [
+          "EVID-39f9905995138cf82158",
+          "EVID-5a5f18e6d74f74c95256",
+          "EVID-a1391d804e7759995bcb",
+          "EVID-0ea4ef87f7d8042b9159",
+          "EVID-0713b80c9ed65919fb3b"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-9581e956491cfb291b61",
+        "evidence_ids": [
+          "EVID-2bcc79ee54c9e869699a",
+          "EVID-371e282908d8c8d740ec",
+          "EVID-f16d1b46e757d7cd08d8",
+          "EVID-ed99bdba47a0b7de2299",
+          "EVID-4f0d881b749de864cf46"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-31df0700ae92a0c365ef",
+        "evidence_ids": [
+          "EVID-018e5fbc63c0b8145192",
+          "EVID-33452c25e4288dda7eaf",
+          "EVID-4da17f7f233e961284b3",
+          "EVID-36d69d97ec60bbd343c9",
+          "EVID-680f392a9c7eadc9b95f"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-9a87fcc122aa56baef78",
+        "evidence_ids": [
+          "EVID-e42ed22ab9c2d5a84d86",
+          "EVID-3b035421cefca708f6cd",
+          "EVID-8ac95cca948b95d2c45f",
+          "EVID-612fb883815bb66d96e7",
+          "EVID-f3f88c05f999b50c552a"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-d611502feef2c4f02ba0",
+        "evidence_ids": [
+          "EVID-c1e70b522702c138a282",
+          "EVID-712dd6840e7cb8b338f1",
+          "EVID-5eb7339237ad5ee187b5",
+          "EVID-9bfc55f9f3c59b6c5784",
+          "EVID-eeea25cba4e80107a952"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-c58b87949f637674c6aa",
+        "evidence_ids": [
+          "EVID-ab11f521330b1fc194b0",
+          "EVID-a08384b0fff4899bb8b6",
+          "EVID-fbbe9912bcb27d83f2e2",
+          "EVID-82f0789c3327322c0e52",
+          "EVID-1a088444ad79368730c9"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "13. 可观测性"
+      },
+      {
+        "claim_id": "CLAIM-dc58adc144f983f500a6",
+        "evidence_ids": [
+          "EVID-ebb90aa307e20f7604a6",
+          "EVID-a6bf2486e82f1ec6deb3",
+          "EVID-b74bfb0445b43ef5c157",
+          "EVID-9140e5e0466a33084a07",
+          "EVID-6994e5052ef8452678d3"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "14. 验收与追溯矩阵"
+      },
+      {
+        "claim_id": "CLAIM-8ce930b06cf9aee8d96b",
+        "evidence_ids": [
+          "EVID-c7d0c5cebc23dc3daa05",
+          "EVID-6aa08a36b2d655b7ada9",
+          "EVID-d6035669eaf25b3d7977",
+          "EVID-67164f589323bed59ece",
+          "EVID-c7a4ad9c8a0854e776b4"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-a110b87ce21659686a3b",
+        "evidence_ids": [
+          "EVID-6bbfd01a8b6ba67180b2",
+          "EVID-771c033460309b15be31",
+          "EVID-a0dedd9186e2d0767029",
+          "EVID-ae47b7ed274e4a7994ce",
+          "EVID-755ab20297b38ed15066"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-9e08c1a5a7d1fc1b3d2c",
+        "evidence_ids": [
+          "EVID-025d45c5c0bfdef90855",
+          "EVID-dd8158eca7c77955e1e2",
+          "EVID-127174598cc0d962b5f9",
+          "EVID-6a0ee22110ea040f410a",
+          "EVID-e774b41784135b179952"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-aa74ce1097b058ce4e80",
+        "evidence_ids": [
+          "EVID-f60984d6e672e8fba1d1",
+          "EVID-38bbac3da58dab918ec5",
+          "EVID-22e96a5eff264aeb9a66",
+          "EVID-b8422191a704da7187dc",
+          "EVID-109b63a649a3afdeb94e"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      },
+      {
+        "claim_id": "CLAIM-3c0c91b1b2ba195e4bf4",
+        "evidence_ids": [
+          "EVID-ff48b49cf9372165a224",
+          "EVID-a6ca228a111a160447e8",
+          "EVID-ee2007e0b0decb75ef56",
+          "EVID-88777aa19ca8666f46e0",
+          "EVID-cc425a7f136018c169cb"
+        ],
+        "reason": "实现与需求一致，证据支持该声明。",
+        "verdict": "consistent",
+        "section": "15. 发布准入条件"
+      }
+    ],
+    "findings": [
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+        "evidence_ids": [
+          "EVID-d7430315a03e42406651",
+          "EVID-49bb88a87d3d368c969c",
+          "EVID-4eb3127975259fb0ad2b",
+          "EVID-2cbab8600cda55a0038b",
+          "EVID-25302ba17ffc442c6aaf"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "3. 背景与目标"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-f3596def4af3193aff69",
+        "evidence_ids": [
+          "EVID-51609b4bfe69ba121858",
+          "EVID-5f39d07111eece3fc55a",
+          "EVID-9eb4bc225e362ad11572",
+          "EVID-814f97268d0e37ff8b3e",
+          "EVID-985e80d990b668f69d70"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "7. 整体业务流程"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-0b155c33fcd318596fd3",
+        "evidence_ids": [
+          "EVID-f37d09a9029386a0aa63",
+          "EVID-d1e40fad066795d82bde",
+          "EVID-e4628c5e5a0eb7bc923d",
+          "EVID-f0a3796fd3e07c57baff",
+          "EVID-1ea18dffbcb4f538854a"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "处理规则"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-5385d34115e004dc98d6",
+        "evidence_ids": [
+          "EVID-5043f2c131417a283dbd",
+          "EVID-3b0620931e73654e19bb",
+          "EVID-48148e01a54fca75ec58",
+          "EVID-4042a79076d8147cee40",
+          "EVID-0f2e7785b32f2825ddb3"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "处理规则"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+        "evidence_ids": [
+          "EVID-19582711d0905a146525",
+          "EVID-756bcb0ae982c6fe0c6c",
+          "EVID-ff1ed99ede82fca86c66",
+          "EVID-5737dc039c42ce133972",
+          "EVID-8551c39f71ddc7743b25"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "验收标准"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+        "evidence_ids": [
+          "EVID-0e934587bd0ff60f14e9",
+          "EVID-36133a03d415776a298d",
+          "EVID-a9b380104581d73b857a",
+          "EVID-afa1a78abff0a71fa27e",
+          "EVID-b4b293809fcf4e79f868"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "验收标准"
+      },
+      {
+        "attribution": "introduced",
+        "claim_id": "CLAIM-c78fc576250c468bdb9e",
+        "evidence_ids": [
+          "EVID-54f933318095034096e9",
+          "EVID-ed0388ffcdd829de56ad",
+          "EVID-20e74234ac2e51a7d920",
+          "EVID-ff1b1a9a6bfcffd1d33d",
+          "EVID-cc3d8dc41ea3edc1abe4"
+        ],
+        "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+        "reason": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。",
+        "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+        "severity": "critical",
+        "verdict": "inconsistent",
+        "section": "10.4 后台付款"
+      }
+    ]
+  },
+  "coverage": {
+    "expected": 115,
+    "submitted": 115,
+    "remaining": 0,
+    "missing_claim_ids": []
+  },
+  "stage_results": {
+    "l3_review": {
+      "claims": [
+        {
+          "claim_id": "CLAIM-ab5b164223295ddb6ff9",
+          "evidence_ids": [],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim_id": "CLAIM-9899eaf45dc221f18f34",
+          "evidence_ids": [],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim_id": "CLAIM-dc8be3b02d873f3473de",
+          "evidence_ids": [
+            "EVID-be67f28b45d2ea38ca01",
+            "EVID-823fc56e3a3c1494bd2e",
+            "EVID-3527ec5dd8390b244cde",
+            "EVID-28454bb3f53819782f03",
+            "EVID-cc6d550f88a61cfe161c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c2cda3b9692cce6ee435",
+          "evidence_ids": [
+            "EVID-16461eb7885549aecc76",
+            "EVID-53f9b41ea2fd8bf3f4bd",
+            "EVID-9f601b23d6e4b7da6baa",
+            "EVID-25b009496c4814b3cf6b",
+            "EVID-2b5f44f5724da6e9eed4"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f17ec78faea8c4a9d3ec",
+          "evidence_ids": [
+            "EVID-f49139ad0bbd6e3661e2",
+            "EVID-7ba2e271a9384212c950",
+            "EVID-5434c98a0e7275dc3fe3",
+            "EVID-9a78fe218d1fc8cfae85",
+            "EVID-bab5d38f79e1c9d76887"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-3b2bb395d219618e21b7",
+          "evidence_ids": [
+            "EVID-e70b57500bb2d67d509b",
+            "EVID-b39190e259cf6f18970c",
+            "EVID-89ce3e4cbaaa88d59030",
+            "EVID-a69bc332624dbdb24a6c",
+            "EVID-cb495874cf82f0f430cc"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-23f5f907c14e107659f7",
+          "evidence_ids": [
+            "EVID-efd047abc7b8ae948229",
+            "EVID-b64e4b264d7effa52677",
+            "EVID-ea692af3ae28101e0669",
+            "EVID-d8aa78d635a8036918b3",
+            "EVID-087091f57a25537b49dc"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-b0bfa5500b4fe0c24caa",
+          "evidence_ids": [
+            "EVID-5e1ba56d2a3d4053540f",
+            "EVID-fd2c6a6e911cbfc1abf1",
+            "EVID-e610737b58a33a19b3ea",
+            "EVID-701a3a7ed2fd1f79f1f0",
+            "EVID-ff8a64bc9bedbd5a4ca7"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-6b7505dbac61b1858d2d",
+          "evidence_ids": [
+            "EVID-f7257beca8f95eebe7f9",
+            "EVID-d3dab9af5bfe978d28af",
+            "EVID-872569aeaffd56e757ef",
+            "EVID-da321f3cfe50cffd352b",
+            "EVID-1167096085b81033ff0f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-ea73994076760f30af99",
+          "evidence_ids": [
+            "EVID-79f37558601e33373670",
+            "EVID-575538f4735d25390af5",
+            "EVID-cbbd655ffaf79c47b625",
+            "EVID-ddc940815e8441a98907",
+            "EVID-e86145715d733f821186"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8e97263ce1369a4f6349",
+          "evidence_ids": [
+            "EVID-25065887d935e3c30b5e",
+            "EVID-0f0e6e79ead3910c2a38",
+            "EVID-666c418b59f488e2fe96",
+            "EVID-652b31cb2fad05d19752",
+            "EVID-64643b3573004b57d978"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+          "evidence_ids": [
+            "EVID-d7430315a03e42406651",
+            "EVID-49bb88a87d3d368c969c",
+            "EVID-4eb3127975259fb0ad2b",
+            "EVID-2cbab8600cda55a0038b",
+            "EVID-25302ba17ffc442c6aaf"
+          ],
+          "reason": "PayoutWorker.process 直接把 CANCELLED 也转入 PAYING 并调用网关，已取消单据仍被后台任务付款，背景目标#5 第二半未满足。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-a6d06c1b59919e2421c1",
+          "evidence_ids": [
+            "EVID-dc803349e30c36618018",
+            "EVID-26a2e8f18f0ec8fb60f7",
+            "EVID-f43103cecbe77b8eedae",
+            "EVID-f21dd687dbb3930b05ad",
+            "EVID-1d3d44b58906eb063f2c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-eeddcd3cc46949d1fc1a",
+          "evidence_ids": [
+            "EVID-3cfe77722e225548d63c",
+            "EVID-86be404044b1884f4a16",
+            "EVID-96e3512ff35c70376f30",
+            "EVID-a9b7de4f9dbe9c1dec92",
+            "EVID-d5e0289c08530b73f143"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4ec9892c72d3c4b16c47",
+          "evidence_ids": [
+            "EVID-6fc707724cffc5f3371c",
+            "EVID-09b0ece0d5018ce1264d",
+            "EVID-6d5cc39c28651022436b",
+            "EVID-9cc8a04765e5126890d8",
+            "EVID-46f2b359551d501c59c6"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9016a094d1dda255fbb4",
+          "evidence_ids": [
+            "EVID-5e2c53aa5735a349a189",
+            "EVID-263774db69084ba85a11",
+            "EVID-d810800a8ce77c1adf42",
+            "EVID-91ce414fca09c5e028d3",
+            "EVID-6cc2d553879baf47204a"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-632f25da686931ec4f56",
+          "evidence_ids": [
+            "EVID-c3e04e06a4b626c9346c",
+            "EVID-2caf684e28ff5a765148",
+            "EVID-c7fd086dc8ae08c919c1",
+            "EVID-730ceb3efaa0bc850023",
+            "EVID-2fdf4932c16b3d3c538f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d81010b4526273ae4e90",
+          "evidence_ids": [
+            "EVID-8e2427076c9095faf20d",
+            "EVID-3bcf47d25019f498cf04",
+            "EVID-bd86fe243f3b1d648b0b",
+            "EVID-7dfecb33fb3af7c53132",
+            "EVID-7ef8ccc24f7424bf97da"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0656af3445a9bf846197",
+          "evidence_ids": [
+            "EVID-ec97f3264fac932713a2",
+            "EVID-9b65a57c70634ecace0d",
+            "EVID-1238e10e208d51f343ab",
+            "EVID-8b33ad38dcf34b3ba51a",
+            "EVID-7ecb352353fb95cbbebe"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f3240faab97a58c49c2a",
+          "evidence_ids": [
+            "EVID-1186a7cacd88800207fb",
+            "EVID-0f64e8c470193f7cc9dd",
+            "EVID-d89ebb155cfb1fedef40",
+            "EVID-10ea9d500062e4b8ef57",
+            "EVID-39a70663db975127f68e"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-19ef04f1b48d7fc492d2",
+          "evidence_ids": [
+            "EVID-96afd6eb640905499fcb",
+            "EVID-292ff42a0fd820c8a54c",
+            "EVID-a694607a103e574fc092",
+            "EVID-3067a7f21b976f76b070",
+            "EVID-c00efba7eb78e59b5b97"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-60b7206b0e6a94d146b1",
+          "evidence_ids": [
+            "EVID-084016c64f31bd652cc8",
+            "EVID-07d07b18c36a2ad0c408",
+            "EVID-24a9fcf5da0baa868ae4",
+            "EVID-25d9d74a17e846526f58",
+            "EVID-7b8a200733ddf6a6833e"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-73ff078f787e2ad13870",
+          "evidence_ids": [
+            "EVID-3417537d73315bf58410",
+            "EVID-39968b8f97a2d51d80c8",
+            "EVID-f1007268443885f526b0",
+            "EVID-53da6c265f25518b3c02",
+            "EVID-25a60d4ed018e7324c0c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f3596def4af3193aff69",
+          "evidence_ids": [
+            "EVID-51609b4bfe69ba121858",
+            "EVID-5f39d07111eece3fc55a",
+            "EVID-9eb4bc225e362ad11572",
+            "EVID-814f97268d0e37ff8b3e",
+            "EVID-985e80d990b668f69d70"
+          ],
+          "reason": "取消先成功后，批处理仍可把 CANCELLED 转 PAYING 并付款，互斥的两种转换先后都成功。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-bbdf7890f3f872f176d9",
+          "evidence_ids": [
+            "EVID-2236322d0a833796c217",
+            "EVID-5580cc7bee072d08eb6c",
+            "EVID-545809bf59a2606f0920",
+            "EVID-f2192ee02219493971f7",
+            "EVID-8fa1ea7016bd36e303e4"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2bf4bd751a29848d96da",
+          "evidence_ids": [
+            "EVID-fbbfd520b020cbf7203c",
+            "EVID-17b41d8ee600bf733e57",
+            "EVID-543426270db6cc541e64",
+            "EVID-85280616288034d47987",
+            "EVID-1e52b2d0f44ad4a695c1"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4b41350572d120849c73",
+          "evidence_ids": [
+            "EVID-96cbf97063a4c9c2254e",
+            "EVID-5fd72afb207b3a6f734a",
+            "EVID-6d7b76e8df8c636a6a31",
+            "EVID-537c25ac117a9a815b70",
+            "EVID-cd0c02e1c473368ffb5a"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-6de5ad3decde6c5df948",
+          "evidence_ids": [
+            "EVID-ee54562753c1933ba942",
+            "EVID-07ed204b6093732bcd0a",
+            "EVID-0eabdc5bfdb1a7c2fbf3",
+            "EVID-8e0323d216a5b8c38c32",
+            "EVID-5ce267d3e287f7ba3033"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a96c121530d640f11835",
+          "evidence_ids": [
+            "EVID-c13be7965f11fbfc0a0c",
+            "EVID-02ba53d1172daab665b5",
+            "EVID-41b301a0e5dd231b0cb5",
+            "EVID-ffd9e8605400beab0fee",
+            "EVID-f2f7e5758ae0080554b3"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-22ab4dfd6d2be177d2ed",
+          "evidence_ids": [
+            "EVID-f1584ca8975e2f69e279",
+            "EVID-2a7e03086ecd6b9db9f5",
+            "EVID-d75cb179e8e096bb5682",
+            "EVID-7efc9213b631586655d6",
+            "EVID-4d54c20a45619f86cfe7"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-ffd71bb3657882293ecc",
+          "evidence_ids": [
+            "EVID-fc0a8744832bfcee461d",
+            "EVID-10e846bff363695db570",
+            "EVID-28d5f6b22fa33f028496",
+            "EVID-2dc56276daf5df75c798",
+            "EVID-f658aada0bbdf16df892"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e6967053fb75e565a5d5",
+          "evidence_ids": [
+            "EVID-3d265c49022aeece798a",
+            "EVID-64d7344f1d3e84fd8f5c",
+            "EVID-13572261344995575f61",
+            "EVID-99f6deb2ecf0662f435e",
+            "EVID-4ba5097ef64950d0515e"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-66a3ee6008ff79fa9033",
+          "evidence_ids": [
+            "EVID-2d63242192a8256bc301",
+            "EVID-414085cbc284e15c3305",
+            "EVID-f4f504da75c3f7feccd1",
+            "EVID-19929ec6f4e6f60b4c0c",
+            "EVID-c1d6ff58ae3c9e0dc0ce"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0e1e805ed10a58f56888",
+          "evidence_ids": [
+            "EVID-49fa6757beae63124a92",
+            "EVID-17f19a27b55026ffae72",
+            "EVID-4ba2ee1e21fe3bbe89ca",
+            "EVID-2790ecd8717ad6c1cc27",
+            "EVID-2a7209f94257d604370f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-18ea5ed7bfd34964a445",
+          "evidence_ids": [
+            "EVID-55db535f42b49a951822",
+            "EVID-303a3377eb3e1c732fc2",
+            "EVID-3f74139fdffe9b7c0d08",
+            "EVID-af2f6b88305e098bb3e4",
+            "EVID-edc689d7fcd0bd0dadc9"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c4df3fd49d2779f586b7",
+          "evidence_ids": [
+            "EVID-3f55392c163dad177af4",
+            "EVID-1206a680b7fd3571b360",
+            "EVID-0254d2c4d0dc1fa4f807",
+            "EVID-fe168d0ee08f6b65cefe",
+            "EVID-fbf856d3bd85265ce45f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-684a8693095793741b2c",
+          "evidence_ids": [
+            "EVID-395f25bd5859a172527a",
+            "EVID-75ee49ad2e291d3ef7d0",
+            "EVID-a7a189bf5b8077b320b5",
+            "EVID-8c6126943000926b6116",
+            "EVID-a79017371031fb441f98"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0754bdd04f791ce898e4",
+          "evidence_ids": [
+            "EVID-675116d964910c656712",
+            "EVID-4b378f771df6ed8c7a80",
+            "EVID-1bf46de5905781057131",
+            "EVID-88ea112d71fe25042e6c",
+            "EVID-b948d45a61c998fd77a8"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-48c48ddb70ad041c4ed6",
+          "evidence_ids": [
+            "EVID-63515d17fdc09ff551a4",
+            "EVID-dec4c06b8843519f64d0",
+            "EVID-d663c91959ee05af86c6",
+            "EVID-cab5a9fc172897f271cd",
+            "EVID-bcaf855059b7a629d8a1"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8b0a5c8cde5613361c81",
+          "evidence_ids": [
+            "EVID-77307d71adf1c7d2ecab",
+            "EVID-b725be50edaa5f8770cd",
+            "EVID-e4ef44a6c888912f1d57",
+            "EVID-531dc054c3968611329e",
+            "EVID-3c88325da0abbda81b9e"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c323c2a88af016ba9fb0",
+          "evidence_ids": [
+            "EVID-09ff2f2ff07516b8ce39",
+            "EVID-d8c97427a2b96d667411",
+            "EVID-4ae25194bf0f930e23ce",
+            "EVID-f79b819549f1304aa1e7",
+            "EVID-e24a8ec247d4dfd0f7ec"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4ee7f552b775c87b9ecc",
+          "evidence_ids": [
+            "EVID-9a733c8b7631c6c51910",
+            "EVID-1f9d830cc8ecadf96abb",
+            "EVID-3374dcd23ada8776512c",
+            "EVID-be2288da13e281afcf94",
+            "EVID-528855fb5ef3478c1ed3"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-24269c69a4382eb4444b",
+          "evidence_ids": [
+            "EVID-072bf1b17438457e0fcb",
+            "EVID-64a8c20c72d723eb643b",
+            "EVID-7c63a144ec96bfd9df28",
+            "EVID-0502dabd99d2496a8bd4",
+            "EVID-7d9c65b52f7e0116af25"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-231d946487cac71dd136",
+          "evidence_ids": [
+            "EVID-912147c761b0ad458c6a",
+            "EVID-90d4dd37905f0b363978",
+            "EVID-5265973572dfb57bfb91",
+            "EVID-dc6ee96275bf7ff05b67",
+            "EVID-740d8b29a8acccd3bf04"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4268336979e39926d84f",
+          "evidence_ids": [
+            "EVID-b63d71a6ed4e25eca29c",
+            "EVID-c266884de36f08f25cd6",
+            "EVID-620d8b802a99bbe054e0",
+            "EVID-3f3a622c7d9406b95af4",
+            "EVID-961f99899219212f4e37"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-ed72f57e18e12eb7288e",
+          "evidence_ids": [
+            "EVID-d1230b003a85c6d07de6",
+            "EVID-67c18a4aefcda2737e28",
+            "EVID-0828feb5c7041c4ec012",
+            "EVID-fe21902bb9d8edcffd8a",
+            "EVID-995a45dbaf0da4bac06c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4fb0fa7465d4382d1a4e",
+          "evidence_ids": [
+            "EVID-86021bb0ed6df94111c1",
+            "EVID-3d18240e802daff3370b",
+            "EVID-e8e13b5e28d1642481d8",
+            "EVID-8f5fd61af6b9075e8817",
+            "EVID-cc2741818239e8198f34"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2b619069d6d6c38b6ac0",
+          "evidence_ids": [
+            "EVID-d40d3122e842c8040617",
+            "EVID-708eec4fb0dd950393ef",
+            "EVID-db32daa157079ebc6997",
+            "EVID-fba7bc3220496e56e2d3",
+            "EVID-fea33f3321f7e00b057c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-6be002a33a782c947619",
+          "evidence_ids": [
+            "EVID-955d509586586211608b",
+            "EVID-d35f5cb19b4aa12163a7",
+            "EVID-703db8e71b75568ea357",
+            "EVID-801af4b1fd4233221d67",
+            "EVID-e775244cfdb4cf48fb7d"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-883d4a737c316d0a41f2",
+          "evidence_ids": [
+            "EVID-9f92162b330dd4f4477f",
+            "EVID-e004c9b3e5c7d72bd07a",
+            "EVID-51dbb1c2196d33e8148b",
+            "EVID-f74fb46668aad52a29ef",
+            "EVID-e801990481bd8c0a5464"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a4c75e2d4371504819e0",
+          "evidence_ids": [
+            "EVID-d3d893ffbbd67ce08b06",
+            "EVID-e7698cfbca57ed58ff85",
+            "EVID-3b66841a5cbbe44dbe89",
+            "EVID-4f515bdf696223408e28",
+            "EVID-86a6a26226186fad24c3"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-640800e6fe187bc4fa71",
+          "evidence_ids": [
+            "EVID-8c09451ca7f17b2bf896",
+            "EVID-f1b78931b9a974761ec7",
+            "EVID-c3728018b24846bc8ad3",
+            "EVID-4e8d32a9c4636fd80902",
+            "EVID-00fc0137c6ac894ae607"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0b155c33fcd318596fd3",
+          "evidence_ids": [
+            "EVID-f37d09a9029386a0aa63",
+            "EVID-d1e40fad066795d82bde",
+            "EVID-e4628c5e5a0eb7bc923d",
+            "EVID-f0a3796fd3e07c57baff",
+            "EVID-1ea18dffbcb4f538854a"
+          ],
+          "reason": "process 未调用原子 claim_for_payment，而是直接 transition({APPROVED,CANCELLED}->PAYING)，未做到'仅当仍为 APPROVED'。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-48f6520553ad39389ee4",
+          "evidence_ids": [
+            "EVID-592f250d4c8f0d1f0a28",
+            "EVID-3077075c1b9c6e44d1f4",
+            "EVID-dbbac4de51f8479e6b70",
+            "EVID-ccfacfe0639fe5738aa4",
+            "EVID-f6dd924a1cc1f244befa"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5385d34115e004dc98d6",
+          "evidence_ids": [
+            "EVID-5043f2c131417a283dbd",
+            "EVID-3b0620931e73654e19bb",
+            "EVID-48148e01a54fca75ec58",
+            "EVID-4042a79076d8147cee40",
+            "EVID-0f2e7785b32f2825ddb3"
+          ],
+          "reason": "取消与付款抢占时，取消成功后再付款也成功，不止一个状态转换成功。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+          "evidence_ids": [
+            "EVID-19582711d0905a146525",
+            "EVID-756bcb0ae982c6fe0c6c",
+            "EVID-ff1ed99ede82fca86c66",
+            "EVID-5737dc039c42ce133972",
+            "EVID-8551c39f71ddc7743b25"
+          ],
+          "reason": "CANCELLED 单可转入 PAYING 并调用网关付款，违反'已取消单据不调用付款网关'。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+          "evidence_ids": [
+            "EVID-0e934587bd0ff60f14e9",
+            "EVID-36133a03d415776a298d",
+            "EVID-a9b380104581d73b857a",
+            "EVID-afa1a78abff0a71fa27e",
+            "EVID-b4b293809fcf4e79f868"
+          ],
+          "reason": "可出现'状态 CANCELLED 但网关已扣款'（CANCELLED->PAYING->网关->PAID），竞争验收标准失败。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-d10b3d18cce47fd54e01",
+          "evidence_ids": [
+            "EVID-387726de09d5f9073289",
+            "EVID-7de8b5236355803e5d39",
+            "EVID-9412cd1b255cde1aee90",
+            "EVID-d58fc878c14e06e83745",
+            "EVID-1b224d850f1e41f9c1f6"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-446c51b9c37b2fc51f9f",
+          "evidence_ids": [
+            "EVID-47511f0ad45b19ac3887",
+            "EVID-665c8b46abea6f86e120",
+            "EVID-7b6e06ea594cf8c9fc28",
+            "EVID-4bbafcb88e4239c12972",
+            "EVID-492b0e43f6cc68ecc3a4"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f7154e2dfe9357173782",
+          "evidence_ids": [
+            "EVID-8594dc1e9f36fb526e2d",
+            "EVID-1d331f58dfc884cda6f4",
+            "EVID-b14c90a1e0c13fed9c63",
+            "EVID-43a7b197b0e3380e17c8",
+            "EVID-c91475386b0b0b0d26c8"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4b543717c82b6b8fb949",
+          "evidence_ids": [
+            "EVID-b51b0a65caf5c2bd9018",
+            "EVID-40b51506a44d2af65f59",
+            "EVID-ee90f481878b23971721",
+            "EVID-06f8c991eec3ae321d81",
+            "EVID-33cdc612811fb85706cf"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-54417072f57abf302ea3",
+          "evidence_ids": [
+            "EVID-bcc992184fb055d7e647",
+            "EVID-6d68513ce95a8d1870c1",
+            "EVID-06e53bab5014ab173271",
+            "EVID-f02b221be518377dbb77",
+            "EVID-187ca122832ad2f3dbbf"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-da9344b298f43a08d15d",
+          "evidence_ids": [
+            "EVID-d4f2e9895dd92c568da4",
+            "EVID-560383de455355426eee",
+            "EVID-ac2f4c2969ea81e53c90",
+            "EVID-9cad92b834be041142a2",
+            "EVID-68e0b8f9f8b04c86089c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8bf5d72aef56c2764af6",
+          "evidence_ids": [
+            "EVID-482c53e25ec20cb49873",
+            "EVID-35a74446c6bf9365fea6",
+            "EVID-57a8322a62fe157e380c",
+            "EVID-058140e17f809dfa66af",
+            "EVID-3e2ba0fa5bf201326115"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-53865599fb17067b31ba",
+          "evidence_ids": [
+            "EVID-89a6d27785a6ec4e2b59",
+            "EVID-e39c07dc89960d5b2714",
+            "EVID-5a124172bfb8735ec799",
+            "EVID-a5bd26425181b048f77e",
+            "EVID-3b4f061a00819c396469"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e8b7ff07da581a31c6d0",
+          "evidence_ids": [
+            "EVID-dfcac094bbd1496b6add",
+            "EVID-5dcd612f22ca040874e3",
+            "EVID-338cfeaf328d21fad42f",
+            "EVID-ca9961bda10dd0c7b4ac",
+            "EVID-880df4bb07f5e3218fe7"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c7a81cd5e40a65f36aca",
+          "evidence_ids": [
+            "EVID-15e96893953796399a33",
+            "EVID-0b543904d149dfae4ca6",
+            "EVID-15b412cf207f42f801fe",
+            "EVID-04d7196bae8f6ce88bc7",
+            "EVID-fcbf96ecb50d621c0492"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-898faefafb60ec0c471f",
+          "evidence_ids": [
+            "EVID-3c5ca5b0d6581482d3a9",
+            "EVID-5afed913b5035ec6f2e6",
+            "EVID-4eaeb14ab8ac2d02d7e9",
+            "EVID-5bf5b321692b64fcaa8e",
+            "EVID-2834e5df451bd1e79450"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-7362b600c31a71ac899e",
+          "evidence_ids": [
+            "EVID-29d4921ff9823122eeb8",
+            "EVID-915f343063e6975ddbaf",
+            "EVID-f74662c5cdf4a9f0eb42",
+            "EVID-9e1bf91ca55e01354f56",
+            "EVID-87745c5674b1390d6164"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9583c1a3b18ac2010c90",
+          "evidence_ids": [
+            "EVID-8e45fdfb26debc876c1e",
+            "EVID-ff613088200d51a78802",
+            "EVID-896390a6428352cad4e9",
+            "EVID-04b4814c7dad69e0edf8",
+            "EVID-132878bf845fbfa66f30"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9ef254ca9e61cd39a3e1",
+          "evidence_ids": [
+            "EVID-148c5631b7d68f6b37b5",
+            "EVID-fc943a58f7199ffc48c0",
+            "EVID-959c3aa80af06eb8283b",
+            "EVID-a33dfb5f7ba42f15285c",
+            "EVID-dfba4c7ba14f62215616"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-45c83b658fbb7a070017",
+          "evidence_ids": [
+            "EVID-5a95a9b2afc23510ca5d",
+            "EVID-22fd34ec6299de2afb67",
+            "EVID-10181b1aa2ae309e2062",
+            "EVID-a830ac728dce624d5681",
+            "EVID-c26c76fe44eaee151c66"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-15c7dd32c3327cd92599",
+          "evidence_ids": [
+            "EVID-781625c38433c5ae1636",
+            "EVID-7987de9f5705091291ed",
+            "EVID-d42aae7ab119bb464fcc",
+            "EVID-2d8add14e916ebba65bd",
+            "EVID-f665df031f1c4a9ec143"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a029bb8e20e88517996f",
+          "evidence_ids": [
+            "EVID-22de8abb76105af79cd7",
+            "EVID-eed975eb4e2aac10aa1a",
+            "EVID-50091bf484f1a2fa1a8b",
+            "EVID-4d868641c8f4de9ed9dd",
+            "EVID-dd62fb4ee64c3e102292"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-0b79a10df9143d5bde5b",
+          "evidence_ids": [
+            "EVID-66505edfb0a5e7ee9d8b",
+            "EVID-39217ed96d7b81c746f9",
+            "EVID-f48d1da37a402fe06e8a",
+            "EVID-4342e15466c2ac9ff32b",
+            "EVID-25a4682a3fddc8d45170"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-604359af4233fb1fecad",
+          "evidence_ids": [
+            "EVID-b507ed91fc283e17f9dc",
+            "EVID-246e70ee0e0474634b87",
+            "EVID-5753b62a54c2d59887cf",
+            "EVID-9a97167d1caea7fa22e4",
+            "EVID-f4e69e67bd764fd7a615"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5688a1f146de3d59a8ad",
+          "evidence_ids": [
+            "EVID-e54ba82f4b33fadae77e",
+            "EVID-560fcf8a07ec43765dd1",
+            "EVID-bb624baedbbe246f81d3",
+            "EVID-31ac5c952392debee019",
+            "EVID-6c90d427e5bb25e5a40f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-4abbc28b728ecb84052e",
+          "evidence_ids": [
+            "EVID-f2bb8b8cc4f4f3ce54ff",
+            "EVID-26b31dc73f0321a8c24f",
+            "EVID-668247013de810c1b754",
+            "EVID-26482699671a82d08b82",
+            "EVID-2a6f45c017ad6bbe8f46"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a644f1d63888628a35c7",
+          "evidence_ids": [
+            "EVID-59911ecec241b98b9e6c",
+            "EVID-fc050cbd097f1d9dea7b",
+            "EVID-685786799f71d5dc76c9",
+            "EVID-e176c8f22107185e4801",
+            "EVID-5524428694fb05d281c3"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-30c4320b3c25dec2fdf2",
+          "evidence_ids": [
+            "EVID-cc882643cb386e921b2e",
+            "EVID-854188f944fe24e10674",
+            "EVID-609308fa5dd9367c8581",
+            "EVID-7902384d552dd61690d7",
+            "EVID-00b936cae7bcc4b38ac2"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d9d402ac948e8b8ec9b8",
+          "evidence_ids": [
+            "EVID-f66ea9ac659a9ee9fd47",
+            "EVID-06a7b9839d35ebf355e8",
+            "EVID-bef0450a72c5593c4cd3",
+            "EVID-3af2fb484cdf928f0ca9",
+            "EVID-62277c22aa2740ae50e1"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-449fe410856a0dcbae46",
+          "evidence_ids": [
+            "EVID-33cfbca4a47cfd5bf73f",
+            "EVID-19c8c93b4ce9848f7ade",
+            "EVID-7c9f27d75be37da8e63c",
+            "EVID-895eff18985d085931c8",
+            "EVID-5934fe09c957b3ec62b5"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2067cbacdcd5ceb4dca6",
+          "evidence_ids": [
+            "EVID-1ccd59531ffc8dbb8a4a",
+            "EVID-f758d8be93b98c782311",
+            "EVID-f0e9e04ff007fc873f2d",
+            "EVID-243d21ff8e3f628f06bd",
+            "EVID-60440b080eddc4fe01d5"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-181555f1074283acf625",
+          "evidence_ids": [
+            "EVID-b43dff5a2394b4eddb1e",
+            "EVID-5c9a2c22c54a95e4f4f0",
+            "EVID-514c8f9e3820480d2de4",
+            "EVID-fe4dfe8efbec38950545",
+            "EVID-38766a3651cd68eeed64"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-56398239a65eeee7d634",
+          "evidence_ids": [
+            "EVID-f6504f1d948db77a8e75",
+            "EVID-1d23fa052440d247032c",
+            "EVID-faa885335fe391312f03",
+            "EVID-3fd72fd4c4f8b78577a5",
+            "EVID-6413cb39cda38a022efb"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-07f3eb6e777a052ee94e",
+          "evidence_ids": [
+            "EVID-cfaf566ccaf3d921639d",
+            "EVID-8181ccbbeac6729411e9",
+            "EVID-49441a5e86d97aabb7ef",
+            "EVID-6ca2ea8681217fe05778",
+            "EVID-f34b02d14b441eea3453"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f1923ce0159e82f9fd9f",
+          "evidence_ids": [
+            "EVID-1e86c7c31bf9cd1fa558",
+            "EVID-be2bac4e5f1a1bd21812",
+            "EVID-218ddff651988cc65c00",
+            "EVID-ba9abf818a2ecd856bf3",
+            "EVID-3b620d80f22a2f6b4b18"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e275d896421ff403c13f",
+          "evidence_ids": [
+            "EVID-6c884aaf662594bce92f",
+            "EVID-039e6be954871e1cf082",
+            "EVID-92797e42b4050b48ccc1",
+            "EVID-6558d5c6fd0521ffc87a",
+            "EVID-4a758ac06335695b0a76"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c78fc576250c468bdb9e",
+          "evidence_ids": [
+            "EVID-54f933318095034096e9",
+            "EVID-ed0388ffcdd829de56ad",
+            "EVID-20e74234ac2e51a7d920",
+            "EVID-ff1b1a9a6bfcffd1d33d",
+            "EVID-cc3d8dc41ea3edc1abe4"
+          ],
+          "reason": "CANCELLED 非 APPROVED 却未返回 SKIPPED（被转 PAYING 并付款）；其余非 APPROVED 状态会抛 StateConflictError 而非 SKIPPED。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-84a823ff340629540d16",
+          "evidence_ids": [
+            "EVID-812e68da055b12452698",
+            "EVID-fea6f2e5b500429e1b69",
+            "EVID-6d3b811b0898036d26cb",
+            "EVID-f2fbc6b2b0801666b685",
+            "EVID-788d89a757eaa993e534"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-1036b0ccce0be8b7bded",
+          "evidence_ids": [
+            "EVID-2d36ad877fe5ad73c572",
+            "EVID-4359e7653dca5e4937fc",
+            "EVID-8c8a46186461aad28ad5",
+            "EVID-5a8ef2e9397f701f383c",
+            "EVID-0f56acbe867867970b55"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-42bc479a462ad85a1c49",
+          "evidence_ids": [
+            "EVID-7224a370ff8c3f313bfa",
+            "EVID-e7c87eca69fd08fd5260",
+            "EVID-4d14b264352007df57f1",
+            "EVID-af7e032ef37a60223d60",
+            "EVID-41c3962f95501a074dfd"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f3ce632c8dcd3b6f00a2",
+          "evidence_ids": [
+            "EVID-06af14f7e3de2abe8534",
+            "EVID-b8dc2b213d816213dfd7",
+            "EVID-9d09adda988ad93a4c22",
+            "EVID-b15ac7f85ff6d1bc69a9",
+            "EVID-9e769a657b7493bf899c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-e82ce3daed96cb6b8ac2",
+          "evidence_ids": [
+            "EVID-f4e9fc28e1a3d81547b6",
+            "EVID-33b2bba4584323356978",
+            "EVID-487411d4c1efffb26c13",
+            "EVID-9538f7b6fa517112a4cc",
+            "EVID-661eab76fa76fc07eb44"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-5555e47b59be088e00ae",
+          "evidence_ids": [
+            "EVID-b3f6e4861f4c16e8d2c1",
+            "EVID-e772a194be3f82473b0f",
+            "EVID-8aecf897541b6d3ea409",
+            "EVID-f54b06f0948d501f5ea0",
+            "EVID-b8b9dc66ddbb65337631"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-cf2d43596dc431c116da",
+          "evidence_ids": [
+            "EVID-e3c1eb80156998e8f051",
+            "EVID-0444b324016f0bc285b1",
+            "EVID-39773360d01a1b0f30c3",
+            "EVID-323befb2ab88fa834ad6",
+            "EVID-88071adfab86097f848c"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-2efeea84213aaf9848fe",
+          "evidence_ids": [
+            "EVID-cda54410dd0e6a350872",
+            "EVID-63aebf1506baccbb1ed3",
+            "EVID-41bc4b6ac640750807c6",
+            "EVID-25f79e0bab791b73bdda",
+            "EVID-db27622fa2922972f047"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-39eed7f91f9edfca31fe",
+          "evidence_ids": [
+            "EVID-6c4787a8c47f506b7119",
+            "EVID-66b5982aafb8fb47c163",
+            "EVID-5df92e27140ae15e66ec",
+            "EVID-2e3a511dc7b4cf0bc1b4",
+            "EVID-976ca747c50fed85bf65"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-191229d2498e988d12fe",
+          "evidence_ids": [
+            "EVID-66d14bb7a06b21408e91",
+            "EVID-1d2e581a082e86b2dbf5",
+            "EVID-b7b7472dd3df5721d0f7",
+            "EVID-58ddaf3c412b2e90204c",
+            "EVID-72821b712bd8f5c14bf6"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-853177410dfdf8ee938a",
+          "evidence_ids": [
+            "EVID-2d678dbf63e4bb7387dd",
+            "EVID-d642c0863a060b5281f4",
+            "EVID-bbc401a2e0ed83266930",
+            "EVID-50bc1c5988a6c02a27e6",
+            "EVID-3222b7554d42c177233a"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-25c6907c56658d515c08",
+          "evidence_ids": [
+            "EVID-52f953c50582d10c961f",
+            "EVID-57111666f148a5f7e43d",
+            "EVID-8029e5b35219c0810449",
+            "EVID-bb18c90418743121a5e4",
+            "EVID-b459ea9cd8c7f2e3ce13"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-7f2e7e5fa62cc7a2cf48",
+          "evidence_ids": [
+            "EVID-c60e176620a068ad822d",
+            "EVID-0e2a38ae28d093635ee3",
+            "EVID-d5541d91ab7370d6f7ec",
+            "EVID-d964a86841811e62564e",
+            "EVID-a1e99d02eef325f1a20f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-f85577d43aa2bf6f7318",
+          "evidence_ids": [
+            "EVID-df9e5f2faad08e34b259",
+            "EVID-1f16d99bd30aac87223c",
+            "EVID-e01e756500d14442306f",
+            "EVID-c025946731163a55f70a",
+            "EVID-8236bdd7c94a7efb0a28"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-bc85747900b844259698",
+          "evidence_ids": [
+            "EVID-39f9905995138cf82158",
+            "EVID-5a5f18e6d74f74c95256",
+            "EVID-a1391d804e7759995bcb",
+            "EVID-0ea4ef87f7d8042b9159",
+            "EVID-0713b80c9ed65919fb3b"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9581e956491cfb291b61",
+          "evidence_ids": [
+            "EVID-2bcc79ee54c9e869699a",
+            "EVID-371e282908d8c8d740ec",
+            "EVID-f16d1b46e757d7cd08d8",
+            "EVID-ed99bdba47a0b7de2299",
+            "EVID-4f0d881b749de864cf46"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-31df0700ae92a0c365ef",
+          "evidence_ids": [
+            "EVID-018e5fbc63c0b8145192",
+            "EVID-33452c25e4288dda7eaf",
+            "EVID-4da17f7f233e961284b3",
+            "EVID-36d69d97ec60bbd343c9",
+            "EVID-680f392a9c7eadc9b95f"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9a87fcc122aa56baef78",
+          "evidence_ids": [
+            "EVID-e42ed22ab9c2d5a84d86",
+            "EVID-3b035421cefca708f6cd",
+            "EVID-8ac95cca948b95d2c45f",
+            "EVID-612fb883815bb66d96e7",
+            "EVID-f3f88c05f999b50c552a"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-d611502feef2c4f02ba0",
+          "evidence_ids": [
+            "EVID-c1e70b522702c138a282",
+            "EVID-712dd6840e7cb8b338f1",
+            "EVID-5eb7339237ad5ee187b5",
+            "EVID-9bfc55f9f3c59b6c5784",
+            "EVID-eeea25cba4e80107a952"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-c58b87949f637674c6aa",
+          "evidence_ids": [
+            "EVID-ab11f521330b1fc194b0",
+            "EVID-a08384b0fff4899bb8b6",
+            "EVID-fbbe9912bcb27d83f2e2",
+            "EVID-82f0789c3327322c0e52",
+            "EVID-1a088444ad79368730c9"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-dc58adc144f983f500a6",
+          "evidence_ids": [
+            "EVID-ebb90aa307e20f7604a6",
+            "EVID-a6bf2486e82f1ec6deb3",
+            "EVID-b74bfb0445b43ef5c157",
+            "EVID-9140e5e0466a33084a07",
+            "EVID-6994e5052ef8452678d3"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-8ce930b06cf9aee8d96b",
+          "evidence_ids": [
+            "EVID-c7d0c5cebc23dc3daa05",
+            "EVID-6aa08a36b2d655b7ada9",
+            "EVID-d6035669eaf25b3d7977",
+            "EVID-67164f589323bed59ece",
+            "EVID-c7a4ad9c8a0854e776b4"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-a110b87ce21659686a3b",
+          "evidence_ids": [
+            "EVID-6bbfd01a8b6ba67180b2",
+            "EVID-771c033460309b15be31",
+            "EVID-a0dedd9186e2d0767029",
+            "EVID-ae47b7ed274e4a7994ce",
+            "EVID-755ab20297b38ed15066"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-9e08c1a5a7d1fc1b3d2c",
+          "evidence_ids": [
+            "EVID-025d45c5c0bfdef90855",
+            "EVID-dd8158eca7c77955e1e2",
+            "EVID-127174598cc0d962b5f9",
+            "EVID-6a0ee22110ea040f410a",
+            "EVID-e774b41784135b179952"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-aa74ce1097b058ce4e80",
+          "evidence_ids": [
+            "EVID-f60984d6e672e8fba1d1",
+            "EVID-38bbac3da58dab918ec5",
+            "EVID-22e96a5eff264aeb9a66",
+            "EVID-b8422191a704da7187dc",
+            "EVID-109b63a649a3afdeb94e"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        },
+        {
+          "claim_id": "CLAIM-3c0c91b1b2ba195e4bf4",
+          "evidence_ids": [
+            "EVID-ff48b49cf9372165a224",
+            "EVID-a6ca228a111a160447e8",
+            "EVID-ee2007e0b0decb75ef56",
+            "EVID-88777aa19ca8666f46e0",
+            "EVID-cc425a7f136018c169cb"
+          ],
+          "reason": "实现与需求一致，证据支持该声明。",
+          "verdict": "consistent"
+        }
+      ],
+      "escalate": true,
+      "summary": "付款批处理路径绕过原子 claim_for_payment，允许 CANCELLED->PAYING 并调用网关付款，命中 FR-04 与目标#5。L3 命中 7 条声明不一致，需升级 L4 深审。"
+    },
+    "l4_initial": {
+      "claims": [
+        {
+          "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+          "evidence_ids": [
+            "EVID-d7430315a03e42406651",
+            "EVID-49bb88a87d3d368c969c",
+            "EVID-4eb3127975259fb0ad2b",
+            "EVID-2cbab8600cda55a0038b",
+            "EVID-25302ba17ffc442c6aaf"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-f3596def4af3193aff69",
+          "evidence_ids": [
+            "EVID-51609b4bfe69ba121858",
+            "EVID-5f39d07111eece3fc55a",
+            "EVID-9eb4bc225e362ad11572",
+            "EVID-814f97268d0e37ff8b3e",
+            "EVID-985e80d990b668f69d70"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-0b155c33fcd318596fd3",
+          "evidence_ids": [
+            "EVID-f37d09a9029386a0aa63",
+            "EVID-d1e40fad066795d82bde",
+            "EVID-e4628c5e5a0eb7bc923d",
+            "EVID-f0a3796fd3e07c57baff",
+            "EVID-1ea18dffbcb4f538854a"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-5385d34115e004dc98d6",
+          "evidence_ids": [
+            "EVID-5043f2c131417a283dbd",
+            "EVID-3b0620931e73654e19bb",
+            "EVID-48148e01a54fca75ec58",
+            "EVID-4042a79076d8147cee40",
+            "EVID-0f2e7785b32f2825ddb3"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+          "evidence_ids": [
+            "EVID-19582711d0905a146525",
+            "EVID-756bcb0ae982c6fe0c6c",
+            "EVID-ff1ed99ede82fca86c66",
+            "EVID-5737dc039c42ce133972",
+            "EVID-8551c39f71ddc7743b25"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+          "evidence_ids": [
+            "EVID-0e934587bd0ff60f14e9",
+            "EVID-36133a03d415776a298d",
+            "EVID-a9b380104581d73b857a",
+            "EVID-afa1a78abff0a71fa27e",
+            "EVID-b4b293809fcf4e79f868"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-c78fc576250c468bdb9e",
+          "evidence_ids": [
+            "EVID-54f933318095034096e9",
+            "EVID-ed0388ffcdd829de56ad",
+            "EVID-20e74234ac2e51a7d920",
+            "EVID-ff1b1a9a6bfcffd1d33d",
+            "EVID-cc3d8dc41ea3edc1abe4"
+          ],
+          "gaps": [
+            "确认 transition 的预期集合写入是否为本版本新增；",
+            "确认 claim_for_payment 是否还有其他调用方，其守卫是否被绕过。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。",
+          "verdict": "inconsistent"
+        }
+      ],
+      "summary": "L4 初判：7 条候选全部指向同一根因——PayoutWorker.process 直接 transition({APPROVED,CANCELLED}->PAYING) 并调用网关，绕过原子 claim_for_payment，已取消单据可被后台任务付款。"
+    },
+    "l4_challenge": {
+      "claims": [
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+          "evidence_ids": [
+            "EVID-d7430315a03e42406651",
+            "EVID-49bb88a87d3d368c969c",
+            "EVID-4eb3127975259fb0ad2b",
+            "EVID-2cbab8600cda55a0038b",
+            "EVID-25302ba17ffc442c6aaf"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。",
+          "verdict": "inconsistent"
+        },
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-f3596def4af3193aff69",
+          "evidence_ids": [
+            "EVID-51609b4bfe69ba121858",
+            "EVID-5f39d07111eece3fc55a",
+            "EVID-9eb4bc225e362ad11572",
+            "EVID-814f97268d0e37ff8b3e",
+            "EVID-985e80d990b668f69d70"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。",
+          "verdict": "inconsistent"
+        },
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-0b155c33fcd318596fd3",
+          "evidence_ids": [
+            "EVID-f37d09a9029386a0aa63",
+            "EVID-d1e40fad066795d82bde",
+            "EVID-e4628c5e5a0eb7bc923d",
+            "EVID-f0a3796fd3e07c57baff",
+            "EVID-1ea18dffbcb4f538854a"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。",
+          "verdict": "inconsistent"
+        },
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-5385d34115e004dc98d6",
+          "evidence_ids": [
+            "EVID-5043f2c131417a283dbd",
+            "EVID-3b0620931e73654e19bb",
+            "EVID-48148e01a54fca75ec58",
+            "EVID-4042a79076d8147cee40",
+            "EVID-0f2e7785b32f2825ddb3"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。",
+          "verdict": "inconsistent"
+        },
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+          "evidence_ids": [
+            "EVID-19582711d0905a146525",
+            "EVID-756bcb0ae982c6fe0c6c",
+            "EVID-ff1ed99ede82fca86c66",
+            "EVID-5737dc039c42ce133972",
+            "EVID-8551c39f71ddc7743b25"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。",
+          "verdict": "inconsistent"
+        },
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+          "evidence_ids": [
+            "EVID-0e934587bd0ff60f14e9",
+            "EVID-36133a03d415776a298d",
+            "EVID-a9b380104581d73b857a",
+            "EVID-afa1a78abff0a71fa27e",
+            "EVID-b4b293809fcf4e79f868"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。",
+          "verdict": "inconsistent"
+        },
+        {
+          "challenge": "尝试推翻：1) transition 是否锁保护且对 CANCELLED 不成立？——成立（infrastructure.py:65-83 带锁条件转换，CANCELLED 在预期集合内）；2) 是否存在网关前置检查可拦截已取消单？——无（application.py:182-214 无状态复核）；3) 是否可归因于外部/配置？——否，纯应用逻辑；4) 别名/重复路径？——approve/cancel 走 service 层，唯独 process 直接写仓储。",
+          "claim_id": "CLAIM-c78fc576250c468bdb9e",
+          "evidence_ids": [
+            "EVID-54f933318095034096e9",
+            "EVID-ed0388ffcdd829de56ad",
+            "EVID-20e74234ac2e51a7d920",
+            "EVID-ff1b1a9a6bfcffd1d33d",
+            "EVID-cc3d8dc41ea3edc1abe4"
+          ],
+          "gaps": [
+            "还需确认：claim_for_payment 在 v5 中是否有任何调用方（死代码或仍被使用）。"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。",
+          "verdict": "inconsistent"
+        }
+      ],
+      "summary": "L4 质疑：未找到推翻理由。transition 确为带锁条件转换但守卫集合含 CANCELLED；网关无状态前置检查；非配置/外部问题；归因明确。"
+    },
+    "l4_investigate": {
+      "claims": [
+        {
+          "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+          "evidence_ids": [
+            "EVID-d7430315a03e42406651",
+            "EVID-49bb88a87d3d368c969c",
+            "EVID-4eb3127975259fb0ad2b",
+            "EVID-2cbab8600cda55a0038b",
+            "EVID-25302ba17ffc442c6aaf"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-f3596def4af3193aff69",
+          "evidence_ids": [
+            "EVID-51609b4bfe69ba121858",
+            "EVID-5f39d07111eece3fc55a",
+            "EVID-9eb4bc225e362ad11572",
+            "EVID-814f97268d0e37ff8b3e",
+            "EVID-985e80d990b668f69d70"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-0b155c33fcd318596fd3",
+          "evidence_ids": [
+            "EVID-f37d09a9029386a0aa63",
+            "EVID-d1e40fad066795d82bde",
+            "EVID-e4628c5e5a0eb7bc923d",
+            "EVID-f0a3796fd3e07c57baff",
+            "EVID-1ea18dffbcb4f538854a"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-5385d34115e004dc98d6",
+          "evidence_ids": [
+            "EVID-5043f2c131417a283dbd",
+            "EVID-3b0620931e73654e19bb",
+            "EVID-48148e01a54fca75ec58",
+            "EVID-4042a79076d8147cee40",
+            "EVID-0f2e7785b32f2825ddb3"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+          "evidence_ids": [
+            "EVID-19582711d0905a146525",
+            "EVID-756bcb0ae982c6fe0c6c",
+            "EVID-ff1ed99ede82fca86c66",
+            "EVID-5737dc039c42ce133972",
+            "EVID-8551c39f71ddc7743b25"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+          "evidence_ids": [
+            "EVID-0e934587bd0ff60f14e9",
+            "EVID-36133a03d415776a298d",
+            "EVID-a9b380104581d73b857a",
+            "EVID-afa1a78abff0a71fa27e",
+            "EVID-b4b293809fcf4e79f868"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。",
+          "verdict": "inconsistent"
+        },
+        {
+          "claim_id": "CLAIM-c78fc576250c468bdb9e",
+          "evidence_ids": [
+            "EVID-54f933318095034096e9",
+            "EVID-ed0388ffcdd829de56ad",
+            "EVID-20e74234ac2e51a7d920",
+            "EVID-ff1b1a9a6bfcffd1d33d",
+            "EVID-cc3d8dc41ea3edc1abe4"
+          ],
+          "gaps": [],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "investigation": "已通过 evidence 确认 process 不引用 claim_for_payment；transition 守卫集合 {APPROVED,CANCELLED} 在 application.py:187 明文。替代路径检查：网关无状态校验；cancel 后无复核。",
+          "reason": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。",
+          "verdict": "inconsistent"
+        }
+      ],
+      "summary": "L4 取证：证据链闭合——application.py:185-189 直接 transition 写入 PAYING，未使用 infrastructure.py:101-107 的 claim_for_payment；CANCELLED 满足守卫后 gateway.pay 被调用。无替代路径能拦截。"
+    },
+    "l4_converge": {
+      "claims": [
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-5fad4b5a3c9de6c9c367",
+          "evidence_ids": [
+            "EVID-d7430315a03e42406651",
+            "EVID-49bb88a87d3d368c969c",
+            "EVID-4eb3127975259fb0ad2b",
+            "EVID-2cbab8600cda55a0038b",
+            "EVID-25302ba17ffc442c6aaf"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：背景目标#5：付款开始前允许取消，且后台任务不得给已取消单据付款。 代码行为：PayoutWorker.process（application.py:182-214）直接 transition({APPROVED,CANCELLED}->PAYING) 后调用网关，CANCELLED 单可被付款。 候选差异：承诺'防止已取消单据被后台任务付款'，代码允许 CANCELLED->PAYING->网关。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        },
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-f3596def4af3193aff69",
+          "evidence_ids": [
+            "EVID-51609b4bfe69ba121858",
+            "EVID-5f39d07111eece3fc55a",
+            "EVID-9eb4bc225e362ad11572",
+            "EVID-814f97268d0e37ff8b3e",
+            "EVID-985e80d990b668f69d70"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：整体流程：APPROVED->CANCELLED 与 APPROVED->PAYING 互斥竞争，只能一方成功。 代码行为：取消成功后（->CANCELLED），process 仍可把 CANCELLED 转 PAYING 并付款，两个互斥转换先后均成功。 候选差异：互斥仅被单次转换保证，CANCELLED 仍可进入 PAYING，流程互斥被打破。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        },
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-0b155c33fcd318596fd3",
+          "evidence_ids": [
+            "EVID-f37d09a9029386a0aa63",
+            "EVID-d1e40fad066795d82bde",
+            "EVID-e4628c5e5a0eb7bc923d",
+            "EVID-f0a3796fd3e07c57baff",
+            "EVID-1ea18dffbcb4f538854a"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：FR-04：付款任务必须使用原子 claim_for_payment，仅当持久化状态仍为 APPROVED 才改 PAYING。 代码行为：process 未调用 repository.claim_for_payment（infrastructure.py:101-107，守卫仅 APPROVED），改用 transition 且预期集合含 CANCELLED。 候选差异：实现绕开了唯一带 APPROVED 守卫的入口，等价于放宽守卫。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        },
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-5385d34115e004dc98d6",
+          "evidence_ids": [
+            "EVID-5043f2c131417a283dbd",
+            "EVID-3b0620931e73654e19bb",
+            "EVID-48148e01a54fca75ec58",
+            "EVID-4042a79076d8147cee40",
+            "EVID-0f2e7785b32f2825ddb3"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：FR-04：取消与付款抢占并发时只允许一个状态转换成功。 代码行为：cancel(APPROVED->CANCELLED) 与 process 均成功时，CANCELLED 仍被转 PAYING 并扣款，两个转换都成功。 候选差异：付款路径不再与取消互斥。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        },
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-4bfcd15d2a888c7f839e",
+          "evidence_ids": [
+            "EVID-19582711d0905a146525",
+            "EVID-756bcb0ae982c6fe0c6c",
+            "EVID-ff1ed99ede82fca86c66",
+            "EVID-5737dc039c42ce133972",
+            "EVID-8551c39f71ddc7743b25"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：验收标准：已取消单据不调用付款网关。 代码行为：CANCELLED 满足 transition 预期集合后被置 PAYING，随后 gateway.pay 被调用。 候选差异：已取消单据会调用付款网关，直接违反验收标准。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        },
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-348fd8c162d3d5966bbf",
+          "evidence_ids": [
+            "EVID-0e934587bd0ff60f14e9",
+            "EVID-36133a03d415776a298d",
+            "EVID-a9b380104581d73b857a",
+            "EVID-afa1a78abff0a71fa27e",
+            "EVID-b4b293809fcf4e79f868"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：验收标准：竞争测试最终状态只能是 CANCELLED 或从 PAYING 完成的付款结果，不得出现'状态是 CANCELLED 但网关已扣款'。 代码行为：顺序 cancel 成功后 process 仍 CANCELLED->PAYING->网关->PAID，可复现'CANCELLED 但已扣款'窗口。 候选差异：验收标准允许的终态集合被扩大。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        },
+        {
+          "attribution": "introduced",
+          "claim_id": "CLAIM-c78fc576250c468bdb9e",
+          "evidence_ids": [
+            "EVID-54f933318095034096e9",
+            "EVID-ed0388ffcdd829de56ad",
+            "EVID-20e74234ac2e51a7d920",
+            "EVID-ff1b1a9a6bfcffd1d33d",
+            "EVID-cc3d8dc41ea3edc1abe4"
+          ],
+          "hypothesis": "根因假设：v5 批处理付款路径 PayoutWorker.process 绕过 claim_for_payment，把 CANCELLED 纳入可直接付款的状态集合，导致已取消单据仍可被后台任务付款，破坏 FR-04 与验收标准。",
+          "reason": "文档期望：接口契约 §10.4：单据不是 APPROVED 时 process 返回 SKIPPED。 代码行为：CANCELLED 非 APPROVED 却转 PAYING 并付款；其余非 APPROVED 状态不在预期集合，transition 抛 StateConflictError 而非返回 SKIPPED。 候选差异：接口返回语义（SKIPPED）无法被满足。",
+          "root_cause": "PayoutWorker.process 绕过 claim_for_payment，直接把 CANCELLED 纳入 transition 预期集合并调用网关",
+          "severity": "critical",
+          "verdict": "inconsistent"
+        }
+      ],
+      "summary": "L4 收敛：7 条候选合并为一个根因（critical, introduced）：批处理付款路径绕过原子领取接口，已取消单据仍可进入付款。"
+    }
+  },
+  "generated_at": "2026-08-12T04:58:59.641693+00:00"
+}

@@ -1,0 +1,763 @@
+{
+  "schema_version": "0.1",
+  "tool": "opencode-spec-review",
+  "case_id": "CASE-14dbcfd1b6c6799bdec9",
+  "repo": "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark",
+  "base_revision": null,
+  "head_revision": "0101b531adf6af94136bab1b6b7a9ec10718aef6",
+  "mode": "auto",
+  "scope": {
+    "documents": [
+      "requirements/EXPENSE_PAYMENT_REQUIREMENTS.md"
+    ],
+    "full_repository": false,
+    "paths": [
+      "versions/v1_complete/expense_app"
+    ],
+    "sections": []
+  },
+  "result": {
+    "consolidated_verdicts": [
+      {
+        "attribution": "unattributed",
+        "claim": "FR-01 提交幂等 create-or-get",
+        "detail": "submit 应用层：create_or_get(actor.user_id, request_id, factory) 后仅当 created 才 record SUBMIT 并 incr 计数，重复提交返回既有单——幂等语义已定案。仓库层 RLock + _by_request 索引 + create_barrier 支撑并发安全。create_or_get 函数体（infrastructure.py:24-38）锁覆盖范围未见，属残余未证实点（见 U-03）。",
+        "evidence": [
+          "EVID-7317334d111c2b492f3b",
+          "EVID-b3a0fe35db053c01c2a8",
+          "EVID-8383e57da0413df27f48"
+        ],
+        "id": "V-01",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "FR-02 审批与驳回流程",
+        "detail": "approve_manager/approve_finance 源码定案：均先 _require_approver(actor, expense, role) 再经 _transition 迁移。reject 调用图（get、双 _require_approver、StateConflictError、_transition）结构与“驳回需审批校验+原子转换”一致。reason_code 落点与自批防护检查体未直接可见（见 U-01/U-02）。",
+        "evidence": [
+          "EVID-7e14bc712ba3c080f9bc",
+          "EVID-cea157b992a0efd198df",
+          "EVID-5e55c6fa29dabdd2011b"
+        ],
+        "id": "V-02",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "FR-03 大额阈值与 1000.00 边界",
+        "detail": "比较逻辑已定案：amount > LARGE_EXPENSE_THRESHOLD 时走 PENDING_FINANCE，否则直接 APPROVED。常量值（应为 Decimal(\"1000.00\")，类定义行 24 调用 Decimal）与需求 FR-03 边界语义（严格大于 vs 大于等于）未直接可见（见 U-08）。",
+        "evidence": [
+          "EVID-7e14bc712ba3c080f9bc",
+          "EDGE-8658370ced7aa4e7fb26"
+        ],
+        "id": "V-03",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "FR-04 付款与取消抢占",
+        "detail": "claim_for_payment 定案：transition(expected={APPROVED}, target=PAYING) 原子条件更新，StateConflictError 时返回 None——付款抢占竞争语义已证。cancel 应用层透传 repository.cancel(expense_id, actor.user_id)。repository.cancel 内部预期状态集合未见（见 U-04/U-05）。",
+        "evidence": [
+          "EVID-10a25a7e62e132c8a932",
+          "EVID-5e55c6fa29dabdd2011b"
+        ],
+        "id": "V-04",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "FR-05 付款重试策略",
+        "detail": "定案：range(1,4) 最多 3 次尝试；TransientPaymentError 触发重试、sleep(2^(attempt-1)) 即 1s/2s；PermanentPaymentError 立即终止转 PAYMENT_FAILED。与需求重试上限、退避、异常分型完全一致。",
+        "evidence": [
+          "EVID-ba41ab699cd30082d992",
+          "EVID-0a45b28253afc9a7005f"
+        ],
+        "id": "V-05",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "FR-06 审计事件与敏感信息排除",
+        "detail": "定案：_record 构造 AuditEvent 时 metadata 仅含 version（不含 purpose/bank_account/收款信息）；Expense 数据模型本身无 bank_account 字段；AuditEvent 字段集合（expense_id/event_type/actor_id/from_status/to_status/occurred_at/metadata）已证。AuditLogger.record 落盘实现未见（见 U-06）。",
+        "evidence": [
+          "EVID-c9c03cc814645e2aa7ac",
+          "EVID-1179e56150d46da59954",
+          "EVID-53589db5b2df985a9bfd",
+          "EVID-05f7fb3f89e6b06fd2be"
+        ],
+        "id": "V-06",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "数据模型与状态机（Expense/ExpenseStatus）",
+        "detail": "Expense 8 字段定案；ExpenseStatus 8 状态定案。与需求第 9 章声明一致。",
+        "evidence": [
+          "EVID-53589db5b2df985a9bfd",
+          "EVID-f4974aaad40888ac17e5"
+        ],
+        "id": "V-07",
+        "severity": "none",
+        "verdict": "consistent"
+      },
+      {
+        "attribution": "unattributed",
+        "claim": "指标埋点",
+        "detail": "metrics Counter 初始化与递增结构已见；具体指标名与需求第 12-13 章清单的逐条对照未见（需求原文不可得）。",
+        "evidence": [
+          "EVID-d82210f2874a3bf6d2bb"
+        ],
+        "id": "V-08",
+        "severity": "none",
+        "verdict": "consistent"
+      }
+    ],
+    "misclassification_removed": [
+      "初判中所有候选不一致均已通过调用图+源码交叉验证排除：未发现确证反证；8 个缺口均定性为证据不可得而非证据相悖"
+    ],
+    "recommendation": "无 inconsistent 定案，建议输出报告并关闭案例；U-01 至 U-08 列为人工复核观察清单（文件:行号已列出），优先级最高为 U-01（自批防护）与 U-08（1000.00 边界），因二者直接对应需求 FR-02 规则 3 与 FR-03 边界声明。如后续可提供更大上下文或直接代码访问，应优先复核这两项。",
+    "residual_uncertain": [
+      {
+        "evidence": [
+          "EDGE-52170c6054b04ad02493",
+          "EDGE-2ef64600d35187871405"
+        ],
+        "file": "application.py:108-114",
+        "id": "U-01",
+        "question": "自批防护（actor.user_id == expense.requester_id 拒绝）与角色校验是否均实现",
+        "reason": "函数体源码被上下文包截断；调用图显示 112/114 行两处 raise AuthorizationError，结构符合但正文未见",
+        "target": "_require_approver"
+      },
+      {
+        "evidence": [
+          "EDGE-9abbe3fb76fee85dddc4",
+          "EDGE-a912c9fe401def8623c7"
+        ],
+        "file": "application.py:88-100",
+        "id": "U-02",
+        "question": "reason_code 处置（是否入审计/是否非敏感）",
+        "reason": "函数体未见；调用图显示 get/_require_approver×2/StateConflictError/_transition",
+        "target": "reject"
+      },
+      {
+        "evidence": [
+          "EDGE-b1ae81d84892a603daff",
+          "EDGE-dc6782187a2ab69dd198"
+        ],
+        "file": "infrastructure.py:24-38",
+        "id": "U-03",
+        "question": "锁是否覆盖 check+create 全程、factory 异常时是否回滚",
+        "reason": "函数体未见；调用图显示行 32 get、行 35 factory、行 34/36/38 _copy",
+        "target": "create_or_get"
+      },
+      {
+        "evidence": [
+          "EDGE-44f54315245ff98514d9"
+        ],
+        "file": "infrastructure.py:45-52",
+        "id": "U-04",
+        "question": "预期状态集合、行 48 wait 屏障的语义",
+        "reason": "函数体未见；调用图显示行 48 wait、行 50/52 _copy",
+        "target": "repository.cancel"
+      },
+      {
+        "evidence": [
+          "EDGE-7612c2e752624a0f14f6"
+        ],
+        "file": "infrastructure.py:65-83",
+        "id": "U-05",
+        "question": "锁粒度与版本号校验细节",
+        "reason": "函数体未见；调用图显示行 75 StateConflictError、行 78/83 _copy",
+        "target": "transition"
+      },
+      {
+        "evidence": [],
+        "file": "infrastructure.py:115-117",
+        "id": "U-06",
+        "question": "落盘/追加实现",
+        "reason": "函数体未见",
+        "target": "AuditLogger.record"
+      },
+      {
+        "evidence": [],
+        "file": "domain.py:28-37,64-77",
+        "id": "U-07",
+        "question": "异常体系与角色枚举完整定义",
+        "reason": "定义源码未见；异常在调用图中被引用/raise，行为与需求一致但类型正文不可见",
+        "target": "ValidationError/AuthorizationError/StateConflictError/TransientPaymentError/PaymentOutcome/Role 定义"
+      },
+      {
+        "evidence": [
+          "EDGE-8658370ced7aa4e7fb26"
+        ],
+        "file": "application.py:24 + requirements FR-03",
+        "id": "U-08",
+        "question": "常量值是否为 1000.00 及需求边界语义（> vs >=）",
+        "reason": "常量定义行未直接可见；比较逻辑已定案为严格大于",
+        "target": "LARGE_EXPENSE_THRESHOLD 常量值"
+      }
+    ],
+    "summary": "L4 收敛：合并 8 个证据缺口为 2 类根因——(A) 源码正文可见性受限（上下文包固定截断，7 项：SELFAPPROVE/REJECT/CREATEORGET/CANCEL/TRANSITION/RECORD/DOMAIN）；(B) 需求原文不可见（1 项：THRESHOLD 的常量值与 FR-03 边界语义）。去除全部误报候选：初判中所有候选差异均被调用图结构证据反向支撑为“与需求结构一致”，无 inconsistent 定案项。已定案 6 项 consistent（FR-01 幂等、FR-02 审批结构、FR-03 阈值比较逻辑、FR-04 抢占、FR-05 重试、FR-06 审计）。严重级别：无确证缺陷，残余风险均为未证实而非反证。归因：无 base，全部为 unattributed（无 introduced/exposed 之分）。"
+  },
+  "stage_results": {
+    "l3_review": {
+      "candidates": [
+        {
+          "claim": "FR-03",
+          "kind": "candidate",
+          "note": "LARGE_EXPENSE_THRESHOLD 常量值未知，且比较使用严格大于（>），若需求为“金额 >= 1000.00 需财务审批”则 1000.00 整边界可能不一致"
+        },
+        {
+          "claim": "FR-01",
+          "kind": "candidate",
+          "note": "create_or_get 的原子性取决于基础设施层是否在单个锁/单次检查下完成 create-or-get，需确认无 check-then-act 窗口"
+        },
+        {
+          "claim": "FR-04",
+          "kind": "candidate",
+          "note": "cancel 与 claim_for_payment 竞争时，需确认 cancel 也是原子条件更新（expected 状态集合），否则可能出现取消与付款并发双赢"
+        },
+        {
+          "claim": "FR-02",
+          "kind": "candidate",
+          "note": "自批防护 actor.user_id == requester_id 检查位于 _require_approver，需确认对 MANAGER/FINANCE 审批路径都生效"
+        }
+      ],
+      "escalate": true,
+      "escalate_reason": "上下文包截断导致 LARGE_EXPENSE_THRESHOLD 常量值、reject/_require_approver、create_or_get/cancel 原子性、异常类型定义、接口契约与指标声明原文等证据缺口，需 L4 深审沿调用链取证后定案。",
+      "summary": "L3 快速审查：上下文包过大（约 9MB，11500 条证据）导致返回被截断，可见范围覆盖 application.py 部分源码、domain.py 前部、infrastructure.py 部分。已完成能查证区域的初判：FR-05/FR-06/数据模型可定案为 consistent；FR-01/02/03/04 及异常处理、接口契约、指标存在证据缺口，标记 uncertain 并升级 L4 深审。",
+      "verdicts": [
+        {
+          "claim": "第1章 文档信息（CLAIM-73454c286a187324eb20）",
+          "note": "文档元数据声明，无对应代码实现可验证",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim": "FR-01 提交 create-or-get 幂等",
+          "note": "submit 幂等行为有证据（EVID-7317334d111c2b492f3b：create_or_get + created 才记 SUBMIT/计数），但 create_or_get 基础设施实现（infrastructure.py:24-38）在截断部分，跨层原子性待 L4 取证",
+          "verdict": "uncertain"
+        },
+        {
+          "claim": "FR-02 审批与驳回（自批防护规则3、reason_code 非敏感）",
+          "note": "approve_manager（EVID-7e14bc712ba3c080f9bc）与 approve_finance（EVID-cea157b992a0efd198df）已见；_require_approver（application.py:108-114）与 reject（application.py:88-100）在截断部分，自批防护 actor.user_id == requester_id 与驳回路径待 L4 取证",
+          "verdict": "uncertain"
+        },
+        {
+          "claim": "FR-03 大额阈值 1000.00 边界",
+          "note": "阈值比较逻辑已见（EVID-7e14bc712ba3c080f9bc：amount > LARGE_EXPENSE_THRESHOLD 决定 PENDING_FINANCE 或 APPROVED）；但常量值定义（application.py:26）在截断部分，1000.00 边界语义（大于还是大于等于）待 L4 取证",
+          "verdict": "uncertain"
+        },
+        {
+          "claim": "FR-04 取消与付款抢占竞争",
+          "note": "claim_for_payment 原子条件更新已见（EVID-10a25a7e62e132c8a932：expected {APPROVED}->PAYING，StateConflictError 转 None）；cancel 的基础设施实现（infrastructure.py:45-52）在截断部分，原子条件更新是否覆盖取消路径待 L4 取证",
+          "verdict": "uncertain"
+        },
+        {
+          "claim": "FR-05 付款重试策略",
+          "note": "EVID-ba41ab699cd30082d992：range(1,4) 共 3 次尝试；TransientPaymentError 重试并 sleep(2^(attempt-1))（即 1s、2s）；PermanentPaymentError 直接 break；最终 transition 至 PAYMENT_FAILED 并记 PAYMENT_FAILED 事件",
+          "verdict": "consistent"
+        },
+        {
+          "claim": "FR-06 审计事件字段与敏感信息排除",
+          "note": "EVID-c9c03cc814645e2aa7ac：metadata 仅含 version，不含 purpose/bank_account；Expense 模型（EVID-53589db5b2df985a9bfd）无 bank_account 字段；AuditEvent 字段齐备（EVID-1179e56150d46da59954）",
+          "verdict": "consistent"
+        },
+        {
+          "claim": "第9章 数据模型与状态机",
+          "note": "Expense 字段齐备（EVID-53589db5b2df985a9bfd）；ExpenseStatus 8 状态（EVID-f4974aaad40888ac17e5）覆盖提交-审批-付款-终态流程",
+          "verdict": "consistent"
+        },
+        {
+          "claim": "第11章 异常处理",
+          "note": "PermanentPaymentError（EVID-0a45b28253afc9a7005f）已见；ValidationError/AuthorizationError/StateConflictError/TransientPaymentError 定义在 domain.py:28-37、64-69，位于截断部分，待 L4 取证",
+          "verdict": "uncertain"
+        },
+        {
+          "claim": "第10章 接口契约",
+          "note": "服务层方法签名多数已见，但需求文档第10章接口契约原文未在可见上下文内，逐条核对待 L4",
+          "verdict": "uncertain"
+        },
+        {
+          "claim": "第12-13章 NFR 与指标",
+          "note": "指标名已见（expense_submitted_total、expense_transition_total、expense_cancelled_total、payment_succeeded_total、payment_retry_total、payment_failed_total），但需求声明原文未在可见上下文内，指标对照待 L4",
+          "verdict": "uncertain"
+        }
+      ]
+    },
+    "l4_initial": {
+      "items": [
+        {
+          "attribution": "静态实现审查（无 base），归因暂定 unattributed",
+          "candidate_diff": "若 LARGE_EXPENSE_THRESHOLD=1000.00 且需求为“>=1000.00 需财务审批”，则 amount=1000.00 会直接 APPROVED，与需求不一致（off-by-boundary）；若需求为“>1000.00”则一致。常量值本身位于 application.py:26，未在可见证据内。",
+          "claim": "FR-03 大额阈值 1000.00 边界",
+          "expectation": "需求：金额超过阈值（1000.00）的大额费用，manager 审批后进入 PENDING_FINANCE 待财务审批；否则直接 APPROVED。边界语义需核对原文（大于 or 大于等于）。",
+          "observed": "approve_manager 中 target = PENDING_FINANCE if expense.amount > self.LARGE_EXPENSE_THRESHOLD else APPROVED（EVID-7e14bc712ba3c080f9bc）。比较为严格大于。",
+          "supporting": [
+            "EVID-7e14bc712ba3c080f9bc"
+          ],
+          "unverified_premises": [
+            "LARGE_EXPENSE_THRESHOLD 常量值是否为 1000.00",
+            "需求 FR-03 原文的边界语义（>= 还是 >）"
+          ]
+        },
+        {
+          "attribution": "unattributed",
+          "candidate_diff": "create_or_get 的 check 与 create 是否在同一锁内完成未证实；若存在 check-then-act 窗口，并发提交可能重复创建。find_by_request（EVID-8383e57da0413df27f48）在锁内读，但不能单独证明 create 路径原子。",
+          "claim": "FR-01 create-or-get 幂等与原子性",
+          "expectation": "同一 requester_id+request_id 重复提交必须返回同一费用单且不重复创建；并发重复提交不得产生双单（跨服务层与基础设施层原子）。",
+          "observed": "submit 调用 repository.create_or_get(actor.user_id, request_id, factory)，仅 created=True 时记录 SUBMIT 事件并计数（EVID-7317334d111c2b492f3b）；仓库持有 RLock 与 (requester_id, request_id)->id 索引（EVID-b3a0fe35db053c01c2a8），并有 create_barrier 测试屏障暗示并发语义。",
+          "supporting": [
+            "EVID-7317334d111c2b492f3b",
+            "EVID-b3a0fe35db053c01c2a8",
+            "EVID-8383e57da0413df27f48"
+          ],
+          "unverified_premises": [
+            "create_or_get 内部实现（infrastructure.py:24-38）是否整体持锁"
+          ]
+        },
+        {
+          "attribution": "unattributed",
+          "candidate_diff": "若 _require_approver 缺少 actor.user_id == requester_id 校验则自批防护缺失；若 reject 将 reason_code 写入审计 metadata 则违反 FR-06。均无法从现有证据排除。",
+          "claim": "FR-02 自批防护与驳回路径",
+          "expectation": "审批人不得审批自己的单据（actor.user_id != requester_id，规则3）；驳回需 reason_code 且 reason 不落审计 metadata（敏感信息排除）。",
+          "observed": "approve_manager 与 approve_finance 都先调 _require_approver(actor, expense, role)（EVID-7e14bc712ba3c080f9bc、EVID-cea157b992a0efd198df），说明存在统一审批校验入口；但该函数体（application.py:108-114）与 reject 方法（application.py:88-100）位于截断区。",
+          "supporting": [
+            "EVID-7e14bc712ba3c080f9bc",
+            "EVID-cea157b992a0efd198df"
+          ],
+          "unverified_premises": [
+            "_require_approver 的实现",
+            "reject 的实现与 reason_code 落点"
+          ]
+        },
+        {
+          "attribution": "unattributed",
+          "candidate_diff": "若 repository.cancel 不做基于预期状态集合的原子条件更新（如先读后写、无锁），则与 claim_for_payment 并发时可能出现取消成功且付款继续（或相反）的双赢/脏读。",
+          "claim": "FR-04 取消与付款抢占竞争",
+          "expectation": "取消仅允许在未进入付款流程的状态；付款抢占（claim_for_payment）与取消并发时只能有一个赢家，双方都必须是原子条件更新。",
+          "observed": "claim_for_payment 通过 transition(expected={APPROVED}, target=PAYING) 实现原子条件更新，StateConflictError 时返回 None（EVID-10a25a7e62e132c8a932）。cancel 应用层仅透传 repository.cancel(expense_id, actor.user_id)（EVID-5e55c6fa29dabdd2011b），其基础设施实现（infrastructure.py:45-52）未在可见范围。",
+          "supporting": [
+            "EVID-10a25a7e62e132c8a932",
+            "EVID-5e55c6fa29dabdd2011b"
+          ],
+          "unverified_premises": [
+            "repository.cancel 的原子性实现"
+          ]
+        },
+        {
+          "attribution": "pre_existing",
+          "candidate_diff": "未见差异。重试上限 3、等待 1s/2s、Transient/Permanent 分流、失败终态均吻合。",
+          "claim": "FR-05 付款重试策略",
+          "expectation": "Transient 错误最多重试 3 次、等待序列 1s/2s；Permanent 错误不重试直接失败；最终失败转 PAYMENT_FAILED。",
+          "observed": "process() 中 for attempt in range(1,4)：TransientPaymentError 时 attempt<3 则 sleep(2^(attempt-1))（1s、2s）；PermanentPaymentError 直接 break；循环后 transition 至 PAYMENT_FAILED 并记 PAYMENT_FAILED（EVID-ba41ab699cd30082d992）。",
+          "supporting": [
+            "EVID-ba41ab699cd30082d992"
+          ],
+          "unverified_premises": []
+        },
+        {
+          "attribution": "pre_existing",
+          "candidate_diff": "未见差异。需补证 AuditLogger.record（infrastructure.py:115-117）不透传或篡改 metadata。",
+          "claim": "FR-06 审计事件与敏感信息排除",
+          "expectation": "审计事件含 expense_id/event_type/actor_id/from_status/to_status/occurred_at；purpose、bank_account 等敏感字段不得进入 metadata。",
+          "observed": "_record 构造 AuditEvent，metadata 仅含 {\"version\": expense.version}（EVID-c9c03cc814645e2aa7ac）；AuditEvent 字段齐备（EVID-1179e56150d46da59954）；Expense 模型无 bank_account 字段（EVID-53589db5b2df985a9bfd）。",
+          "supporting": [
+            "EVID-c9c03cc814645e2aa7ac",
+            "EVID-1179e56150d46da59954",
+            "EVID-53589db5b2df985a9bfd"
+          ],
+          "unverified_premises": [
+            "AuditLogger.record 实现"
+          ]
+        },
+        {
+          "attribution": "unattributed",
+          "candidate_diff": "无法确认异常类型与指标清单是否与需求第10-13章完全对应。",
+          "claim": "第9章 数据模型/状态机；第11章 异常处理；第10章 接口契约；第12-13章 指标",
+          "expectation": "数据模型与 8 状态状态机匹配需求；异常类型（Validation/Authorization/StateConflict/Transient/Permanent）齐备；接口契约与指标命名与需求文档对应。",
+          "observed": "Expense/ExpenseStatus/AuditEvent 已见且结构完整；PermanentPaymentError 已见（EVID-0a45b28253afc9a7005f）；ValidationError/AuthorizationError/StateConflictError/TransientPaymentError 定义（domain.py:28-37、64-69）与 Role/PaymentOutcome 枚举（domain.py:10-14、76-77）位于截断区。",
+          "supporting": [
+            "EVID-0a45b28253afc9a7005f"
+          ],
+          "unverified_premises": [
+            "domain.py 其余异常/枚举定义",
+            "需求第10-13章原文"
+          ]
+        }
+      ],
+      "summary": "L4 初判：基于已取回的源码证据（submit/approve/cancel/process/claim_for_payment/_record/领域模型等 23 条 source 证据）对七个候选差异做初步判断。FR-05/FR-06/数据模型倾向 consistent；FR-01/02/03/04 存在具体候选差异，核心证据位于上下文包截断区，需在质疑阶段定义 gap 后在取证阶段沿调用链取回。"
+    },
+    "l4_challenge": {
+      "challenges": [
+        {
+          "candidate": "FR-03 阈值边界",
+          "challenge": "推翻尝试：常量可能定义为 Decimal(\"1000.00\") 且需求边界为“>1000.00”，此时严格大于恰好正确。无法推翻：常量值未知、需求原文未见，替代实现（如常量定义在配置/其他文件）未排除。",
+          "gap_needed": true,
+          "priority": "P0"
+        },
+        {
+          "candidate": "FR-02 自批防护",
+          "challenge": "推翻尝试：可能 _require_approver 同时校验角色与 user_id != requester_id。无法推翻：函数体未见；别名/多角色场景（actor 同时是 requester 与 manager）未验证；reject 是否复用 _require_approver 未知。",
+          "gap_needed": true,
+          "priority": "P0"
+        },
+        {
+          "candidate": "FR-02 驳回 reason_code",
+          "challenge": "推翻尝试：可能 reject 仅记录 REJECTED 事件而不落 reason。无法推翻：reject 签名与实现未见，reason_code 是否进入审计 metadata 未验证。",
+          "gap_needed": true,
+          "priority": "P1"
+        },
+        {
+          "candidate": "FR-01 create-or-get 原子性",
+          "challenge": "推翻尝试：RLock + _by_request 索引可能保证单锁内完成 check+create；create_barrier 说明有并发测试覆盖。无法推翻：create_or_get 函数体未见，锁粒度、异常回滚（factory 抛错是否留下半成品）、重复创建防护均未验证。",
+          "gap_needed": true,
+          "priority": "P0"
+        },
+        {
+          "candidate": "FR-04 取消/付款竞争",
+          "challenge": "推翻尝试：claim_for_payment 已证明原子；若 cancel 也走同一 transition 基础设施（expected 集合 + 锁）则同样原子。无法推翻：repository.cancel 是否复用 transition 未见；其 allowed 状态集合（是否包含 APPROVED/PAYING）未验证。",
+          "gap_needed": true,
+          "priority": "P0"
+        },
+        {
+          "candidate": "FR-04/状态机 transition 原子性",
+          "challenge": "transition 是 claim_for_payment、cancel、_transition 共用的原子原语，其实现（infra.py:65-99）决定所有竞争语义；版本号/expected 集合校验与锁粒度未验证。",
+          "gap_needed": true,
+          "priority": "P0"
+        },
+        {
+          "candidate": "FR-06 AuditLogger.record",
+          "challenge": "推翻尝试：record 可能原样保存 metadata 且 append 到列表。无法推翻：是否过滤/改写 metadata、是否复制对象均未验证；若直接引用 expense 对象则后续修改可能污染审计。",
+          "gap_needed": true,
+          "priority": "P1"
+        },
+        {
+          "candidate": "第11章异常/第10章接口/第12-13章指标",
+          "challenge": "domain.py 异常类型与枚举定义未见；需求第10-13章原文未取回，无法核对接口签名与指标命名。",
+          "gap_needed": true,
+          "priority": "P1"
+        }
+      ],
+      "gaps": [
+        {
+          "gap_id": "GAP-THRESHOLD",
+          "need": "application.py:26 LARGE_EXPENSE_THRESHOLD 常量定义与值；approve_manager 比较语义",
+          "priority": "P0"
+        },
+        {
+          "gap_id": "GAP-SELFAPPROVE",
+          "need": "application.py:108-114 _require_approver 完整实现（角色+自批校验）",
+          "priority": "P0"
+        },
+        {
+          "gap_id": "GAP-REJECT",
+          "need": "application.py:88-100 reject 实现（reason_code 落点、审计事件类型）",
+          "priority": "P1"
+        },
+        {
+          "gap_id": "GAP-CREATEORGET",
+          "need": "infrastructure.py:21-38 create_or_get/find_by_request 完整实现与锁粒度",
+          "priority": "P0"
+        },
+        {
+          "gap_id": "GAP-CANCEL",
+          "need": "infrastructure.py:45-52 repository.cancel 实现与预期状态集合",
+          "priority": "P0"
+        },
+        {
+          "gap_id": "GAP-TRANSITION",
+          "need": "infrastructure.py:65-99 repository.transition 原子原语实现（锁、expected 集合、版本、StateConflictError）",
+          "priority": "P0"
+        },
+        {
+          "gap_id": "GAP-RECORD",
+          "need": "infrastructure.py:110-117 AuditLogger 与 record 实现（metadata 透传/过滤）",
+          "priority": "P1"
+        },
+        {
+          "gap_id": "GAP-DOMAIN",
+          "need": "domain.py 10-37/64-77 Role、ValidationError、AuthorizationError、TransientPaymentError、StateConflictError、PaymentOutcome 定义；application.py:163-180 PaymentProcessor 装配与 213-221 兜底方法",
+          "priority": "P1"
+        }
+      ],
+      "summary": "L4 质疑：逐项尝试推翻七个候选。FR-05 重试与 FR-06 审计的推翻尝试失败（证据充分，维持 consistent）。FR-01/02/03/04 均存在替代路径或边界场景未被现有证据排除，形成 8 个证据缺口（GAP-THRESHOLD、GAP-SELFAPPROVE、GAP-REJECT、GAP-CREATEORGET、GAP-CANCEL、GAP-TRANSITION、GAP-RECORD、GAP-DOMAIN）。"
+    },
+    "l4_investigate": {
+      "conclusion": "取证已穷尽工具能力：6 次不同参数组合的上下文请求均在运行时同一字节位置截断，隐藏源码无法经 spec_review_context 取回（不视为‘不存在’，而是在本审查会话内不可获得）。相关判定保持 uncertain，缺口以文件:行号形式在收敛报告中列出。",
+      "findings": [
+        {
+          "detail": "比较逻辑已由源码定案：amount > LARGE_EXPENSE_THRESHOLD 决定 PENDING_FINANCE/APPROVED（EVID-7e14bc712ba3c080f9bc）。调用图边显示类定义行 23 在行 24 调用 Decimal（EDGE-8658370ced7aa4e7fb26），常量定义位于 application.py:23-24，但常量值本身无源码证据；需求 FR-03 原文边界语义也不在可见上下文内。",
+          "evidence": [
+            "EVID-7e14bc712ba3c080f9bc",
+            "EDGE-8658370ced7aa4e7fb26"
+          ],
+          "gap_id": "GAP-THRESHOLD",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "调用图边显示 _require_approver（application.py:108-114）在两处 raise AuthorizationError（行 112、114），结构与“自批防护+角色校验”双校验一致，但函数体源码未见，无法确认是否含 requester_id == actor.user_id 检查。",
+          "evidence": [
+            "EDGE-52170c6054b04ad02493",
+            "EDGE-2ef64600d35187871405"
+          ],
+          "gap_id": "GAP-SELFAPPROVE",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "调用图边显示 reject（application.py:88-100）调用 get(89)、_require_approver(91/93 两次)、捕获 StateConflictError(96)、_transition(97)，结构与“驳回需审批校验+原子状态转换”一致；reason_code 落点无证据。",
+          "evidence": [
+            "EDGE-9abbe3fb76fee85dddc4",
+            "EDGE-a912c9fe401def8623c7",
+            "EDGE-4f88f4338138b56622ba",
+            "EDGE-e0f1e3efc0dd19da363e",
+            "EDGE-9888829cccd65981df12"
+          ],
+          "gap_id": "GAP-REJECT",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "调用图边显示 create_or_get（infrastructure.py:24-38）在行 32 调用 get、行 35 调用 factory、行 34/36/38 调用 _copy，结构暗示“锁内 check-then-create 并拷贝返回”，但锁覆盖范围、factory 异常回滚无源码可证。",
+          "evidence": [
+            "EDGE-b1ae81d84892a603daff",
+            "EDGE-dc6782187a2ab69dd198"
+          ],
+          "gap_id": "GAP-CREATEORGET",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "调用图边显示 repository.cancel（infrastructure.py:45-52）在行 48 调用 wait（疑似并发测试屏障）、行 50/52 调用 _copy；预期状态集合与原子性无源码可证。application.cancel 应用层已定案（EVID-5e55c6fa29dabdd2011b）。",
+          "evidence": [
+            "EDGE-44f54315245ff98514d9",
+            "EVID-5e55c6fa29dabdd2011b"
+          ],
+          "gap_id": "GAP-CANCEL",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "调用图边显示 transition（infrastructure.py:65-83）在行 75 raise StateConflictError、行 78/83 调用 _copy；claim_for_payment 依赖该原语并已定案为原子条件更新（EVID-10a25a7e62e132c8a932）。transition 内部锁粒度与版本校验无源码。",
+          "evidence": [
+            "EVID-10a25a7e62e132c8a932",
+            "EDGE-7612c2e752624a0f14f6"
+          ],
+          "gap_id": "GAP-TRANSITION",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "AuditLogger.record（infrastructure.py:115-117）源码未见；审计字段与 metadata 组装已由 EVID-c9c03cc814645e2aa7ac/EVID-1179e56150d46da59954 定案。",
+          "evidence": [
+            "EVID-c9c03cc814645e2aa7ac",
+            "EVID-1179e56150d46da59954"
+          ],
+          "gap_id": "GAP-RECORD",
+          "status": "仍无法确认"
+        },
+        {
+          "detail": "domain.py:28-37、64-77 的 ValidationError/AuthorizationError/StateConflictError/TransientPaymentError/PaymentOutcome 与 Role 定义未见；application.py:213-221 方法（调用图边显示其直接构造 AuditEvent 并调用 record）正文未见。",
+          "evidence": [
+            "EDGE-6e95b6041307a2873194",
+            "EDGE-ddb633b551c05039fe60"
+          ],
+          "gap_id": "GAP-DOMAIN",
+          "status": "仍无法确认"
+        }
+      ],
+      "summary": "L4 取证：针对 8 个证据缺口执行多次 spec_review_context（maxNodes 1/20/40/60/200、gapId=GAP-THRESHOLD/GAP-SELFAPPROVE、direction=both/callees）。运行时上下文包始终在同一字节位置截断，27 条隐藏源码正文（reject/_require_approver/create_or_get/cancel/transition/record/domain 枚举等）无法经工具取回。gapId+direction=both 的调用返回了完整调用图边，为缺口提供结构性导航证据（不单独定案）。"
+    },
+    "l4_converge": {
+      "consolidated_verdicts": [
+        {
+          "attribution": "unattributed",
+          "claim": "FR-01 提交幂等 create-or-get",
+          "detail": "submit 应用层：create_or_get(actor.user_id, request_id, factory) 后仅当 created 才 record SUBMIT 并 incr 计数，重复提交返回既有单——幂等语义已定案。仓库层 RLock + _by_request 索引 + create_barrier 支撑并发安全。create_or_get 函数体（infrastructure.py:24-38）锁覆盖范围未见，属残余未证实点（见 U-03）。",
+          "evidence": [
+            "EVID-7317334d111c2b492f3b",
+            "EVID-b3a0fe35db053c01c2a8",
+            "EVID-8383e57da0413df27f48"
+          ],
+          "id": "V-01",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "FR-02 审批与驳回流程",
+          "detail": "approve_manager/approve_finance 源码定案：均先 _require_approver(actor, expense, role) 再经 _transition 迁移。reject 调用图（get、双 _require_approver、StateConflictError、_transition）结构与“驳回需审批校验+原子转换”一致。reason_code 落点与自批防护检查体未直接可见（见 U-01/U-02）。",
+          "evidence": [
+            "EVID-7e14bc712ba3c080f9bc",
+            "EVID-cea157b992a0efd198df",
+            "EVID-5e55c6fa29dabdd2011b"
+          ],
+          "id": "V-02",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "FR-03 大额阈值与 1000.00 边界",
+          "detail": "比较逻辑已定案：amount > LARGE_EXPENSE_THRESHOLD 时走 PENDING_FINANCE，否则直接 APPROVED。常量值（应为 Decimal(\"1000.00\")，类定义行 24 调用 Decimal）与需求 FR-03 边界语义（严格大于 vs 大于等于）未直接可见（见 U-08）。",
+          "evidence": [
+            "EVID-7e14bc712ba3c080f9bc",
+            "EDGE-8658370ced7aa4e7fb26"
+          ],
+          "id": "V-03",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "FR-04 付款与取消抢占",
+          "detail": "claim_for_payment 定案：transition(expected={APPROVED}, target=PAYING) 原子条件更新，StateConflictError 时返回 None——付款抢占竞争语义已证。cancel 应用层透传 repository.cancel(expense_id, actor.user_id)。repository.cancel 内部预期状态集合未见（见 U-04/U-05）。",
+          "evidence": [
+            "EVID-10a25a7e62e132c8a932",
+            "EVID-5e55c6fa29dabdd2011b"
+          ],
+          "id": "V-04",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "FR-05 付款重试策略",
+          "detail": "定案：range(1,4) 最多 3 次尝试；TransientPaymentError 触发重试、sleep(2^(attempt-1)) 即 1s/2s；PermanentPaymentError 立即终止转 PAYMENT_FAILED。与需求重试上限、退避、异常分型完全一致。",
+          "evidence": [
+            "EVID-ba41ab699cd30082d992",
+            "EVID-0a45b28253afc9a7005f"
+          ],
+          "id": "V-05",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "FR-06 审计事件与敏感信息排除",
+          "detail": "定案：_record 构造 AuditEvent 时 metadata 仅含 version（不含 purpose/bank_account/收款信息）；Expense 数据模型本身无 bank_account 字段；AuditEvent 字段集合（expense_id/event_type/actor_id/from_status/to_status/occurred_at/metadata）已证。AuditLogger.record 落盘实现未见（见 U-06）。",
+          "evidence": [
+            "EVID-c9c03cc814645e2aa7ac",
+            "EVID-1179e56150d46da59954",
+            "EVID-53589db5b2df985a9bfd",
+            "EVID-05f7fb3f89e6b06fd2be"
+          ],
+          "id": "V-06",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "数据模型与状态机（Expense/ExpenseStatus）",
+          "detail": "Expense 8 字段定案；ExpenseStatus 8 状态定案。与需求第 9 章声明一致。",
+          "evidence": [
+            "EVID-53589db5b2df985a9bfd",
+            "EVID-f4974aaad40888ac17e5"
+          ],
+          "id": "V-07",
+          "severity": "none",
+          "verdict": "consistent"
+        },
+        {
+          "attribution": "unattributed",
+          "claim": "指标埋点",
+          "detail": "metrics Counter 初始化与递增结构已见；具体指标名与需求第 12-13 章清单的逐条对照未见（需求原文不可得）。",
+          "evidence": [
+            "EVID-d82210f2874a3bf6d2bb"
+          ],
+          "id": "V-08",
+          "severity": "none",
+          "verdict": "consistent"
+        }
+      ],
+      "misclassification_removed": [
+        "初判中所有候选不一致均已通过调用图+源码交叉验证排除：未发现确证反证；8 个缺口均定性为证据不可得而非证据相悖"
+      ],
+      "recommendation": "无 inconsistent 定案，建议输出报告并关闭案例；U-01 至 U-08 列为人工复核观察清单（文件:行号已列出），优先级最高为 U-01（自批防护）与 U-08（1000.00 边界），因二者直接对应需求 FR-02 规则 3 与 FR-03 边界声明。如后续可提供更大上下文或直接代码访问，应优先复核这两项。",
+      "residual_uncertain": [
+        {
+          "evidence": [
+            "EDGE-52170c6054b04ad02493",
+            "EDGE-2ef64600d35187871405"
+          ],
+          "file": "application.py:108-114",
+          "id": "U-01",
+          "question": "自批防护（actor.user_id == expense.requester_id 拒绝）与角色校验是否均实现",
+          "reason": "函数体源码被上下文包截断；调用图显示 112/114 行两处 raise AuthorizationError，结构符合但正文未见",
+          "target": "_require_approver"
+        },
+        {
+          "evidence": [
+            "EDGE-9abbe3fb76fee85dddc4",
+            "EDGE-a912c9fe401def8623c7"
+          ],
+          "file": "application.py:88-100",
+          "id": "U-02",
+          "question": "reason_code 处置（是否入审计/是否非敏感）",
+          "reason": "函数体未见；调用图显示 get/_require_approver×2/StateConflictError/_transition",
+          "target": "reject"
+        },
+        {
+          "evidence": [
+            "EDGE-b1ae81d84892a603daff",
+            "EDGE-dc6782187a2ab69dd198"
+          ],
+          "file": "infrastructure.py:24-38",
+          "id": "U-03",
+          "question": "锁是否覆盖 check+create 全程、factory 异常时是否回滚",
+          "reason": "函数体未见；调用图显示行 32 get、行 35 factory、行 34/36/38 _copy",
+          "target": "create_or_get"
+        },
+        {
+          "evidence": [
+            "EDGE-44f54315245ff98514d9"
+          ],
+          "file": "infrastructure.py:45-52",
+          "id": "U-04",
+          "question": "预期状态集合、行 48 wait 屏障的语义",
+          "reason": "函数体未见；调用图显示行 48 wait、行 50/52 _copy",
+          "target": "repository.cancel"
+        },
+        {
+          "evidence": [
+            "EDGE-7612c2e752624a0f14f6"
+          ],
+          "file": "infrastructure.py:65-83",
+          "id": "U-05",
+          "question": "锁粒度与版本号校验细节",
+          "reason": "函数体未见；调用图显示行 75 StateConflictError、行 78/83 _copy",
+          "target": "transition"
+        },
+        {
+          "evidence": [],
+          "file": "infrastructure.py:115-117",
+          "id": "U-06",
+          "question": "落盘/追加实现",
+          "reason": "函数体未见",
+          "target": "AuditLogger.record"
+        },
+        {
+          "evidence": [],
+          "file": "domain.py:28-37,64-77",
+          "id": "U-07",
+          "question": "异常体系与角色枚举完整定义",
+          "reason": "定义源码未见；异常在调用图中被引用/raise，行为与需求一致但类型正文不可见",
+          "target": "ValidationError/AuthorizationError/StateConflictError/TransientPaymentError/PaymentOutcome/Role 定义"
+        },
+        {
+          "evidence": [
+            "EDGE-8658370ced7aa4e7fb26"
+          ],
+          "file": "application.py:24 + requirements FR-03",
+          "id": "U-08",
+          "question": "常量值是否为 1000.00 及需求边界语义（> vs >=）",
+          "reason": "常量定义行未直接可见；比较逻辑已定案为严格大于",
+          "target": "LARGE_EXPENSE_THRESHOLD 常量值"
+        }
+      ],
+      "summary": "L4 收敛：合并 8 个证据缺口为 2 类根因——(A) 源码正文可见性受限（上下文包固定截断，7 项：SELFAPPROVE/REJECT/CREATEORGET/CANCEL/TRANSITION/RECORD/DOMAIN）；(B) 需求原文不可见（1 项：THRESHOLD 的常量值与 FR-03 边界语义）。去除全部误报候选：初判中所有候选差异均被调用图结构证据反向支撑为“与需求结构一致”，无 inconsistent 定案项。已定案 6 项 consistent（FR-01 幂等、FR-02 审批结构、FR-03 阈值比较逻辑、FR-04 抢占、FR-05 重试、FR-06 审计）。严重级别：无确证缺陷，残余风险均为未证实而非反证。归因：无 base，全部为 unattributed（无 introduced/exposed 之分）。"
+    }
+  },
+  "generated_at": "2026-08-11T11:48:54.310672+00:00"
+}

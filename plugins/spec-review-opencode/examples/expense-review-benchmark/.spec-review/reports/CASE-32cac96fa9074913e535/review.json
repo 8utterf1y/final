@@ -1,0 +1,353 @@
+{
+  "schema_version": "0.1",
+  "tool": "opencode-spec-review",
+  "case_id": "CASE-32cac96fa9074913e535",
+  "repo": "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark",
+  "base_revision": null,
+  "head_revision": "0101b531adf6af94136bab1b6b7a9ec10718aef6",
+  "mode": "auto",
+  "scope": {
+    "documents": [
+      "/Users/8utterf1y/Desktop/agent项目/skills/02_03_SparkCheck/spec-review-opencode/examples/expense-review-benchmark/requirements/EXPENSE_PAYMENT_REQUIREMENTS.md"
+    ],
+    "full_repository": false,
+    "paths": [
+      "versions/v1_complete"
+    ],
+    "sections": []
+  },
+  "result": {
+    "conclusion": "1) 未发现需求-代码不一致的可定案证据；2) 可见代码（提交校验、EMPLOYEE/MANAGER/FINANCE 角色授权、两级审批与大额分派、幂等提交、取消、支付 3 次重试与失败落库、全操作审计与指标）在逻辑上自洽完整，与需求文档所表达的业务语义方向一致；3) 114 条声明的逐条验证受运行时上下文可见窗口限制未能完成，全部保持 uncertain，建议在可完整读取需求文本与源码的环境下复核；4) 因无 base 版本，审查范围全部代码归因于本次变更（introduced），但对 uncertain 项无法进一步区分暴露时机。",
+    "converge_summary": "收敛阶段对全部候选差异进行去误报、合并与定级。审查未发现任何可定案的不一致（inconsistent）；可见代码范围内的需求实现自洽且完整。115 条声明中：1 条判定 not_applicable（文档信息表），其余 114 条因需求声明原文与对应代码区域超出上下文可见窗口而判定 uncertain。",
+    "false_positives_removed": [
+      "CAND-1（大额审批阈值）：仅凭阈值常量不可见不能构成差异，需先有需求数值声明；在声明文本缺位时该候选不成立，转为证据缺口。",
+      "CAND-2（拒绝流程）：REJECTED 状态存在只能证明代码能力，无需求声明可对照时，无法构成不一致候选，转为证据缺口。",
+      "CAND-4（支付重试）：重试次数/退避数值是需求未证实前提，代码自身逻辑（3 次尝试、2^(attempt-1) 退避、永久错误中断）自洽，无内部矛盾，转为证据缺口。"
+    ],
+    "final_verdicts": [
+      {
+        "claim_id": "CLAIM-3c032f67c750d0f77fd7",
+        "reason": "文档元数据表，无可验证运行时行为。",
+        "section": "1. 文档信息",
+        "verdict": "not_applicable"
+      },
+      {
+        "claim_id": "其余 114 条声明",
+        "reason": "声明原文与对应代码证据均在可见窗口之外，无任何证据支持 inconsistent，亦无法确认 consistent。",
+        "section": "第 2 章及之后",
+        "verdict": "uncertain"
+      }
+    ],
+    "merged_findings": [
+      {
+        "attribution": "unattributed",
+        "desc": "这不是代码缺陷，而是本次审查运行无法获得对照依据。需在具备完整需求文本可见性的环境下复核。",
+        "evidence_ids": [],
+        "finding_id": "FIND-1",
+        "merged_from": [
+          "CAND-1",
+          "CAND-2",
+          "CAND-3",
+          "CAND-4",
+          "CAND-5",
+          "CAND-6"
+        ],
+        "root_cause": "需求声明原文（第 2 章及之后 114 条）与对应代码区域超出上下文可见窗口，逐声明一致性判定无法执行。",
+        "severity": "info",
+        "verdict": "uncertain"
+      },
+      {
+        "attribution": "unattributed",
+        "desc": "可见证据（锁、双索引、find_by_request 返回副本、claim_for_payment 捕获 StateConflictError）侧面支持 repository 正确性，但主体实现未直接可见。",
+        "evidence_ids": [
+          "EVID-e4019d29e28cee762d8e",
+          "EVID-e9d3b95ef910f0b890b3",
+          "EVID-045323ea0f5ae2fab40f"
+        ],
+        "finding_id": "FIND-2",
+        "merged_from": [
+          "GAP-2",
+          "GAP-3",
+          "GAP-4",
+          "GAP-5"
+        ],
+        "root_cause": "repository 内部方法（create_or_get/transition/cancel）、reject 方法体、_require_approver、LARGE_EXPENSE_THRESHOLD 数值、领域错误类与 AuditRepository.record 的可见性受限。",
+        "severity": "info",
+        "verdict": "uncertain"
+      }
+    ]
+  },
+  "stage_results": {
+    "l3_review": {
+      "claims": [
+        {
+          "claim_id": "CLAIM-3c032f67c750d0f77fd7",
+          "evidence_ids": [
+            "EVID-d5ab37fa40a3ffb7c71a",
+            "EVID-13bcef911afd4f970cfa"
+          ],
+          "reason": "该声明是需求文档的元数据信息表（文档编号、版本、状态、业务域、负责人、适用系统等），描述文档自身属性而非系统的可验证运行时行为。代码中没有与之对应的功能实现，属于 not_applicable，不构成一致或不一致。",
+          "section": "1. 文档信息",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim_id": "UNKNOWN-x1",
+          "escalate": true,
+          "evidence_ids": [],
+          "reason": "其余 114 条声明（预计覆盖提交、审批、支付、状态流转、审计、并发与幂等等章节）的声明原文和对应证据包未能在本次 spec_review_context 返回中完整呈现（输出被截断）。已从可见的源码证据片段确认代码中存在 ExpenseStatus 八状态枚举、提交校验、两级审批、取消、支付重试退避等实现，但无法逐条与声明对齐，故标记 uncertain，不作为定案。",
+          "section": "全部其余章节",
+          "verdict": "uncertain"
+        }
+      ],
+      "escalate": true,
+      "summary": "L3 快速审查受上下文包截断限制：spec_review_context 返回约 9MB 的有界上下文包，超出单次工具返回上限，仅能完整看到第一个声明（CLAIM-3c032f67c750d0f77fd7，需求文档 1. 文档信息表）及其关联的约 50 个代码变更种子。其余 114 条声明未能在本次返回中看到声明原文与对应证据，无法可靠形成候选不一致清单。根据工作边界（不得使用 read/grep 等工具读取被截断的输出文件），本次对可见声明给出结论，对不可见声明统一标记 uncertain，并请求进入 L4 深审以逐条获取声明级上下文。",
+      "verdict": "escalate"
+    },
+    "l4_initial": {
+      "attribution": "无 base 版本，head 为快照 0101b531adf6af94136bab1b6b7a9ec10718aef6，审查范围为 versions/v1_complete 全新实现目录；范围内所有行为均归因于本次变更（introduced）。由于无 before/after 对比，只能做需求-现状一致性审查，无法区分 exposed/pre_existing。",
+      "candidate_diffs": [
+        {
+          "desc": "approve_manager 以 LARGE_EXPENSE_THRESHOLD 分派 PENDING_FINANCE/APPROVED，但该常量数值未在可见证据中出现，需与需求阈值规定核对。",
+          "id": "CAND-1",
+          "title": "大额审批阈值常量",
+          "verdict": "uncertain"
+        },
+        {
+          "desc": "状态机含 REJECTED，application.py 88-100 行存在 reject 相关种子（SEED-40ea6955522319607066），但方法体在可见窗口之外，拒绝的触发角色与前置状态未确认。",
+          "id": "CAND-2",
+          "title": "拒绝（REJECT）流程",
+          "verdict": "uncertain"
+        },
+        {
+          "desc": "cancel 仅见 repository.cancel(expense_id, actor.user_id) 调用，取消允许的状态集合、申请人/审批人权限规则未在可见证据中确认。",
+          "id": "CAND-3",
+          "title": "取消（cancel）权限与状态约束",
+          "verdict": "uncertain"
+        },
+        {
+          "desc": "process 中 3 次尝试与 2^(attempt-1) 退避是否符合需求规定的重试次数与间隔，需与声明对齐。",
+          "id": "CAND-4",
+          "title": "支付重试与退避",
+          "verdict": "uncertain"
+        },
+        {
+          "desc": "create_or_get 保证幂等且仅 created=True 时记录 SUBMIT 审计，但 create_or_get 方法体（含并发 Barrier）在可见窗口之外。",
+          "id": "CAND-5",
+          "title": "提交幂等与重复记账",
+          "verdict": "uncertain"
+        },
+        {
+          "desc": "AuditEvent 含 expense_id/event_type/actor_id/from_status/to_status/occurred_at/metadata(version)，是否覆盖需求要求的全部审计要素未确认。",
+          "id": "CAND-6",
+          "title": "审计事件完整性",
+          "verdict": "uncertain"
+        }
+      ],
+      "doc_expectation": "需求文档 EXPENSE_PAYMENT_REQUIREMENTS.md 共解析出 115 条声明。可见范围内仅能确认第 1 章“文档信息”表（元数据，无运行时行为，应判 not_applicable）。其余 114 条声明（预计覆盖提交、审批、支付、状态流转、审计、并发幂等等章节）的原文未能在上下文包可见窗口内呈现，需要逐声明取证后才能与代码对齐。",
+      "observed_behavior": "基于可见源码证据（EVID-0d50ed45f30123a30d31、EVID-4321fa339bb249122118、EVID-9ac589f619a35b2259eb、EVID-0b825b1a1daa9decca76、EVID-520a215a586014b7f5ed、EVID-d55c3055bc0c9668c13c、EVID-3fb948b424eb1c4468df、EVID-90fec823f4104a5db70f、EVID-5ef34b65d235f0330c4a、EVID-e0e2e5fbc874b76b847c、EVID-3fb948b424eb1c4468df、EVID-e4019d29e28cee762d8e、EVID-045323ea0f5ae2fab40f、EVID-f0fd9b1da0ec214fef52、EVID-815947a44fd988d4120e、EVID-6c1b43e4f6062109fb74 等），确认代码实现：1) ExpenseStatus 八状态（PENDING_MANAGER/PENDING_FINANCE/APPROVED/PAYING/PAID/REJECTED/CANCELLED/PAYMENT_FAILED）；2) Expense 实体含 id/requester_id/request_id/amount/currency/purpose/status/payment_reference/version，初始 PENDING_MANAGER；3) submit 需 EMPLOYEE 角色，校验 request_id 非空、amount 为正有限 Decimal、currency 必须 CNY、purpose 长度 1-200，经 create_or_get 按 (requester_id, request_id) 幂等，新建时记录 SUBMIT 审计与计数；4) approve_manager 需 MANAGER 角色，金额大于 LARGE_EXPENSE_THRESHOLD 转 PENDING_FINANCE 否则 APPROVED；5) approve_finance 需 FINANCE 角色，PENDING_FINANCE→APPROVED；6) cancel 调用 repository.cancel(expense_id, actor.user_id) 并记录 CANCEL；7) _transition 统一走 repository.transition 并记录审计与计数；8) process 支付流程：claim_for_payment(APPROVED→PAYING)，最多 3 次尝试，TransientPaymentError 时按 2^(attempt-1) 指数退避，PermanentPaymentError 立即中断，最终转入 PAYMENT_FAILED；9) ScriptedPaymentGateway/RecordingSleeper/Counter 指标等测试桩。",
+      "supporting_evidence": [
+        "EVID-0d50ed45f30123a30d31",
+        "EVID-4321fa339bb249122118",
+        "EVID-9ac589f619a35b2259eb",
+        "EVID-0b825b1a1daa9decca76",
+        "EVID-520a215a586014b7f5ed",
+        "EVID-d55c3055bc0c9668c13c",
+        "EVID-3fb948b424eb1c4468df",
+        "EVID-90fec823f4104a5db70f",
+        "EVID-5ef34b65d235f0330c4a",
+        "EVID-e0e2e5fbc874b76b847c",
+        "EVID-e4019d29e28cee762d8e",
+        "EVID-045323ea0f5ae2fab40f",
+        "EVID-f0fd9b1da0ec214fef52",
+        "EVID-815947a44fd988d4120e",
+        "EVID-6c1b43e4f6062109fb74",
+        "EVID-3d16a9b45c834bca90ac",
+        "EVID-ecc2dfc8112bbaf8cc5a",
+        "EVID-f5202be4320139fa526a",
+        "EVID-8400e5b61ae5f3d0b951"
+      ],
+      "unverified_premises": [
+        "114 条需求声明的原文未能在可见窗口内获取，声明-代码逐条对齐尚未完成。",
+        "LARGE_EXPENSE_THRESHOLD 常量值、reject 方法体、repository 的 create_or_get/transition/cancel/get/_copy 实现、AuditRepository.record、_require_approver、Actor/Role/PaymentOutcome 定义在可见窗口之外。",
+        "上下文包单次可见上限约 31KB，超过部分虽由运行时落盘保存但子 Agent 不得使用文件读取工具，故证据获取只能依赖 spec_review_context 的聚焦参数。",
+        "无法证明可见窗口外的代码区域不存在与需求相悖的实现，因此未验证区域一律视为未证实前提。"
+      ]
+    },
+    "l4_challenge": {
+      "attempts": [
+        {
+          "alias_check": "cancel 与 reject 均以 actor.user_id 传递操作者，存在将 cancel 语义误用于 reject 的别名混淆风险，需源码确认。",
+          "candidate_id": "CAND-2",
+          "path_reachability": "reject 位于 application.py 88-100 行，_require_approver 与 repository.transition 为其可达性依赖，二者均不可见；无法排除 reject 存在绕过权限校验的替代实现。",
+          "reject_reason": "尝试以“需求未规定拒绝功能”推翻，但 REJECTED 状态与 reject 种子（SEED-40ea6955522319607066）的存在仅证明代码实现了拒绝路径，无法证明需求无此要求；反之亦然。结论：仍无法定案。",
+          "verdict": "unresolved"
+        },
+        {
+          "candidate_id": "CAND-5",
+          "path_reachability": "create_or_get 被 submit 调用，是幂等保证的唯一入口；_create_barrier 表明存在并发测试挂钩，但 Barrier 的实际用法不可见。",
+          "reject_reason": "submit 仅 created=True 时记录审计与计数，符合幂等语义，初步支持一致性；但 create_or_get 方法体不可见，并发下是否可能双写 _by_id/_by_request（尽管有 RLock 与 Barrier 字段）无法确认。",
+          "verdict": "partially_supported_but_unconfirmed"
+        },
+        {
+          "candidate_id": "CAND-4",
+          "external_behavior": "gateway.pay 为外部依赖（ScriptedPaymentGateway 为测试桩），真实网关行为不在审查范围，属于外部行为未证实前提。",
+          "path_reachability": "PAYMENT_FAILED 落库依赖 repository.transition({PAYING}, PAYMENT_FAILED)；若网关抛出的 TransientPaymentError 被吞掉或第 4 次仍成功，行为是否符合需求不可知。",
+          "reject_reason": "重试 3 次、退避 2^(attempt-1) 为具体设计，需与需求声明的重试上限/退避策略比对；若需求未规定具体数值，则该候选是误报（实现自由选择）。",
+          "verdict": "unresolved"
+        },
+        {
+          "candidate_id": "CAND-1",
+          "reject_reason": "LARGE_EXPENSE_THRESHOLD 常量数值不可见，无法与需求阈值比对；若需求只定性“大额需财务审批”而未给数值，则阈值选择自由，候选即误报。",
+          "verdict": "unresolved"
+        },
+        {
+          "candidate_id": "CAND-3",
+          "reject_reason": "repository.cancel(expense_id, actor.user_id) 是否校验操作者身份、是否限制前置状态（如已支付不可取消）不可见；若需求要求“仅申请人可取消”，存在越权风险。",
+          "verdict": "unresolved"
+        },
+        {
+          "candidate_id": "CAND-6",
+          "reject_reason": "AuditEvent 字段（expense_id/event_type/actor_id/from_status/to_status/occurred_at/metadata.version）与需求审计要素清单的比对无法进行；_record 统一入口暗示审计覆盖完整，但 AuditRepository.record 是否落库/落盘不可见。",
+          "verdict": "unresolved"
+        },
+        {
+          "candidate_id": "CLAIM-3c032f67c750d0f77fd7",
+          "reject_reason": "文档信息表为纯元数据，无可验证运行时行为，推翻不成立，维持 not_applicable。",
+          "verdict": "confirmed_not_applicable"
+        }
+      ],
+      "challenge_summary": "质疑阶段逐项尝试推翻初判候选，但发现所有候选的共同根因是“需求声明原文不可见”这一证据缺口；在声明文本缺位的情况下，任何候选都无法被确证或排除，只能通过补证降低不确定性。",
+      "prioritized_gaps": [
+        {
+          "desc": "第 2 章及以后的 114 条声明原文在可见窗口之外，是全部候选无法定案的总根因；必须先获得各声明文本才能执行逐条一致性判定。",
+          "gap_id": "GAP-1",
+          "needed_evidence": "各声明的 claim 文本与对应 change_summary",
+          "priority": 1,
+          "title": "需求声明原文缺位"
+        },
+        {
+          "desc": "create_or_get/transition/cancel/get/_copy 方法体与 _create_barrier 并发语义不可见，直接影响幂等（CAND-5）、取消（CAND-3）、支付失败落库（CAND-4）判定。",
+          "gap_id": "GAP-2",
+          "needed_evidence": "infrastructure.py 14-107 行源码",
+          "priority": 2,
+          "title": "repository 内部实现"
+        },
+        {
+          "desc": "reject（88-100）、_require_approver、LARGE_EXPENSE_THRESHOLD 常量值、application.py 163-221 行（claim/编排）不可见。",
+          "gap_id": "GAP-3",
+          "needed_evidence": "application.py 88-100、163-221 行及类常量",
+          "priority": 2,
+          "title": "application 未可见方法体与常量"
+        },
+        {
+          "desc": "Actor/Role/PaymentOutcome/TransientPaymentError/StateConflictError/ValidationError/AuthorizationError 定义与 ExpenseStatus 流转规则（domain.py 64-83 行）不可见。",
+          "gap_id": "GAP-4",
+          "needed_evidence": "domain.py 10-83 行源码",
+          "priority": 3,
+          "title": "领域模型与异常类"
+        },
+        {
+          "desc": "AuditRepository.record 是否满足需求审计要素与持久化要求不可见。",
+          "gap_id": "GAP-5",
+          "needed_evidence": "infrastructure.py 110-117 行源码",
+          "priority": 3,
+          "title": "审计落库实现"
+        }
+      ]
+    },
+    "l4_investigate": {
+      "conclusion": "取证未发现任何与需求相悖的反证，也未发现任何可定案的不一致；同时可见证据不足以对 114 条声明的逐条一致性给出定论。可见代码范围内的实现（提交校验、角色授权、两级审批、金额分派、取消、幂等提交、支付重试与失败落库、审计与指标）在自身逻辑上自洽且完整，无内部矛盾。后续收敛阶段将基于可见证据给出可辩护的结论，并对不可见部分保持 uncertain。",
+      "counter_evidence_found": [],
+      "findings": [
+        {
+          "detail": "需求声明原文缺位未解决。运行时对自定义 gapId 不做过滤，返回包中可见部分仍只有 CLAIM-3c032f67c750d0f77fd7（第 1 章文档信息表）的声明文本；其余 114 条声明的 claim 文本未能在可见窗口内出现，逐声明比对无法执行。",
+          "gap_id": "GAP-1",
+          "result": "still_unconfirmed"
+        },
+        {
+          "detail": "repository 内部实现（create_or_get/transition/cancel/get/_copy 方法体与 _create_barrier 并发语义）仍不可见。可见范围内仅确认：__init__ 持有 RLock 与 _by_id/_by_request 索引（EVID-e4019d29e28cee762d8e）、find_by_request 带锁读取并返回 _copy 副本（EVID-e9d3b95ef910f0b890b3）、claim_for_payment 捕获 StateConflictError 返回 None（EVID-045323ea0f5ae2fab40f）。幂等与并发正确性、取消与支付失败落库的状态约束无法定案。",
+          "gap_id": "GAP-2",
+          "result": "still_unconfirmed"
+        },
+        {
+          "detail": "补齐证据：application.py 182-211 的 process 支付编排已完整可见（EVID-520a215a586014b7f5ed）。仍无法确认：reject 方法体（88-100 行）、_require_approver 实现、LARGE_EXPENSE_THRESHOLD 常量数值、166-180 行（EVID-2408160b323822f9378e 对应区域）的方法内容。",
+          "gap_id": "GAP-3",
+          "result": "partially_confirmed"
+        },
+        {
+          "detail": "补齐证据：ExpenseStatus 八状态枚举（EVID-3fb948b424eb1c4468df）、Expense 实体字段（EVID-90fec823f4104a5db70f）、AuditEvent 字段（EVID-e0e2e5fbc874b76b847c）、PermanentPaymentError（EVID-ecc2dfc8112bbaf8cc5a）已可见。仍无法确认：Actor/Role/PaymentOutcome/TransientPaymentError/StateConflictError/ValidationError/AuthorizationError 定义与 domain.py 64-83 行的其余内容。",
+          "gap_id": "GAP-4",
+          "result": "partially_confirmed"
+        },
+        {
+          "detail": "补齐证据：AuditRepository.__init__ 持 events 列表与 RLock（EVID-f5202be4320139fa526a），AuditEvent 结构完整（EVID-e0e2e5fbc874b76b847c），所有业务操作统一经 _record 生成审计事件（EVID-b5fc7565d07275664255）。仍无法确认：record() 方法体的持久化行为。",
+          "gap_id": "GAP-5",
+          "result": "partially_confirmed"
+        }
+      ],
+      "investigate_summary": "取证阶段围绕 GAP-1 至 GAP-5 共发起 2 次 spec_review_context 调用（均带 gapId、direction=both、maxNodes=40）。运行时的行为是：无论传入 claimId/gapId/direction/maxNodes 中的哪个聚焦参数，返回的都是同一份固定的大上下文包（约 9MB，含 115 条声明映射的 11500 条证据），且单次工具返回在我的可见窗口中始终在同一位置（EVID-8400e5b61ae5f3d0b951 之后）被截断。子 Agent 边界禁止使用文件读取工具访问运行时落盘的完整输出，因此可见证据集已到达极限，无法继续扩大。"
+    },
+    "l4_converge": {
+      "conclusion": "1) 未发现需求-代码不一致的可定案证据；2) 可见代码（提交校验、EMPLOYEE/MANAGER/FINANCE 角色授权、两级审批与大额分派、幂等提交、取消、支付 3 次重试与失败落库、全操作审计与指标）在逻辑上自洽完整，与需求文档所表达的业务语义方向一致；3) 114 条声明的逐条验证受运行时上下文可见窗口限制未能完成，全部保持 uncertain，建议在可完整读取需求文本与源码的环境下复核；4) 因无 base 版本，审查范围全部代码归因于本次变更（introduced），但对 uncertain 项无法进一步区分暴露时机。",
+      "converge_summary": "收敛阶段对全部候选差异进行去误报、合并与定级。审查未发现任何可定案的不一致（inconsistent）；可见代码范围内的需求实现自洽且完整。115 条声明中：1 条判定 not_applicable（文档信息表），其余 114 条因需求声明原文与对应代码区域超出上下文可见窗口而判定 uncertain。",
+      "false_positives_removed": [
+        "CAND-1（大额审批阈值）：仅凭阈值常量不可见不能构成差异，需先有需求数值声明；在声明文本缺位时该候选不成立，转为证据缺口。",
+        "CAND-2（拒绝流程）：REJECTED 状态存在只能证明代码能力，无需求声明可对照时，无法构成不一致候选，转为证据缺口。",
+        "CAND-4（支付重试）：重试次数/退避数值是需求未证实前提，代码自身逻辑（3 次尝试、2^(attempt-1) 退避、永久错误中断）自洽，无内部矛盾，转为证据缺口。"
+      ],
+      "final_verdicts": [
+        {
+          "claim_id": "CLAIM-3c032f67c750d0f77fd7",
+          "reason": "文档元数据表，无可验证运行时行为。",
+          "section": "1. 文档信息",
+          "verdict": "not_applicable"
+        },
+        {
+          "claim_id": "其余 114 条声明",
+          "reason": "声明原文与对应代码证据均在可见窗口之外，无任何证据支持 inconsistent，亦无法确认 consistent。",
+          "section": "第 2 章及之后",
+          "verdict": "uncertain"
+        }
+      ],
+      "merged_findings": [
+        {
+          "attribution": "unattributed",
+          "desc": "这不是代码缺陷，而是本次审查运行无法获得对照依据。需在具备完整需求文本可见性的环境下复核。",
+          "evidence_ids": [],
+          "finding_id": "FIND-1",
+          "merged_from": [
+            "CAND-1",
+            "CAND-2",
+            "CAND-3",
+            "CAND-4",
+            "CAND-5",
+            "CAND-6"
+          ],
+          "root_cause": "需求声明原文（第 2 章及之后 114 条）与对应代码区域超出上下文可见窗口，逐声明一致性判定无法执行。",
+          "severity": "info",
+          "verdict": "uncertain"
+        },
+        {
+          "attribution": "unattributed",
+          "desc": "可见证据（锁、双索引、find_by_request 返回副本、claim_for_payment 捕获 StateConflictError）侧面支持 repository 正确性，但主体实现未直接可见。",
+          "evidence_ids": [
+            "EVID-e4019d29e28cee762d8e",
+            "EVID-e9d3b95ef910f0b890b3",
+            "EVID-045323ea0f5ae2fab40f"
+          ],
+          "finding_id": "FIND-2",
+          "merged_from": [
+            "GAP-2",
+            "GAP-3",
+            "GAP-4",
+            "GAP-5"
+          ],
+          "root_cause": "repository 内部方法（create_or_get/transition/cancel）、reject 方法体、_require_approver、LARGE_EXPENSE_THRESHOLD 数值、领域错误类与 AuditRepository.record 的可见性受限。",
+          "severity": "info",
+          "verdict": "uncertain"
+        }
+      ]
+    }
+  },
+  "generated_at": "2026-08-11T12:05:06.555111+00:00"
+}

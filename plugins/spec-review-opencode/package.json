@@ -1,0 +1,32 @@
+{
+  "name": "@company/opencode-spec-review",
+  "version": "0.4.0",
+  "description": "支持 GitHub PR 审查与安全回写的 OpenCode 需求—代码一致性子 Agent",
+  "type": "module",
+  "exports": "./index.ts",
+  "main": "./index.ts",
+  "files": [
+    "index.ts",
+    "src",
+    "node_modules/@opencode-ai/plugin",
+    "node_modules/zod",
+    "runtime",
+    "README.md",
+    "DESIGN.md"
+  ],
+  "scripts": {
+    "test:runtime": "python3 -m unittest discover -s runtime/tests -v"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "1.18.16",
+    "zod": "4.1.8"
+  },
+  "engines": {
+    "opencode": ">=1.18.0",
+    "python": ">=3.9"
+  },
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "benchmark_id": "expense-payment-consistency-v1",
+  "requirements": "requirements/EXPENSE_PAYMENT_REQUIREMENTS.md",
+  "versions": {
+    "v1_complete": {
+      "classification": "fully_compliant",
+      "expected_failed_tests": [],
+      "expected_findings": []
+    },
+    "v2_partial_idempotency": {
+      "classification": "partially_implemented",
+      "expected_failed_tests": ["test_FR01_concurrent_duplicate_is_atomic"],
+      "expected_findings": [{
+        "requirement_id": "FR-01",
+        "type": "concurrency_atomicity",
+        "severity": "high",
+        "summary": "幂等性仅覆盖串行重复请求，查询与创建分离导致并发重复建单"
+      }]
+    },
+    "v3_missing_self_approval": {
+      "classification": "not_implemented",
+      "expected_failed_tests": ["test_FR02_requester_cannot_approve_own_expense"],
+      "expected_findings": [{
+        "requirement_id": "FR-02",
+        "type": "missing_authorization_control",
+        "severity": "critical",
+        "summary": "完全缺失申请人与审批人职责分离校验"
+      }]
+    },
+    "v4_wrong_retry_policy": {
+      "classification": "contradictory_implementation",
+      "expected_failed_tests": [
+        "test_FR05_permanent_failure_is_not_retried",
+        "test_FR05_transient_attempt_cap_is_three",
+        "test_FR05_transient_retry_sequence"
+      ],
+      "expected_findings": [{
+        "requirement_id": "FR-05",
+        "type": "algorithm_and_exception_policy",
+        "severity": "high",
+        "summary": "重试上限、退避序列和永久错误分类均与需求冲突"
+      }]
+    },
+    "v5_cancelled_payment_bypass": {
+      "classification": "cross_path_requirement_bypass",
+      "expected_failed_tests": ["test_FR04_cancelled_expense_is_never_paid"],
+      "expected_findings": [{
+        "requirement_id": "FR-04",
+        "type": "state_machine_call_path_bypass",
+        "severity": "critical",
+        "summary": "批处理付款路径绕过原子领取接口，已取消单据仍可进入付款"
+      }]
+    }
+  }
+}
