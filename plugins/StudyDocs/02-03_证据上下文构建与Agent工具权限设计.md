@@ -2,6 +2,8 @@
 
 ## 第一部分：总结介绍
 
+本章继续使用总览章中的 `CASE-7A91 / CLAIM-R1 / CLAIM-R2` 会议准入案例。阅读时要把三层数据分开：索引层的 `symbol/edge` 是代码快照事实，case 层的 `claim/change_seed` 表示本次 MR 要审什么，证据层的 `evidence/evidence pack` 才是分配给某条 claim、允许模型引用的上下文。总览章展示完整事件顺序，本章重点解释这些中间数据为什么长成这种形态。
+
 这一部分对应简历里的两段能力：一是“调取内部需求文档和 MR 变更信息，基于 Git Diff、AST/Tree-sitter 构建符号索引与双向调用链，形成需求-变更-代码关联的证据上下文”；二是“通过受控工具约束 Agent 的取证范围”。这两者必须放在一起理解，因为证据上下文不是普通检索结果，而是 Agent 能够判断一致性的唯一事实来源。
 
 整个数据流从 `spec_review_start` 开始。用户输入 MR 标识或 MR 链接、仓库范围、路径过滤、章节过滤和审查模式后，TypeScript 工具会把 payload 交给 Python Runtime。Runtime 的 `workflow.start_case` 先校验范围；MR 模式下会通过内部 MCP 与平台接口获取 MR 信息和设计文档，锁定 base/head SHA，并准备 detached analysis worktree；然后依次调用索引、diff 范围解析和需求声明抽取。这里的顺序不是随意的：先建索引，才能把 diff hunk 关联到代码符号；先解析变更范围，才能知道后续上下文应该从哪些 seed 出发；再抽取需求 claim，才能把同一批变更证据与每条需求声明组合成 evidence pack。

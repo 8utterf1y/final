@@ -24,6 +24,302 @@
 
 上下文包是这个 Agent 的关键产物。`spec_review_context` 最终会进入 `context.build_context_packs`。新版实现不会一次返回所有 claim 和所有 seed，而是按页返回少量 claim，并针对每条 claim 对 diff seed 和 symbol 做相关性排序，再用有限的 callers/callees 图扩展补充源码证据。每条 diff 或 source 证据都会被持久化，并生成稳定的 `evidence_id`。因此最终审查结论不是一句“模型认为不一致”，而是“某个需求 claim 基于哪些 diff/source evidence_id 被判定为 inconsistent 或 uncertain”。
 
+### 先区分六种对象：它们不是同一份数据换了名字
+
+理解整个过程最容易卡住的地方，是把“索引、调用图、证据包、阶段结果”都笼统理解成上下文。实际上它们分属不同生命周期：
+
+| 对象 | 由谁产生 | 表达什么 | 是否绑定本次 MR | 是否直接给最终结论引用 |
+| --- | --- | --- | --- | --- |
+| `symbol` | Tree-sitter 索引器 | 仓库中有哪些类、函数、方法，它们在哪些行 | 否，属于代码快照 | 否，它主要用于定位和导航 |
+| `edge` | Tree-sitter 索引器和调用目标解析器 | 哪个符号调用了哪个符号 | 否，属于代码快照 | 否，调用图本身不能单独证明运行时行为 |
+| `change_seed` | Git Diff 范围解析器 | 本次 MR 改了哪段代码、命中了哪个符号 | 是，绑定 `case_id` | 间接使用，它会被转换成 diff evidence |
+| `claim` | 需求文档解析器 | 文档中一条可独立核验的要求 | 是，绑定 `case_id` | 是最终判定的审查单位 |
+| `evidence` | context 或 investigate | 某个 claim 可引用的 diff/source 事实 | 是，同时绑定 `case_id + claim_id` | 是，确定性结论必须引用 `evidence_id` |
+| `stage_run` | Agent 提交、Runtime 校验后保存 | 当前阶段对各 claim 的结构化判断 | 是，绑定 `case_id + stage` | 最终报告会综合这些阶段产物 |
+
+最关键的转换关系是：Tree-sitter 先产生全仓可复用的 `symbol/edge`；Git Diff 再把本次 MR 映射成 `change_seed`；Runtime 针对每个 `claim` 从 seed 出发检索符号、源码和调用图，把其中能被审查引用的部分固化成 `evidence`；Agent 最后只能用这些 evidence 形成 `stage_run`。所以索引不是报告，调用图不是结论，evidence pack 也不是模型输出。
+
+### 一个从输入到报告的完整演算案例
+
+下面始终使用同一个案例。为便于阅读，示例 ID 做了缩写；真实实现使用 `stable_id` 生成稳定 ID。
+
+设计文档《会议准入设计》包含两条验收要求：
+
+```text
+R1：用户没有加入权限时，接口必须拒绝加入会议。
+R2：每次拒绝加入会议时，必须写入安全审计日志，日志包含 user_id 和 room_id。
+```
+
+MR 把 `MeetingService::Join` 从“直接加入”改成“先鉴权再加入”，但是没有显式增加审计调用：
+
+```cpp
+bool MeetingService::Join(const User& user, const Room& room) {
+    if (!ValidateJoinPermission(user, room)) {
+        return false;
+    }
+    session_store_.Add(user.id(), room.id());
+    return true;
+}
+```
+
+#### 时刻 T0：`spec_review_start` 只负责建立审查世界
+
+Agent 发起的逻辑输入可以理解为：
+
+```json
+{
+  "repo": "/workspace/meeting-server",
+  "mr": "MR-4821",
+  "docs": ["DOC-meeting-access-v3"],
+  "paths": ["src/**"],
+  "sections": ["加入权限", "安全审计"],
+  "mode": "auto"
+}
+```
+
+内部 MCP 与平台接口先把 `MR-4821` 解析成确定的仓库、base SHA、head SHA、变更文件和关联设计文档版本。Runtime 随后创建 `CASE-7A91`。这个时刻还没有模型结论，数据库发生的是事实层初始化：
+
+```text
+review_cases  + CASE-7A91(stage=l3_review, status=active, base=B100, head=H120)
+claims        + CLAIM-R1("无权限必须拒绝加入")
+claims        + CLAIM-R2("拒绝时必须记录安全审计日志")
+change_seeds  + SEED-JOIN(src/meeting/meeting_service.cc:40-46, SYM-JOIN)
+```
+
+这里的事件顺序不能调换。先锁定 base/head，是为了保证 diff、源码证据和未来发布都指向同一个 MR 版本；先建立 head 快照的索引，才能把 diff 第 40 至 46 行映射到 `SYM-JOIN`；先把文档拆成两条 claim，后面才能分别判断“拒绝行为”和“审计行为”，而不是把两个验收条件合并成一个模糊结论。
+
+#### 时刻 T1：Tree-sitter 把源码变成可查询结构
+
+解析前，Runtime 面对的是文件字符和行号。Tree-sitter 解析后先得到语法节点，再由索引器投影成符号和调用边。可以把中间过程简化理解为：
+
+```text
+源码文本
+  -> function_definition "MeetingService::Join" [40, 47]
+     -> call_expression "ValidateJoinPermission" [41]
+     -> call_expression "session_store_.Add" [44]
+  -> function_definition "MeetingService::ValidateJoinPermission" [50, 54]
+     -> call_expression "permission_client_.CanJoin" [52]
+```
+
+落入索引后的形态不是一棵巨大语法树，而是更适合查询的关系数据：
+
+```text
+symbols
+  SYM-JOIN       MeetingService::Join                    line 40-47
+  SYM-VALIDATE   MeetingService::ValidateJoinPermission  line 50-54
+  SYM-CAN-JOIN   PermissionClient::CanJoin               line 18-26
+
+edges
+  SYM-JOIN     --calls--> SYM-VALIDATE
+  SYM-JOIN     --calls--> SYM-SESSION-ADD
+  SYM-VALIDATE --calls--> SYM-CAN-JOIN
+```
+
+索引覆盖整个 head 快照，可以被多个 case 复用；`SEED-JOIN` 则只属于 `CASE-7A91`，表示本次 MR 的 diff 命中了 `SYM-JOIN`。这就是“仓库知识”和“本次变更范围”的边界。
+
+#### 时刻 T2：同一个变更为不同 claim 生成不同证据包
+
+Agent 调用：
+
+```text
+spec_review_context(caseId="CASE-7A91", cursor=0, limit=3, direction="both")
+```
+
+Runtime 不会把 `SYM-JOIN` 周围的所有代码原样塞给两个 claim。它会分别使用 claim 文本给 seed 和符号排序，然后为每条 claim 固化 evidence。简化后的返回如下：
+
+```json
+{
+  "case_id": "CASE-7A91",
+  "stage": "l3_review",
+  "page": {"cursor": 0, "returned": 2, "total": 2, "next_cursor": null},
+  "packs": [
+    {
+      "claim": {"claim_id": "CLAIM-R1", "statement": "无权限必须拒绝加入"},
+      "change_summary": [{"seed_id": "SEED-JOIN", "symbol_id": "SYM-JOIN"}],
+      "graph": {
+        "symbols": ["SYM-JOIN", "SYM-VALIDATE", "SYM-CAN-JOIN"],
+        "edges": ["SYM-JOIN -> SYM-VALIDATE", "SYM-VALIDATE -> SYM-CAN-JOIN"],
+        "gaps": []
+      },
+      "evidence": [
+        {"evidence_id": "EVID-R1-DIFF", "kind": "diff", "path": "src/meeting/meeting_service.cc"},
+        {"evidence_id": "EVID-R1-JOIN", "kind": "source", "path": "src/meeting/meeting_service.cc"},
+        {"evidence_id": "EVID-R1-CAN", "kind": "source", "path": "src/auth/permission_client.cc"}
+      ]
+    },
+    {
+      "claim": {"claim_id": "CLAIM-R2", "statement": "拒绝时必须写安全审计日志"},
+      "change_summary": [{"seed_id": "SEED-JOIN", "symbol_id": "SYM-JOIN"}],
+      "graph": {
+        "symbols": ["SYM-JOIN", "SYM-VALIDATE", "SYM-CAN-JOIN"],
+        "edges": ["SYM-JOIN -> SYM-VALIDATE", "SYM-VALIDATE -> SYM-CAN-JOIN"],
+        "gaps": []
+      },
+      "evidence": [
+        {"evidence_id": "EVID-R2-DIFF", "kind": "diff", "path": "src/meeting/meeting_service.cc"},
+        {"evidence_id": "EVID-R2-JOIN", "kind": "source", "path": "src/meeting/meeting_service.cc"}
+      ]
+    }
+  ],
+  "prior_stage_results": {}
+}
+```
+
+注意 `EVID-R1-JOIN` 和 `EVID-R2-JOIN` 即使可能指向同一段源码，也分别属于不同 claim。这样做看似重复，却阻止模型拿“R1 的鉴权证据”去证明“R2 已经记录审计”。`evidence_id` 的作用不仅是定位片段，更重要的是表达“这段事实被分配给哪条需求进行判断”。
+
+还要注意，返回中的 `graph.gaps` 不是“业务需求缺口检测器”。Runtime 只会在调用目标无法唯一解析或图扩展达到预算时记录 `unresolved_edge`、`ambiguous` 或 `budget_limit`。像“审计日志可能遗漏”这样的语义缺口，是 Agent 比较 `CLAIM-R2` 与现有 evidence 后提出的假设，再由 challenge 阶段整理成 `gap_id`；Runtime 不会因为函数名里没有 `Audit` 就自动宣布需求未实现。
+
+#### 时刻 T3：L3 只筛选风险，不急着把“没看到”判成“没有”
+
+Agent 读取 evidence pack 后提交：
+
+```json
+{
+  "summary": "拒绝路径已有直接证据，审计行为仍需补证。",
+  "claims": [
+    {
+      "claim_id": "CLAIM-R1",
+      "verdict": "consistent",
+      "evidence_ids": ["EVID-R1-DIFF", "EVID-R1-JOIN", "EVID-R1-CAN"],
+      "reason": "无权限时 ValidateJoinPermission 返回 false，Join 随即返回 false。"
+    },
+    {
+      "claim_id": "CLAIM-R2",
+      "verdict": "uncertain",
+      "evidence_ids": ["EVID-R2-DIFF", "EVID-R2-JOIN"],
+      "reason": "当前片段未出现审计调用，但尚未排除上游、封装层或统一拦截器实现。"
+    }
+  ]
+}
+```
+
+`spec_review_submit` 不会盲目接受。Runtime 会检查两条真实 claim 是否都出现、有没有重复、verdict 是否属于固定枚举、每个 evidence 是否属于 `CASE-7A91 + 对应 claim`。通过后才新增：
+
+```text
+stage_runs + RUN-L3(case=CASE-7A91, stage=l3_review, result=上述 JSON)
+```
+
+此时 `review_cases.stage` 仍然是 `l3_review`，所以 `next_action` 是 `awaiting_next`。只有 Agent 再调用 `spec_review_next`，Runtime 才读取 L3 结果，发现 `CLAIM-R2=uncertain`，把 stage 更新为 `l4_initial`。这体现了 `submit` 和 `next` 分离的意义：前者记录不可变的阶段产物，后者根据已记录事实推进状态。
+
+#### 时刻 T4：L4 不是重复审查，而是在同一条疑点上逐步减少未知量
+
+进入 L4 后，`CLAIM-R1` 不再返回，因为 auto 模式只深审 L3 的 `inconsistent/uncertain` 候选。四个阶段的输入增量和输出增量如下：
+
+| 阶段 | 进入时比上一阶段多看到什么 | Agent 要解决的问题 | 新持久化产物 |
+| --- | --- | --- | --- |
+| `l4_initial` | evidence pack + L3 对 R2 的 `uncertain` 原因 | 把怀疑写成可验证假设 | `RUN-L4-INITIAL`：期望、观察、候选差异、未证实前提 |
+| `l4_challenge` | 再加 initial 的候选问题 | 主动寻找能推翻初判的替代解释 | `RUN-L4-CHALLENGE`：`GAP-AUDIT-1/2` |
+| `l4_investigate` | 再加 challenge 的 gap | 每轮执行一个定向查询，收集 observation | `investigation_actions`、预算消耗、新 evidence、`RUN-L4-INVESTIGATE` |
+| `l4_converge` | 全部阶段结果 + 取证轨迹 + 新证据 | 在支持证据与反证都检查后给最终结论 | `RUN-L4-CONVERGE`：最终 verdict、severity、attribution、root cause |
+
+`l4_initial` 的核心不是把 uncertain 改成 inconsistent，而是把未知量显式化：
+
+```json
+{
+  "claim_id": "CLAIM-R2",
+  "verdict": "uncertain",
+  "hypothesis": "MR 新增拒绝分支，但该分支没有触发安全审计。",
+  "unverified_assumptions": [
+    "ValidateJoinPermission 内部没有统一审计",
+    "Join 的上游入口没有在 false 返回后记录审计",
+    "框架拦截器没有统一记录准入失败"
+  ]
+}
+```
+
+`l4_challenge` 随后反向质疑这三个前提，不能只重复“代码里没看到日志”：
+
+```json
+{
+  "claim_id": "CLAIM-R2",
+  "verdict": "uncertain",
+  "gaps": [
+    {"gap_id": "GAP-AUDIT-1", "question": "ValidateJoinPermission 的 callees 中是否存在审计封装？"},
+    {"gap_id": "GAP-AUDIT-2", "question": "Join 的 callers 是否在返回 false 后统一记录拒绝事件？"},
+    {"gap_id": "GAP-AUDIT-3", "question": "是否存在按该路由生效的安全审计拦截器？"}
+  ]
+}
+```
+
+到了 `l4_investigate`，Agent 才围绕 gap 执行动作。一次动作只回答一个问题：
+
+```text
+Action 1: get_callees(SYM-VALIDATE), gap=GAP-AUDIT-1
+Observation 1: 只发现 PermissionClient::CanJoin，没有审计封装
+数据库增量: IACT-01，rounds 1/12，tool_calls 1/32
+
+Action 2: get_callers(SYM-JOIN), gap=GAP-AUDIT-2
+Observation 2: 找到 JoinController::Handle 和 MeetingRpcHandler::JoinMeeting
+数据库增量: IACT-02，rounds 2/12，tool_calls 2/32
+
+Action 3: read_source_range(join_controller.cc:72-96), gap=GAP-AUDIT-2
+Observation 3: caller 仅把 false 转成 PERMISSION_DENIED，没有调用审计服务
+新增证据: EVID-R2-CALLER
+数据库增量: IACT-03，rounds 3/12，tool_calls 3/32
+
+Action 4: search_code("SecurityAudit RecordDeny meeting join"), gap=GAP-AUDIT-3
+Observation 4: 仓库存在 SecurityAudit::RecordDeny，但本次拒绝路径不可达
+新增证据: EVID-R2-AUDIT-API
+数据库增量: IACT-04，rounds 4/12，tool_calls 4/32
+
+Action 5: finish_investigation(note="三个替代路径均已检查")
+Observation 5: ready_for_converge=true
+```
+
+这里 `search_code` 命中一个审计 API 并不自动证明需求已实现。只有它位于本次拒绝路径上，才可能成为支持一致性的证据；现在的事实恰好是“API 存在，但从 Join 拒绝路径不可达”。Agent 将 action 摘要提交为 `RUN-L4-INVESTIGATE`，再由 `next` 推进到收敛阶段。
+
+`l4_converge` 最终同时考虑原始证据和反证检查：
+
+```json
+{
+  "final_verdicts": [
+    {
+      "claim_id": "CLAIM-R2",
+      "verdict": "inconsistent",
+      "severity": "high",
+      "attribution": "introduced",
+      "root_cause_id": "ROOT-MISSING-DENY-AUDIT",
+      "evidence_ids": ["EVID-R2-DIFF", "EVID-R2-JOIN", "EVID-R2-CALLER", "EVID-R2-AUDIT-API"],
+      "reason": "MR 在 Join 中引入新的拒绝分支，但该分支及两个真实入口均未记录审计；仓库中的审计 API 不在此调用路径上。"
+    }
+  ]
+}
+```
+
+所以最终的 `inconsistent` 不是来自“模型第一次没看到日志”，而是来自一条完整论证：需求明确要求记录日志；MR 引入了拒绝分支；拒绝分支源码没有审计；下游鉴权封装没有审计；两个上游入口也没有审计；仓库虽有审计 API，但当前路径不可达。L4 的价值就是把“缺少直接观察”逐步变成“主要替代解释已经被证据排除”。
+
+#### 时刻 T5：错误和中断不会抹掉已经确认的状态
+
+假设 Agent 错把 `EVID-R1-CAN` 放进 `CLAIM-R2` 的提交，Runtime 会在 evidence ownership 校验时拒绝，`stage_runs` 不会新增记录，case 仍停在当前阶段。Agent 需要重新读取该 claim 的 pack，使用属于 R2 的 evidence 再提交。失败不会自动跳过，也不会把半份结果当成成功。
+
+假设进程在 `IACT-03` 后中断，SQLite 中已经存在 L3、initial、challenge 的 `stage_runs`，也存在前三轮 `investigation_actions`、预算消耗和 observation cache。恢复时：
+
+```text
+spec_review_status(CASE-7A91)
+  -> stage=l4_investigate
+  -> next_action.action=l4_investigate
+
+spec_review_investigation_status(CASE-7A91)
+  -> recent_actions=[IACT-03, IACT-02, IACT-01]
+  -> rounds.used=3
+  -> tool_calls.used=3
+```
+
+恢复的是“可验证的外部状态”，不是模型尚未提交的思维过程。Agent 从已有轨迹继续查 `GAP-AUDIT-3` 即可，不需要重建索引，也不能假装记得中断前没有落库的推理。即使 Agent 不断重复取证，round、tool call、返回字符和源码行数预算也会形成硬停止条件；主状态机自身则只能单向从当前阶段推进到 `ready_to_finish`，不存在回到前一阶段的边。
+
+#### 时刻 T6：报告展示结论，JSON 保留完整审计轨迹
+
+进入 `ready_to_finish` 后，`spec_review_finish` 才被允许执行。最终面向人的摘要可以是：
+
+```text
+CLAIM-R1  consistent   无权限加入已被拒绝
+CLAIM-R2  inconsistent 拒绝路径缺少安全审计，high，introduced
+证据       meeting_service.cc、join_controller.cc、permission_client.cc
+根因       ROOT-MISSING-DENY-AUDIT
+```
+
+而 `review.json` 还会保留逐 claim 结果、coverage、verdict 统计和各阶段结果。这样 reviewer 看到的是简洁结论，评估系统和审计人员仍然可以回答“L3 为什么升级、challenge 提了哪些反证、investigate 查了什么、最终为何改变 verdict”。
+
 当状态机进入 `ready_to_finish` 后，Agent 调用 `spec_review_finish`。Runtime 会读取所有 `stage_runs`，把 L3 结果和 L4 收敛结果重新组装成逐 claim 覆盖结果，统计 `verdict_counts`，并按 `root_id/root_cause_id` 聚合不一致项。报告写入业务仓库的 `.spec-review/reports/<case-id>/` 下，包括 `review.md`、`review.json` 和 `review.sarif`。如果覆盖率完整，case 状态更新为 `finished/completed`；如果仍有缺失 claim，会写出不完整报告并标记为 `coverage_incomplete/incomplete`。JSON 保存完整阶段结果和覆盖率，Markdown 面向用户阅读，SARIF 面向代码扫描或平台集成。
 
 整条流程可以概括为下面的事件流：
