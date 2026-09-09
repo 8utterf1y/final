@@ -2,7 +2,7 @@
 
 ## 第一部分：总结介绍
 
-这套 RAG 现在不只是“导入文档后检索答案”，而是承担了两个相关目标：第一，把项目外部资料、PDF、Markdown、CSV、JSON 等文档变成可检索知识；第二，把 Agent 完成任务时产生的调查、修改、验证过程沉淀成结构化经验文档，写入同一个知识库，供后续相似任务召回复用。对应到简历表述，就是“经验沉淀与知识库检索增强”。
+这部分包含两套用途不同、底层能力可复用的检索链。Knowledge 负责把规范、接口、设计文档以及 PDF、Markdown、CSV、JSON 等事实型资料变成可检索片段；Experience 负责把 Agent 完成任务时产生的调查、修改和验证过程沉淀为完整经验，并通过独立 Description 索引召回。两类资料不再混入同一分块索引，对应到简历表述就是“经验沉淀与知识库检索增强”。
 
 整体链路可以分成经验生产链、离线索引链和在线检索链。经验生产链由 [experience.py](/Users/8utterf1y/Desktop/agent项目/claude-mini/claude-code-from-scratch/python/mini_claude/experience.py:1) 负责：Agent 每轮开始时记录用户消息，每次工具调用、工具结果、权限拒绝和 assistant 文本也会被记录到 `TaskJournal`。这个 journal 故意独立于聊天历史，因为第七章的 compact、snip、microcompact 会改写消息；但可复用经验需要不可变事件证据。
 
@@ -10,7 +10,9 @@
 
 经验 JSON 不是直接相信模型输出。`validate_experience_payload()` 会校验 turn 范围、清洗字段、限制列表长度、移除不存在的 evidence event id，并根据是否有成功 shell 验证、是否有编辑、是否有失败修复等计算 `quality_score`。低质量经验会被标记为 `skip`；没有验证证据的经验会加上 `unverified` 标签。这里体现的是“经验可以由模型总结，但必须由程序做结构化校验和质量门控”。
 
-通过校验后，`render_experience_markdown()` 会把经验渲染成 Markdown，并写入项目级目录 `~/.mini-claude/projects/<project-hash>/experiences/`。随后它会调用 `get_knowledge_store().add_document(str(path))`，把这份经验文档作为知识库文档导入和索引。也就是说，经验沉淀不是另起一套检索系统，而是复用知识库的 loader、chunking、embedding、FTS5、HNSW、RRF 和 rerank 能力。删除经验时，也会尝试删除对应 knowledge document，保证经验文件和索引大体同步。
+通过校验后，`render_experience_markdown()` 会把经验渲染成 Markdown，并写入项目级目录 `~/.mini-claude/projects/<project-hash>/experiences/`。完整 Markdown 是经验的事实源，显式分成 `Description` 和 `Content` 两部分：`Description` 是用于召回的短描述，概括适用场景、问题信号、相关文件模式和验证命令；`Content` 保留适用边界、诊断依据、有序步骤、坑点和验证方式。系统同时把 `Description`、经验 ID 和 Markdown 路径写入独立的 `experience-index.db`。经验保存不再调用 Knowledge 的 `add_document()`，因此完整流程不会被约 500 token 的普通文档切分打散。
+
+经验卡片索引由 [experience_index.py](/Users/8utterf1y/Desktop/agent项目/claude-mini/claude-code-from-scratch/python/mini_claude/experience_index.py:1) 负责。SQLite 的 `experience_cards` 表保存 ID、标题、Markdown 路径、description、质量分和辅助字段，`experience_cards_fts` 只围绕标题与 description 建立 FTS5 索引；向量 embedding 也只对 description 生成。查询时对 description 执行向量和关键词双路召回，用 RRF 合并排名，再结合向量分、RRF 分、词覆盖和精确短语进行轻量重排。经验数量通常远小于知识 chunk 数，因此当前向量分支使用精确余弦检索；Embedding 服务暂时不可用时，卡片仍可落库并通过 FTS5 检索。
 
 离线索引链由 [knowledge.py](/Users/8utterf1y/Desktop/agent项目/claude-mini/claude-code-from-scratch/python/mini_claude/knowledge.py:1)、[knowledge_loaders.py](/Users/8utterf1y/Desktop/agent项目/claude-mini/claude-code-from-scratch/python/mini_claude/knowledge_loaders.py:1) 和 [embeddings.py](/Users/8utterf1y/Desktop/agent项目/claude-mini/claude-code-from-scratch/python/mini_claude/embeddings.py:1) 组成。知识库按项目隔离，当前工作目录绝对路径会被 SHA-256 成 16 位 project hash，数据存到 `~/.mini-claude/projects/<project-hash>/knowledge/`。不同项目即使导入同名文件也不会混在一起，但这不是强安全租户隔离，因为本地文件没有加密，也没有用户级 ACL。
 
@@ -25,6 +27,8 @@ Embedding 层通过 `EmbeddingProvider` 协议解耦具体服务。默认实现�
 存储层使用 SQLite。`documents` 保存文档元数据和 active version，`chunks` 保存正文、heading、位置、metadata 和 float32 向量 BLOB，`chunks_fts` 使用 SQLite FTS5 建全文索引。FTS5 优先 trigram tokenizer，便于中文和无空格文本的子串匹配；不支持时回退默认 tokenizer。小规模向量检索走 exact search，即对候选向量逐个计算余弦相似度；规模上来后可选 HNSW 近似向量索引，用图结构提升查询速度。
 
 在线检索链从 `knowledge_search` 工具开始。这个工具定义在 [tools.py](/Users/8utterf1y/Desktop/agent项目/claude-mini/claude-code-from-scratch/python/mini_claude/tools.py:136)，属于 deferred tool。初始请求不会发送完整 schema，只在动态 System Prompt 的 manifest 里告诉模型有知识库文档，并在 deferred 工具列表里提示可以通过 `tool_search` 激活。模型判断问题和知识库相关时，先调用 `tool_search`，下一轮才获得 `knowledge_search` 完整参数。这是渐进式披露：先披露文档目录，再披露工具 schema，最后才返回相关正文 chunk。
+
+经验消费链同样采用渐进式披露，但比 Knowledge 多一级。动态上下文只列出经验 ID、标题和少量 description 摘要；模型遇到相似问题时先激活并调用 `experience_search`，得到候选经验的 ID、路径和 description，不直接得到完整流程。模型判断某条经验确实相关后，再调用 `experience_show(experience_id)` 读取完整 Markdown Content。两项工具都是只读、可并发的 deferred tool，在 Plan 模式下也允许调用；返回内容统一标记为不可信历史参考，要求模型先核对当前代码和版本，再执行并验证。
 
 检索时系统先做 metadata 路由和显式过滤。`knowledge_search` 支持按 document id、source dir、MIME、parser、tags、chapter 等过滤；没有显式条件时，会根据查询与文档标题、文件名、描述、标签和 headings 的重合度做保守自动路由。只有置信度足够高才缩小范围，否则全库搜索。这个策略优先保证 recall，因为错误路由会在召回前把正确文档排除掉。
 
@@ -42,21 +46,21 @@ RRF 的好处是不需要强行归一化余弦相似度和 BM25 这两个不同�
 
 评测闭环由 `/kb eval` 支持。评测集可以指定 query、预期文档、source/heading 子串、预期关键词和 top-k，系统计算 Recall@K、MRR 和 Precision@K。你简历里的“相较于单路检索，Recall@5 由 68% 提升至 86%”可以这样解释：单路检索通常指只用向量或只用关键词；双路召回加 RRF 融合后，前 5 个结果包含正确证据的比例从 68% 到 86%，说明正确证据更容易进入模型可见上下文。注意这衡量的是 retrieval recall，不等同于最终答案准确率，生产还要评估 groundedness、faithfulness 和 citation correctness。
 
-把这套系统串起来看，它的亮点不是“调用 embedding API”，而是把 Agent 运行轨迹、经验抽取、结构化文档、混合检索、渐进披露、上下文预算和安全边界接成闭环。经验沉淀让成功任务可复用，结构感知分块提高文档片段质量，HNSW 和 FTS5 分别覆盖语义与关键词，RRF 降低融合调参成本，评测指标让优化有数据依据。
+把这套系统串起来看，Knowledge 和 Experience 共用“向量 + 关键词 + 融合”的检索思想，但使用不同的索引粒度和消费方式。事实型文档按结构分块并直接返回局部证据；过程型经验只对 Description 做召回，再按 ID 读取完整 Content。这样既保留经验步骤的连续性，也避免每次把多篇长经验塞入上下文。
 
 ## 面试话术版本
 
-我在这个项目里实现的是一个项目级 RAG 和经验沉淀系统。Agent 执行任务时会用独立的 `TaskJournal` 记录用户目标、工具调用、工具结果、权限拒绝和验证结果，因为聊天历史会被 compact 改写，不适合做经验证据。用户执行 `/experience save` 后，系统会把轨迹抽取成结构化经验文档，包括适用场景、问题、根因、处理步骤、坑点和验证方式，再写成 Markdown 并导入知识库。
+我在这个项目里实现了项目级知识库和独立的经验沉淀链。Agent 执行任务时用 `TaskJournal` 记录用户目标、工具调用、工具结果、权限拒绝和验证结果，因为聊天历史会被 compact 改写，不适合作为经验证据。用户执行 `/experience save` 后，系统把轨迹提炼为带 Description 和 Content 的完整 Markdown；后续先通过 `experience_search` 匹配 Description，再通过 `experience_show` 读取完整 Content。
 
 知识库离线侧做结构感知切分：Markdown/HTML 保留标题层级，PDF 保留页码，CSV 按行切并重复表头，JSON 按 JSONPath 切分；chunk 的标题和正文一起生成 embedding。索引层用 SQLite 保存文档、chunk、metadata 和向量，同时用 FTS5 建关键词索引；小规模走 exact vector search，大规模可启用 HNSW 近似向量检索。重建时通过 `active_version` 做版本切换，新索引完整完成后才激活，失败不会影响旧索引可查。
 
-在线侧采用混合召回：向量检索负责语义相似，FTS5/BM25 负责关键词和精确标识符，然后用 RRF 按排名融合，再用本地 reranker 结合向量分、词覆盖、标题标签覆盖和精确短语做二阶段排序。相比单路检索，Recall@5 从 68% 提升到 86%，说明前五个候选更容易包含正确证据。Agent 集成上，知识库先只在 System Prompt 里披露 manifest，`knowledge_search` 作为 deferred tool 按需激活，结果被标记为不可信参考数据，并受上下文预算和权限系统保护。
+Knowledge 在线侧采用混合召回：向量检索负责语义相似，FTS5/BM25 负责关键词和精确标识符，然后用 RRF 按排名融合，再用本地 reranker 做二阶段排序。相比单路检索，Knowledge golden set 的 Recall@5 从 68% 提升到 86%。Experience 也做混合召回，但检索对象是经验 Description，命中后再读取完整 Content，因此必须单独评测经验 Recall@K、适用性 Precision@K 和端到端任务收益，不能直接复用 Knowledge 的 86% 指标。
 
 ## 第二部分：面试问答与追问补充
 
 ### Q1：面试官问：你这个 RAG 系统的核心亮点是什么？不要只说用了向量库。
 
-核心亮点是把 Agent 的任务经验和外部知识统一进一个可检索闭环。Agent 完成任务时会记录工具调用、失败、修改和验证结果，`/experience save` 把轨迹抽取成结构化经验 Markdown，再写入知识库。后续遇到类似问题时，模型可以通过 `knowledge_search` 召回历史流程，而不是只依赖当前短期上下文。
+核心亮点是根据知识类型设计不同检索粒度。外部知识按文档结构分块，`knowledge_search` 直接返回相关证据；任务经验保留为完整 Markdown，只对 Description 建立索引，`experience_search` 命中后再通过 `experience_show` 读取 Content 全文。这样可以同时兼顾知识片段的定位精度和经验流程的完整性。
 
 检索侧不是单一路径，而是结构感知分块、HNSW/精确向量召回、FTS5/BM25 关键词召回、RRF 融合和本地 rerank。这个组合解决的是“自然语言语义”和“代码符号精确匹配”两类需求。
 
@@ -65,6 +69,8 @@ RRF 的好处是不需要强行归一化余弦相似度和 BM25 这两个不同�
 普通文档回答的是“知识是什么”，经验文档回答的是“这类工程任务应该怎么做”。在 Coding Agent 里，很多价值来自排查路径、失败信号、验证命令、踩坑和项目约定，这些并不总是存在于静态文档中。
 
 所以经验沉淀补的是过程知识。后续类似任务被召回时，Agent 可以复用调查顺序和验证方式，但仍然要基于当前代码重新确认，不能盲套历史经验。
+
+普通文档适合切成可独立引用的证据片段，经验则依赖“现象—诊断—处理—验证”的顺序关系。因此实现上把两者分开：Knowledge 返回 chunk，Experience 先用 Description 召回，再读取完整 Content。
 
 ### Q3：面试官问：为什么 `TaskJournal` 要独立于聊天历史？
 
@@ -80,7 +86,7 @@ RRF 的好处是不需要强行归一化余弦相似度和 BM25 这两个不同�
 
 ### Q5：面试官问：为什么经验文档要写成 Markdown，而不是直接写数据库？
 
-Markdown 有两个好处：第一，人可以读、可以审查、可以版本化；第二，它天然适合现有知识库 loader，frontmatter 提供 title、description、tags，正文标题能参与结构分块。
+Markdown 有两个好处：第一，人可以直接审查、修改和版本化；第二，它能完整保留经验步骤和适用边界。检索索引不复制整篇正文，只保存 Description、经验 ID 和 Markdown 路径，避免数据库内容与文件内容形成两套事实源。
 
 如果直接写数据库，检索可以做，但可解释性和可维护性会差一些。这里选择 Markdown 是为了兼顾机器检索和人工复盘。
 
@@ -200,15 +206,33 @@ manifest 太详细会变成另一种上下文膨胀。它只应该帮助模型�
 
 ### Q25：面试官问：经验库会不会污染模型判断？
 
-会有风险。历史经验可能过期、未验证，或者当前任务条件不同。项目通过 `unverified` 标签、source/heading 引用和 Prompt 约束提醒模型不能盲套经验。
+会有风险。历史经验可能过期、未验证，或者当前任务条件不同。项目通过 `unverified` 标签、卡片中的适用与非适用条件，以及工具结果里的历史参考声明提醒模型不能盲套经验。
 
 更稳的做法是把经验当作排查线索，而不是事实结论。复用前必须读取当前代码、检查当前配置并重新运行验证命令。
 
 ### Q26：面试官问：RAG、Memory、Experience 三者怎么区分？
 
-Memory 是少量长期偏好、反馈和项目事实，通常通过索引和 side query 注入；RAG 是大量外部资料和经验文档的检索系统；Experience 是从 Agent 任务轨迹生成的结构化过程知识，最终会写入 RAG。
+Memory 是少量长期偏好、反馈和项目事实，通过轻量索引和相关召回进入上下文；Knowledge/RAG 保存大量事实型外部资料，按结构分块检索；Experience 是从任务轨迹生成的过程型知识，完整 Markdown 负责保存，Description 索引负责发现。
 
-一句话说：Memory 记“用户和项目长期偏好”，RAG 查“外部证据”，Experience 沉淀“做事流程”。
+一句话说：Memory 记“长期事实”，Knowledge 查“外部证据”，Experience 复用“历史做法”。三者的生命周期、检索粒度和注入方式都不同。
+
+### Q26A：面试官问：经验卡片具体存什么，为什么不直接向量化整篇经验？
+
+经验卡片保存 ID、标题、完整文件路径、Description、tags、质量分以及少量辅助字段。真正参与 embedding 和 FTS5 的核心是 Description，它是一段专门用于召回的短描述，会概括适用场景、问题信号、相关文件模式和验证命令。
+
+完整经验的 Content 中还有详细排查过程、失败尝试和有序步骤。如果直接对整篇做单向量，细节会稀释核心场景；如果按普通知识切块，又可能只召回某一步而丢失前置条件。因此 Description 负责发现，Content 负责完整使用。
+
+### Q26B：面试官问：`experience_search` 到 `experience_show` 的完整链路是什么？
+
+动态上下文先披露经验 ID、标题和少量 Description 摘要，不放正文。模型遇到相似任务时，通过 `tool_search` 激活 `experience_search`；系统对经验 Description 执行向量和 FTS5 双路召回、RRF 融合与轻量重排，返回最多 3 张候选卡片。模型根据当前错误、模块和适用条件选中候选，再调用 `experience_show(id)`，宿主程序只允许从当前项目经验目录读取对应 Markdown Content。全文以 tool result 进入消息历史，模型随后还要检查当前代码并运行验证命令。
+
+### Q26C：面试官问：为什么 Experience 当前不用 HNSW？
+
+经验卡片数量通常远小于知识库 chunk 数，逐条计算余弦相似度实现简单、结果确定，而且便于和关键词过滤组合。Knowledge 在 chunk 达到阈值后才启用 HNSW；Experience 当前保留精确向量检索，等卡片规模和延迟数据证明有必要时再增加近似索引。
+
+### Q26D：面试官问：知识库和经验库的效果怎么分别评测？
+
+Knowledge 用带有期望文档或 chunk 的 golden set，比较 Recall@5、MRR 和 Precision@K，68% 到 86% 属于这条链。Experience 另建历史问题变体集，每条任务标注可适用经验 ID 和不可适用经验，先测 Description 召回的 Recall@3、Precision@3 和错误经验命中率，再固定模型、仓库、权限和轮次做有无经验的端到端 A/B，比较任务通过率、tool call、input token、耗时和验证覆盖率。当前代码已经完成检索与使用链路，但不能把 Knowledge 的 86% 直接宣称为 Experience 的准确率。
 
 ### Q27：面试官问：RAG 和上下文治理怎么配合？
 
@@ -230,7 +254,7 @@ RAG 会把外部证据注入模型，如果不控制 top-k、单文档上限和�
 
 ### Q30：面试官问：一句话怎么讲你的简历 bullet？
 
-我构建了任务轨迹记录和经验持久化机制，把 Agent 的成功工作流沉淀成结构化经验文档并写入项目级 RAG；检索侧用结构感知分块、HNSW 向量召回和 FTS5/BM25 关键词召回，通过 RRF 融合排序，将 Recall@5 从 68% 提升到 86%。
+我实现了相互独立的知识检索和经验复用链：知识文档采用结构感知分块、HNSW/精确向量与 FTS5 双路召回，并通过 RRF 和二阶段重排将 Recall@5 从 68% 提升到 86%；任务经验则保存为带 Description 和 Content 的完整 Markdown，只索引 Description，命中后按 ID 读取 Content 全文，避免有序处理流程被分块打散。
 
 ## 代码阅读索引
 
@@ -240,6 +264,7 @@ RAG 会把外部证据注入模型，如果不控制 top-k、单文档上限和�
 | 经验 JSON schema 与校验 | `python/mini_claude/experience.py:290-420` |
 | 经验 Markdown 渲染 | `python/mini_claude/experience.py:422-486` |
 | 经验 fallback、脱敏、摘要 | `python/mini_claude/experience.py:488-749` |
+| 经验卡片 schema、SQLite/FTS、混合召回与结果格式 | `python/mini_claude/experience_index.py` |
 | Agent 记录 journal | `python/mini_claude/agent.py:514,1246-1304,1657,1888` |
 | CLI `/experience` 命令 | `python/mini_claude/__main__.py:243-292` |
 | 数据结构、常量、项目目录 | `python/mini_claude/knowledge.py:24-124` |
@@ -251,5 +276,5 @@ RAG 会把外部证据注入模型，如果不控制 top-k、单文档上限和�
 | 工具结果格式化与执行 | `python/mini_claude/knowledge.py:1495-1558` |
 | Loader 与 Embedding | `python/mini_claude/knowledge_loaders.py`, `python/mini_claude/embeddings.py` |
 | 工具 schema 与延迟激活 | `python/mini_claude/tools.py:136-245` |
-| Prompt 中的知识库规则 | `python/mini_claude/prompt.py:70,225-245` |
-| 测试 | `python/tests/test_knowledge.py`, `python/tests/test_experience.py` |
+| Prompt 中的 Knowledge/Experience 规则与 manifest | `python/mini_claude/prompt.py`, `python/mini_claude/experience.py` |
+| 测试 | `python/tests/test_knowledge.py`, `python/tests/test_experience.py`, `python/tests/test_experience_index.py` |

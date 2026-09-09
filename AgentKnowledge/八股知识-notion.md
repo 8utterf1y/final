@@ -1,4 +1,4 @@
- ### AI核心概念：Agent Loop、Plan-and-Execute、A2A、Agentic Workflows、Tools 注册
+### AI核心概念：Agent Loop、Plan-and-Execute、A2A、Agentic Workflows、Tools 注册
 
 **AI Agent 系统的三代演进**
 
@@ -8,15 +8,15 @@
 
 **Harness 五子系统模型**
 
-​**指令子系统**​：创建 `AGENTS.md`（或 `CLAUDE.md`），内容包括项目概览和目的、技术栈和版本、首次运行命令、不可违反的硬约束、指向更详细文档的链接。
+**指令子系统**：创建 `AGENTS.md`（或 `CLAUDE.md`），内容包括项目概览和目的、技术栈和版本、首次运行命令、不可违反的硬约束、指向更详细文档的链接。
 
-​**工具子系统**​：确保 agent 有足够的工具访问权限。不要因为"安全考虑"把 shell 给禁了，agent 连 `pip install` 都跑不了，还怎么干活？但也别什么都开放，按最小权限原则来。
+**工具子系统**：确保 agent 有足够的工具访问权限。不要因为"安全考虑"把 shell 给禁了，agent 连 `pip install` 都跑不了，还怎么干活？但也别什么都开放，按最小权限原则来。
 
-​**环境子系统**​：让环境状态自描述。用 `pyproject.toml` 或 `package.json` 锁定依赖，用 `.nvmrc` 或 `.python-version` 指定运行时版本，用 Docker 或 devcontainer 让环境可重现。
+**环境子系统**：让环境状态自描述。用 `pyproject.toml` 或 `package.json` 锁定依赖，用 `.nvmrc` 或 `.python-version` 指定运行时版本，用 Docker 或 devcontainer 让环境可重现。
 
-​**状态子系统**​：长任务必须有进度跟踪。用一个简单的 `PROGRESS.md` 文件记录：哪些做完了，哪些在做，哪些被阻塞。每个会话结束前更新，下一个会话开始时读取。
+**状态子系统**：长任务必须有进度跟踪。用一个简单的 `PROGRESS.md` 文件记录：哪些做完了，哪些在做，哪些被阻塞。每个会话结束前更新，下一个会话开始时读取。
 
-​**反馈子系统**​：这是投入产出比最高的子系统。在 `AGENTS.md` 里显式列出验证命令：
+**反馈子系统**：这是投入产出比最高的子系统。在 `AGENTS.md` 里显式列出验证命令：
 
 **Agent 面临的挑战有哪些？**
 
@@ -61,13 +61,13 @@ OpenAI Schema 解决数据格式问题，MCP 解决通信接入问题。
 **什么是 Context Engineering？**
 
 * **上下文（Context）是提供给 LLM 的、用于完成下一步推理或生成任务的全部信息集合。**
-* 上下文工程关注​**如何确保模型拥有完成任务所需的全部上下文——包括正确的知识、相关的历史、适当的工具描述、以及结构化的指令**​。
+* 上下文工程关注**如何确保模型拥有完成任务所需的全部上下文——包括正确的知识、相关的历史、适当的工具描述、以及结构化的指令**。
 * 一个完整的Context Engineering 系统包含四大支柱：
 
-    * ​**知识检索层（Knowledge Retrieval）**​：透过RAG、GraphRAG 等技术从外部知识库即时检索相关资讯
-    * ​**记忆管理层（Memory Management）**​：管理对话历史、使用者偏好与跨会话的长期记忆
-    * ​**上下文编排层（Context Orchestration）**​：决定哪些资讯以何种顺序、何种格式注入context window
-    * ​**工具与环境层（Tools & Environment）**​：为LLM 提供可呼叫的工具描述、API schema 与环境状态
+    * **知识检索层（Knowledge Retrieval）**：透过RAG、GraphRAG 等技术从外部知识库即时检索相关资讯
+    * **记忆管理层（Memory Management）**：管理对话历史、使用者偏好与跨会话的长期记忆
+    * **上下文编排层（Context Orchestration）**：决定哪些资讯以何种顺序、何种格式注入context window
+    * **工具与环境层（Tools & Environment）**：为LLM 提供可呼叫的工具描述、API schema 与环境状态
 
 **Agent 核心范式有哪些？**
 1. ReAct：**ReAct（Reasoning + Acting）**
@@ -87,7 +87,7 @@ OpenAI Schema 解决数据格式问题，MCP 解决通信接入问题。
     * ***Plan-and-Execute*** 把整个任务分成了两个独立阶段，可由不同的模型进行处理。
         * `规划阶段`（通常 1 次）：深入理解用户的最终目标，把复杂大任务拆解成清晰有序的小步骤，确定每个步骤的目标、输入、输出以及相互依赖关系，最终生成完整的结构化执行计划。
         * `执行阶段`：按照计划依次执行每个小步骤，每个步骤可以直接调用工具完成或者用简单的 ReAct 循环。
-    * ​**适用场景**​：写调研报告、生成长文、迁移代码、制定测试计划等**目标明确、步骤较多**的结构化长任务。
+    * **适用场景**：写调研报告、生成长文、迁移代码、制定测试计划等**目标明确、步骤较多**的结构化长任务。
     * 优点：目标感强：有明确的执行路线图，不容易偏离目标。
     * 缺点：灵活性较差：遇到计划外的情况时，调整能力不如 ReAct。计划可能过时：如果环境在执行过程中发生变化，原来的计划可能不再适用
 3. Reflecion
@@ -97,7 +97,7 @@ OpenAI Schema 解决数据格式问题，MCP 解决通信接入问题。
         * `生成`：根据任务要求和已有信息，生成初步的结果。
         * `反思`：站在第三方视角，按照预设的评估标准（如正确性、完整性、可读性）对结果进行批判性检查，列出存在的问题和改进点。
         * `修正`：针对反思发现的问题，对结果进行针对性修改和完善。
-    * ​**适用场景**​：代码生成、文档写作、复杂推理、数据分析报告等**对质量要求较高**的任务。
+    * **适用场景**：代码生成、文档写作、复杂推理、数据分析报告等**对质量要求较高**的任务。
     * 优点：结果质量高：通过多次迭代和自我修正，显著提升输出的准确性和质量；错误率低：能够主动发现并纠正自己的错误。
     * 缺点：可能陷入无限循环：如果反思不够准确，可能会反复修改同一个问题。
 
@@ -122,7 +122,7 @@ OpenAI Schema 解决数据格式问题，MCP 解决通信接入问题。
         * 核心特点：所有 Agent 地位平等，没有中央决策者。它们通过轮流发言、交换信息、提出观点、互相辩论的方式，共同探索问题的解决方案，最终通过投票或共识来做出决策。
         * 典型案例：一个战略决策团队，包括市场分析师 Agent、技术专家 Agent、财务专家 Agent、风险评估 Agent。
 
-* ​**适用场景**​：软件开发、企业级项目管理、复杂市场调研等**需要分工协作**的超复杂任务。
+* **适用场景**：软件开发、企业级项目管理、复杂市场调研等**需要分工协作**的超复杂任务。
 * 优点：
     * 上下文隔离：不同 Agent 维护自己的上下文，避免了单 Agent 的上下文爆炸问题。
     * 可扩展性好：可以通过增加 Agent 的数量来提升系统的能力。
@@ -179,7 +179,7 @@ LangGraph（Python）和 Spring AI Alibaba Graph（Java）都是基于这套思�
 
 **LangGraph**
 
-LangGraph 解决的不是"怎么写 **prompt** "，而是 ​**Agent 的编排问题**​：
+LangGraph 解决的不是"怎么写 **prompt** "，而是 **Agent 的编排问题**：
 
 * 执行流程怎么控制
 * 状态怎么更新和持久化
@@ -218,13 +218,13 @@ LangGraph 解决的不是"怎么写 **prompt** "，而是 ​**Agent 的编排�
 * 记忆检索（Retrieve）通常发生在新 Session 开始时。系统把用户 Query 向量化，再和长期记忆库里的条目做语义相似性检索，将命中率最高的一批条目 prepend 进 System Prompt 或放进平行 slot。首包路径上跑一次向量检索很常见，但 VectorStore 的 P99 会直接吃进 TTFT。常见缓解方式是用 Redis 做预热线，或者把浅层偏好、静态画像全量预载，深度记忆再走异步精排，或者和生成流水线重叠，把等人感压下去。
 
 > **1. 定义问题（展现专业性）：** “这是一个典型的串行阻塞问题。长期记忆通常依赖 VectorStore，而向量检索的 P99 延迟较高。如果采用严格的‘先检索、后 Prompt 组装、后 LLM 生成’的串行链路，检索延迟会 1:1 地叠加到 TTFT（首字延迟）上，导致严重的‘等人感’。”
-> 
+>
 > **2. 给出解决方案（展现架构能力，分层次说）：** “在工程落地中，我通常会从三个维度来优化：
-> 
-> * ​**第一是缓存层（Cache）**：引入 Redis 做热数据预热线。将高频访问的记忆实体放入 Redis，拦截大部分简单查询，将 TTFT 控制在毫秒级。
-> * ​**第二是数据分层（Tiering）**​：将记忆分为静态画像（浅层）和情景记忆（深层）。静态画像在 Session 初始化时全量预载到 System Prompt；深层记忆走异步检索，不阻塞主链路。
-> * ​**第三是流水线并行（Pipeline Overlap）​**：打破串行。在 LLM 进行 Prefill 阶段，或者在生成前几个‘垫话’Token 时，并发执行向量检索和 Rerank（精排）。利用大模型生成的间隙把检索做完，实现感知上的‘零延迟’。”
-> 
+>
+> * **第一是缓存层（Cache）**：引入 Redis 做热数据预热线。将高频访问的记忆实体放入 Redis，拦截大部分简单查询，将 TTFT 控制在毫秒级。
+> * **第二是数据分层（Tiering）**：将记忆分为静态画像（浅层）和情景记忆（深层）。静态画像在 Session 初始化时全量预载到 System Prompt；深层记忆走异步检索，不阻塞主链路。
+> * **第三是流水线并行（Pipeline Overlap）**：打破串行。在 LLM 进行 Prefill 阶段，或者在生成前几个‘垫话’Token 时，并发执行向量检索和 Rerank（精排）。利用大模型生成的间隙把检索做完，实现感知上的‘零延迟’。”
+>
 > **3. 补充进阶细节（加分项，证明你真干过）：** “除了架构层面的优化，在 VectorStore 底层我也会做一些微调。比如：使用 HNSW 索引并调整 `ef_search` 参数来平衡召回率和延迟；对 Embedding 模型进行量化（如 INT8）减少计算量；或者在检索时限制 `top_k` 的数量，并在检索后加一个轻量级的 Cross-Encoder Rerank 来保证质量。”
 
 **长期记忆和 RAG 有什么区别？**
@@ -265,47 +265,47 @@ Manus 将文件系统作为结构化的外部记忆；Claude Code 则把 `CLAUDE
 Claude Code 的记忆系统采用双轨制：人工编写的 CLAUDE.md，以及自动积累的 Auto Memory。
 
 > 一、 记忆系统架构：双轨制与分层设计
-> 
-> Claude Code 的记忆系统不是单一的数据库，而是 **​“确定性文件”与“概率性自动总结”结合的双轨制​。**
-> 
+>
+> Claude Code 的记忆系统不是单一的数据库，而是 **“确定性文件”与“概率性自动总结”结合的双轨制。**
+>
 > 1. 双轨制记忆
-> 
-> * ​**人工记忆（CLAUDE.md）​**：高确定性、强指令。用于存放项目规范、技术栈、不可违背的架构约定。
-> * ​**自动记忆（Auto Memory）**：概率性、弱指令。系统自动从历史对话中提取调试经验、用户偏好，沉淀在 `MEMORY.md` 中（限制 200 行/25KB，超出拆分）。
-> 
+>
+> * **人工记忆（CLAUDE.md）**：高确定性、强指令。用于存放项目规范、技术栈、不可违背的架构约定。
+> * **自动记忆（Auto Memory）**：概率性、弱指令。系统自动从历史对话中提取调试经验、用户偏好，沉淀在 `MEMORY.md` 中（限制 200 行/25KB，超出拆分）。
+>
 > 2. 四级分层加载机制（面试亮点：展现你的系统级思维）
-> 
+>
 > 记忆加载遵循 **“就近原则”与“作用域隔离”**，越靠近工作目录优先级越高：
-> 
+>
 > 1. **组织级** (`/etc/...`)：全局安全策略、公司红线（不可绕过）。
 > 2. **用户级** (`~/.claude/...`)：个人代码风格、工具偏好。
 > 3. **项目级** (`./CLAUDE.md`)：团队共享的架构规范（提交至 Git）。
 > 4. **本地级** (`./CLAUDE.local.md`)：个人沙箱配置、临时数据（加入 `.gitignore`）。
-> 
+>
 > ---
-> 
+>
 > 二、 CLAUDE.md 工程实践：如何榨干 Context 窗口
-> 
-> 在面试中，面试官非常看重你**​对 LLM Context 窗口的精细化管理能力​**。
-> 
+>
+> 在面试中，面试官非常看重你**对 LLM Context 窗口的精细化管理能力**。
+>
 > 1. 编写原则：做减法与强约束
-> 
-> * ​**容量控制​**：单文件控制在 **200 行以内**，防止“注意力稀释”（Lost in the middle 现象）。
-> * ​**只写“反共识”与“强约定”**：不写格式化工具能解决的、不写框架默认行为。只写技术栈版本、特定命令、**带原因的架构规则**（如：为什么用构造器注入而不是字段注入，因为 SQL 审计依赖）。
-> * ​**规则必须“可验收”**：把“注意可读性”改为“函数不超过 40 行，动词开头”。
-> 
+>
+> * **容量控制**：单文件控制在 **200 行以内**，防止“注意力稀释”（Lost in the middle 现象）。
+> * **只写“反共识”与“强约定”**：不写格式化工具能解决的、不写框架默认行为。只写技术栈版本、特定命令、**带原因的架构规则**（如：为什么用构造器注入而不是字段注入，因为 SQL 审计依赖）。
+> * **规则必须“可验收”**：把“注意可读性”改为“函数不超过 40 行，动词开头”。
+>
 > 2. Context 优化核心：`@引用` vs `Path-scoped Rules` （必考点）
-> 
+>
 > **当项目变大，CLAUDE.md 装不下时，如何优化？**
-> 
-> * `@` 引用外部文件：​启动时全量加载。虽然方便，但​**不减少 Context 消耗**​，且最多支持 5 层递归。
-> * ​`.claude/rules/` (Path-scoped rules)：​**按需加载（Lazy Loading）​**。通过配置 paths` 匹配，只有当 Agent 编辑特定目录（如 `controller/`）时才加载对应规则。这是节省 Context、提高指令遵循率的终极手段。
-> 
+>
+> * `@` 引用外部文件：启动时全量加载。虽然方便，但**不减少 Context 消耗**，且最多支持 5 层递归。
+> * `.claude/rules/` (Path-scoped rules)：**按需加载（Lazy Loading）**。通过配置 paths` 匹配，只有当 Agent 编辑特定目录（如 `controller/`）时才加载对应规则。这是节省 Context、提高指令遵循率的终极手段。
+>
 > 3. 提高指令遵循率（Instruction Following）
-> 
-> * 如果规则被无视，**不要盲目加 `IMPORTANT:`​**，这会导致“狼来了”效应。
-> * ​**排查思路**：1. 规则是否被挤到了长文本末尾？ 2. 是否与其他规则冲突？ 3. 规则是否不可执行？ 解决这些比加感叹号有效得多。**
-> 
+>
+> * 如果规则被无视，**不要盲目加 `IMPORTANT:`**，这会导致“狼来了”效应。
+> * **排查思路**：1. 规则是否被挤到了长文本末尾？ 2. 是否与其他规则冲突？ 3. 规则是否不可执行？ 解决这些比加感叹号有效得多。**
+>
 
 
 
@@ -313,9 +313,9 @@ Claude Code 的记忆系统采用双轨制：人工编写的 CLAUDE.md，以及�
 **coding agent中的具体实现：**
 
 > 一、记忆（Memory）：根本没进向量库
-> 
+>
 > 每条记忆 = 一个 `.md` 文件，带 frontmatter 元数据（memory.py:95-101 的 `format_frontmatter`）：
-> 
+>
 > ```markdown
 > ---
 > name: 用户讲解偏好
@@ -324,18 +324,18 @@ Claude Code 的记忆系统采用双轨制：人工编写的 CLAUDE.md，以及�
 > ---
 > 用户希望之后讲解项目时优先使用 Python 版代码，并按事件流组织内容。
 > ```
-> 
+>
 > **类别标签就是 frontmatter 的 `type`**，枚举固定四种（memory.py:24）：`user` / `feedback` / `project` / `reference`，文件名强制 `{type}_{slug}.md`（96-97 行），也就是用"文件名 + type 字段"双重打标。
-> 
-> 它的"召回"不是向量检索，而是 ​**sideQuery**​（memory.py:235-286）：把 `MEMORY.md` 索引（每条的 name/description/type/时间，约 200 行上限）作为 manifest 喂给一次小模型调用，让模型语义挑选最多 5 条最相关的 memory，才读取正文注入主上下文。**选型逻辑靠模型，不靠余弦相似度。**
-> 
+>
+> 它的"召回"不是向量检索，而是 **sideQuery**（memory.py:235-286）：把 `MEMORY.md` 索引（每条的 name/description/type/时间，约 200 行上限）作为 manifest 喂给一次小模型调用，让模型语义挑选最多 5 条最相关的 memory，才读取正文注入主上下文。**选型逻辑靠模型，不靠余弦相似度。**
+>
 > ---
-> 
+>
 > 二、外部知识（Knowledge）：真正的向量库
-> 
-> 
+>
+>
 > **`documents` 表（文档级元数据，超全）：**
-> 
+>
 > ```
 > id, name, source_path, stored_path, content_hash(唯一),
 > mime_type, parser, title, source_dir, description,
@@ -343,29 +343,29 @@ Claude Code 的记忆系统采用双轨制：人工编写的 CLAUDE.md，以及�
 > status, active_version, embedding_model, embedding_dimensions,
 > chunk_count, error, created_at, updated_at
 > ```
-> 
+>
 > **`chunks` 表（块级元数据 + 向量）：**
-> 
+>
 > ![](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/z50058626/.vscode-huawei/extensions/huaweicloud.vscode-codebot-26.7.1/dist/file-icons/default.svg)code
-> 
+>
 > ```
 > id, document_id, index_version, ordinal,
 > heading, page_number, chapter_number, tags(TEXT), token_count,
 > metadata(TEXT), content, content_hash, embedding(BLOB)   ← float32 向量本体
 > ```
-> 
+>
 > **`chunks_fts`**：FTS5 虚拟表（trigram tokenizer，支持下无空格中文）。
-> 
+>
 > 标签来源（knowledge.py:476-493）：`_document_tags()` 合并三层——① 源文件 frontmatter 里的 `tags`；② 标题分词派生（`_derive_tags`）；③ 前 20 个 chunk 的块级标签。文档和 chunk 的 metadata 存的是结构化 JSON（如 CSV 的 `{"format":"csv","row_start":2,"row_end":30,"header":...}`、JSON 的 `json_path`，见 297/311 行）。
-> 
+>
 > ---
-> 
+>
 > 三、经验（Experience）：文件产物 + 复用同一个向量库
-> 
-> 沉淀链路（experience.py:185-187）：任务轨迹 `TaskJournal` → LLM 抽取成固定 JSON → 校验/质量门控 → `render_experience_markdown()` 渲染成 Markdown → 写到 `~/.mini-claude/projects/<hash>/experiences/<时间戳>-<slug>.md` → ​**`get_knowledge_store().add_document(path)` 导入同一个 knowledge.db**​。
-> 
+>
+> 沉淀链路（experience.py:185-187）：任务轨迹 `TaskJournal` → LLM 抽取成固定 JSON → 校验/质量门控 → `render_experience_markdown()` 渲染成 Markdown → 写到 `~/.mini-claude/projects/<hash>/experiences/<时间戳>-<slug>.md` → **`get_knowledge_store().add_document(path)` 导入同一个 knowledge.db**。
+>
 > 经验 Markdown 自带 frontmatter（experience.py:425-431）和结构化正文：
-> 
+>
 > ```markdown
 > ---
 > title: "修复 Rust 导入循环"
@@ -385,15 +385,15 @@ Claude Code 的记忆系统采用双轨制：人工编写的 CLAUDE.md，以及�
 > ## Retrieval     # File patterns / Queries
 > ## Metadata      # Scope / Quality score / Persistence action
 > ```
-> 
+>
 > 导入后，frontmatter 的 `title/tags/description` 会被 loader 解析进 `documents` 表（RAG-知识库系统.md 第 19 行）。**经验在向量库里的区分标记就是 `tags` 里固定含 `"experience"`**——代码里 `list_entries()` 就是用 `if "experience" in doc.tags` 从知识库里反查经验文档的（experience.py:220-225）。
-> 
+>
 > ---
-> 
-> 四、检索：​**默认混在一起检索**​，但支持按标签/元数据分开
-> 
+>
+> 四、检索：**默认混在一起检索**，但支持按标签/元数据分开
+>
 > 唯一的检索入口是 `knowledge_search`（knowledge.py:1117 `search()`），外部知识和经验**在同一池子里**走同一条混合召回：
-> 
+>
 > ```
 > query
 >  ↓ _resolve_document_scope()    ← 决定"在哪些文档里找"
@@ -406,16 +406,16 @@ Claude Code 的记忆系统采用双轨制：人工编写的 CLAUDE.md，以及�
 >  │                          +0.16元数据覆盖+0.07词法+0.05精确短语)
 >  ↓ 上下文预算：top_k(1-10,默认6)、每文档≤3 chunk、总正文≤20000 字符
 > ```
-> 
+>
 > 所以三个问题的结论：
-> 
-> 1. ​**默认混合检索**​——一次 `knowledge_search` 的候选池同时包含外部文档 chunk 和经验 chunk，不做"经验 vs 知识"分流；fallback 路由还专门设计成"置信度不足就全库搜"，优先保 recall。
+>
+> 1. **默认混合检索**——一次 `knowledge_search` 的候选池同时包含外部文档 chunk 和经验 chunk，不做"经验 vs 知识"分流；fallback 路由还专门设计成"置信度不足就全库搜"，优先保 recall。
 > 2. **可以"分"**——`tags` 过滤参数（knowledge.py:1125）能精确按 `tags=["experience"]` 只搜经验，或按 `source_dir`/`mime_type`/`parser`/`chapter_numbers` 等元数据圈定范围。
-> 3. ​**记忆不参与这个检索**​——记忆走的是旁路的 sideQuery 语义挑选，两条链路完全独立；你永远不会在 `knowledge_search` 结果里看到 memory 文件。
-> 
+> 3. **记忆不参与这个检索**——记忆走的是旁路的 sideQuery 语义挑选，两条链路完全独立；你永远不会在 `knowledge_search` 结果里看到 memory 文件。
+>
 > 一张图收尾：
-> 
-> 
+>
+>
 > ```
 >                ┌── Memory (无向量库)── frontmatter type 打标
 >                │        └─ sideQuery + MEMORY.md 索引 → 注入 system-reminder
@@ -512,35 +512,35 @@ HNSW 上的强过滤也有代价：在海量图谱里只保留少数租户标签
 
 
 > **角色扮演**
-> 
+>
 > 角色设定用于约束模型采用的专业视角和表达方式。例如，“你是一位专注于性能优化的 Java 架构师”比“你是 AI”多出了领域和任务倾向。
-> 
+>
 > 角色本身不能补足缺失的业务背景或输出格式。长对话中加入大量无关内容后，早期角色设定的影响也会减弱；复杂任务应控制历史上下文，或在新会话中重新提供必要条件。
-> 
+>
 > **思维链（Chain-of-Thought，CoT）**
-> 
+>
 > CoT 适用于数学计算、逻辑推理和多步骤分析等需要显式检查过程的任务。
-> 
+>
 > 普通模型可以要求给出简要推理步骤，但 reasoning model 不一定会暴露完整内部推理链。工程中更适合要求输出关键依据、检查步骤和最终结论；调试时据此核对变量、证据和可能出错的步骤即可。
-> 
+>
 > **少样本学习**
-> 
+>
 > 复杂任务或者格式严格的任务，给 1-3 个示例，通常比一大段文字说明更管用。
-> 
+>
 > 示例会告诉模型“输出应该长什么样”。这比单纯说“请输出 JSON”更直观。
-> 
+>
 > **任务分解**
-> 
+>
 > 复杂任务可以拆成多个输入、输出都能单独检查的子任务。这样某一步出错时，可以定位到对应步骤，而不必重写整条任务链。
-> 
+>
 > **结构化输出**
-> 
+>
 > 固定格式的输出要先定义 Schema，包括字段、类型和枚举值等约束。
-> 
+>
 > **原生结构化输出**
-> 
+>
 > 除了用 Prompt 引导格式，现在很多模型也支持原生结构化输出。
-> 
+>
 > 原生结构化输出通常会把 Schema 作为 API 参数传入，由模型服务或框架层做约束，比单纯自然语言要求更可靠。
 
 **Prompt 注入攻击**
@@ -550,22 +550,22 @@ Prompt 注入（Prompt Injection）指攻击者把恶意指令放进模型可见
 **三层防护**
 
 > 最底层是**权限控制**。Agent 的**代码执行环境要和宿主机隔离，可以用 Docker 或 WebAssembly **沙箱。API Key、数据库权限也要尽量收窄。危险操作需要额外授权，不能默认放开。
-> 
+>
 > 中间一层是**把 System Prompt 和 User Input 分开**。不可信内容要用分隔符包起来，比如：
-> 
+>
 > ```text
 > ---USER_CONTENT_START---
 > {{content}}
 > ---USER_CONTENT_END---
 > ```
-> 
+>
 > 这样可以明确告诉模型：这段是用户输入，不是系统指令。
-> 
+>
 > 分隔符只能帮助模型区分内容边界，无法在安全层面阻止危险操作。带副作用的工具必须在代码层完成鉴权、参数校验、沙箱隔离和人工确认。
-> 
+>
 > 修改数据库、发送邮件、转账等**高危操作应在执行前中断流程并请求审批，得到授权后才继续调用工具。**
-> 
-> 
+>
+>
 
 越狱和提示词注入需要覆盖输入与执行两个阶段。输入阶段可筛查已知攻击语句和危险工具调用意图；执行阶段则由权限控制、沙箱隔离和人工审批限制实际影响范围。
 
@@ -574,7 +574,7 @@ Prompt 注入（Prompt Injection）指攻击者把恶意指令放进模型可见
 单条 Prompt 只能约束当前输入。Agent 进行多轮推理、调用工具和读取记忆时，模型还会看到历史消息、工具结果和检索材料。Context Engineering 负责从这些可用信息中选择内容，并将其组织进有限的上下文窗口。
 
 > 上下文窗口能装下更多资料，不代表 Agent 会稳定利用这些资料。一次调用里混入过期状态、无关日志或几十个相似工具描述后，模型仍可能漏掉真正影响决策的条件。
-> 
+>
 > Context Engineering 处理的就是调用前的信息组装：哪些规则进入消息，哪些证据按需检索，哪些工具在当前阶段可见，历史何时压缩，原始结果如何保留引用。长任务还要处理跨窗口的状态交接，避免摘要后丢失约束、版本号和未完成事项。
 
 
@@ -587,28 +587,28 @@ Prompt Engineering 处理指令的写法；Context Engineering 决定一轮调�
 **Context Engineering 具体管理什么**
 
 > System Prompt 是 API 消息里的高优先级指令。`.cursor/rules`、`.claude/rules`、`AGENTS.md` 等文件是宿主程序读取的规则来源，宿主会按自己的加载规则把其中一部分转换成模型上下文；它们和 API 角色意义上的 System Prompt 不是同一个概念。Cursor 早期使用的 `.cursorrules` 已属于旧版形式，新项目应使用 `.cursor/rules`。
-> 
+>
 > User Prompt 是用户输入的业务数据和指令。看起来简单，但真实项目里经常会混着自然语言、业务字段、历史状态、附件内容，处理不好就会把上下文搞脏。
-> 
+>
 > Memory 这块分短期和长期。短期记忆一般是 Session 内的滑动窗口，长期记忆不一定就是向量库——文件、KV、关系库、图数据库、向量检索层都可以。关键问题是：记录什么、什么时候写入、怎么更新、怎么遗忘、召回之后怎么进入当前上下文。
-> 
+>
 > RAG & Tools 也算。RAG 负责检索外部文档把相关内容塞进上下文，Tools 负责把工具描述、参数格式、调用结果挂载进去。RAG 其实可以看成 Context Engineering 的一种具体实现——它回答的是“检索什么、怎么检索、结果怎么放进上下文”这几个问题。
-> 
+>
 > JSON Schema、Function Calling 的参数结构和返回约束会限制当前调用，因此也属于上下文的一部分。工具调用后的 Observation 则要区分：保留原文、写入摘要，还是在后续轮次清理；若不提前设计，解析和回放阶段会留下大量难以处理的结果。
-> 
+>
 > 摘要压缩、历史剔除和 Context Caching 都属于 Token 管理手段。它们需要在信息保留与调用成本之间取舍。
- 
+
 **上下文为什么会失效？**
 
 窗口不是越大越好：边际收益递减
 
-> ​**Lost in the Middle**​——模型对开头和结尾的信息更敏感，对夹在中间的东西更容易“看漏”。所以有时候你明明把资料给它了，它还是答错，不一定是没读到，而是关键内容在长上下文里不够显眼。
+> **Lost in the Middle**——模型对开头和结尾的信息更敏感，对夹在中间的东西更容易“看漏”。所以有时候你明明把资料给它了，它还是答错，不一定是没读到，而是关键内容在长上下文里不够显眼。
 >*  关键结论放在中间时，模型更容易看漏。
 >*  上下文越长，候选信息越多，干扰项也越多，注意力就更容易被分散。
 >*  每个 Token 都要和其他 Token 计算注意力关系，Token 越多计算和筛选压力都会上来。不过现在很多长上下文模型会用稀疏注意力、分块、缓存、压缩这些方式来降低成本，所以也不能简单说上下文一长就一定变差。
 
 同样任务同样窗口大小，不同上下文结果有差异
-> 
+>
 > 不合理的上下文，大量噪声信息会导致上下文失效
 > 合理的上下文，高信噪比信息会产生更好的效果
 
@@ -636,19 +636,19 @@ Prompt Engineering 处理指令的写法；Context Engineering 决定一轮调�
 **Compaction：窗口快满时压缩历史**
 
 > 连续多轮任务会把早期判断、工具结果和当前目标同时留在消息历史中。接近窗口上限时，Compaction 将历史压缩为摘要，再以摘要和新消息继续执行，从而实现跨窗口衔接。
-> 
+>
 > Anthropic 介绍过 Claude Code 的一种实现思路：摘要保留架构决策、未解决 Bug 和关键实现细节，冗余工具结果则被移除；压缩后的上下文再配合最近访问的文件恢复任务状态。“5 个文件”是该文中的实现示例，具体保留范围应由任务和窗口预算决定。
 
 **Structured Note-taking：让 Agent 记笔记**
 
 > Structured Note-taking 是另一种处理长任务的方式。让 Agent 把关键进展写到外部文件里（比如 `NOTES.md`），上下文重置之后再读取这些笔记继续工作。
-> 
+>
 > 这个思路跟人类工程师写 to-do list、技术备忘是一样的道理。Claude Code 在长任务里会自动维护 to-do list，自定义 Agent 也可以在项目根目录维护 `NOTES.md`，记录当前进度、已知问题、下一步计划。
 
 **Sub-agent：别让一个 Agent 扛所有状态**
-> 
+>
 > 检索或代码阅读可以交给独立上下文中的 Sub-agent，主 Agent 只接收证据汇总。子 Agent 即使完成数万个 Token 的探索，返回主 Agent 的摘要通常约为 1000 到 2000 Token，详细搜索过程不会长期占用主窗口。
-> 
+>
 > 是否使用取决于任务能否拆分、子任务依赖关系，以及汇总时是否会丢失关键证据。
 
 三种方式可以这么选：
@@ -696,17 +696,6 @@ Dex Horthy 提到过 40% 到 60% 的上下文利用率经验区间，但这不�
 
 
 ###  什么是 Model Context Protocol (MCP)？和 Function Calling、Agent 什么关系？Agent Skills 是什么？和 Prompt、MCP 到底差在哪？
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
@@ -806,7 +795,7 @@ Dex Horthy 提到过 40% 到 60% 的上下文利用率经验区间，但这不�
 
 
 ---
-面试问题 
+面试问题
 
 
 * Harness Engineering 是什么？它和 Prompt Engineering、Context Engineering 有什么关系？

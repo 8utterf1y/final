@@ -14,17 +14,24 @@ from pathlib import Path
 
 from .memory import get_memory_dir
 from .frontmatter import parse_frontmatter
+from .experience import execute_experience_search, execute_experience_show
 from .knowledge import execute_knowledge_search
 
 # ─── Permission modes ──────────────────────────────────────
 
 PermissionMode = str  # "default" | "plan" | "acceptEdits" | "bypassPermissions" | "dontAsk" | "auto"
 
-READ_TOOLS = {"read_file", "list_files", "grep_search", "web_fetch", "knowledge_search"}
+READ_TOOLS = {
+    "read_file", "list_files", "grep_search", "web_fetch", "knowledge_search",
+    "experience_search", "experience_show",
+}
 EDIT_TOOLS = {"write_file", "edit_file"}
 
 # Concurrency-safe tools can run in parallel (read-only, no side effects)
-CONCURRENCY_SAFE_TOOLS = {"read_file", "list_files", "grep_search", "web_fetch", "knowledge_search"}
+CONCURRENCY_SAFE_TOOLS = {
+    "read_file", "list_files", "grep_search", "web_fetch", "knowledge_search",
+    "experience_search", "experience_show",
+}
 
 IS_WIN = sys.platform == "win32"
 
@@ -177,6 +184,43 @@ tool_definitions: list[ToolDef] = [
                 },
             },
             "required": ["query"],
+        },
+        "deferred": True,
+    },
+    {
+        "name": "experience_search",
+        "description": (
+            "Search reusable project task experiences by symptoms, scenario, file patterns, "
+            "root cause, solution summary, and validation method. Returns compact candidate cards; "
+            "call experience_show with a returned ID before applying a workflow."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Current task, symptoms, errors, and relevant module names"},
+                "top_k": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5,
+                    "description": "Maximum candidate experience cards to return (default 3)",
+                },
+            },
+            "required": ["query"],
+        },
+        "deferred": True,
+    },
+    {
+        "name": "experience_show",
+        "description": (
+            "Read one complete reusable experience by ID after experience_search returns a relevant card. "
+            "Treat it as historical guidance and verify applicability against the current code."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "experience_id": {"type": "string", "description": "Experience ID returned by experience_search"},
+            },
+            "required": ["experience_id"],
         },
         "deferred": True,
     },
@@ -762,6 +806,12 @@ async def execute_tool(
 
     if name == "knowledge_search":
         return await execute_knowledge_search(inp)
+
+    if name == "experience_search":
+        return await execute_experience_search(inp)
+
+    if name == "experience_show":
+        return execute_experience_show(inp)
 
     handlers: dict = {
         "write_file": _write_file,

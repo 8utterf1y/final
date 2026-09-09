@@ -17,6 +17,7 @@ from mini_claude.experience import (  # noqa: E402
     summarize_tool_result,
     validate_experience_payload,
 )
+from mini_claude.experience_index import ExperienceIndex  # noqa: E402
 
 
 class ExperienceTests(unittest.TestCase):
@@ -130,9 +131,9 @@ class ExperienceTests(unittest.TestCase):
 
     def test_list_show_and_delete_entries_by_id(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            manager = ExperienceManager(TaskJournal("session"), project_root=Path(tmp))
-            manager.root = Path(tmp) / "experiences"
-            manager.root.mkdir()
+            index = ExperienceIndex(root=Path(tmp) / "experiences")
+            manager = ExperienceManager(TaskJournal("session"), project_root=Path(tmp), experience_index=index)
+            manager.root.mkdir(exist_ok=True)
             path = manager.root / "1700000000-fix-auth-test.md"
             path.write_text("# Fix auth test\n\nBody", encoding="utf-8")
 
@@ -150,9 +151,9 @@ class ExperienceTests(unittest.TestCase):
 
     def test_ambiguous_experience_id_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            manager = ExperienceManager(TaskJournal("session"), project_root=Path(tmp))
-            manager.root = Path(tmp) / "experiences"
-            manager.root.mkdir()
+            index = ExperienceIndex(root=Path(tmp) / "experiences")
+            manager = ExperienceManager(TaskJournal("session"), project_root=Path(tmp), experience_index=index)
+            manager.root.mkdir(exist_ok=True)
             (manager.root / "1700000000-fix-auth.md").write_text("# First", encoding="utf-8")
             (manager.root / "1700000001-fix-auth.md").write_text("# Second", encoding="utf-8")
 

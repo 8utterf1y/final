@@ -16,7 +16,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Awaitable, Callable, Any
 
-from .knowledge import KnowledgeDocument, get_knowledge_store
+from .experience_index import (
+    ExperienceCard,
+    ExperienceIndex,
+    format_experience_body,
+    format_experience_hits,
+)
 
 
 MAX_TEXT_CHARS = 1200
@@ -48,7 +53,7 @@ class TaskEvent:
 class ExperienceSaveResult:
     status: str
     title: str
-    document: KnowledgeDocument | None
+    card: ExperienceCard | None
     path: Path | None
     action: str
     quality_score: int
@@ -61,14 +66,14 @@ class ExperienceEntry:
     id: str
     path: Path
     title: str
-    document_id: str | None = None
+    card_id: str | None = None
 
 
 @dataclass(frozen=True)
 class ExperienceDeleteResult:
     deleted: bool
     entry: ExperienceEntry | None
-    knowledge_removed: bool = False
+    index_removed: bool = False
     warnings: tuple[str, ...] = ()
 
 
@@ -128,10 +133,18 @@ class TaskJournal:
 
 
 class ExperienceManager:
-    def __init__(self, journal: TaskJournal, *, project_root: Path | None = None) -> None:
+    def __init__(
+        self,
+        journal: TaskJournal,
+        *,
+        project_root: Path | None = None,
+        experience_index: ExperienceIndex | None = None,
+    ) -> None:
         self.journal = journal
         self.project_root = (project_root or Path.cwd()).resolve()
-        self.root = Path.home() / ".mini-claude" / "projects" / _project_hash(self.project_root) / "experiences"
+        default_root = Path.home() / ".mini-claude" / "projects" / _project_hash(self.project_root) / "experiences"
+        self.root = experience_index.root if experience_index else default_root
+        self.index = experience_index or ExperienceIndex(root=self.root)
 
     async def save(
         self,
@@ -144,7 +157,7 @@ class ExperienceManager:
             return ExperienceSaveResult(
                 status="skipped",
                 title="No reusable experience detected",
-                document=None,
+                card=None,
                 path=None,
                 action="skip",
                 quality_score=0,
@@ -170,7 +183,7 @@ class ExperienceManager:
             return ExperienceSaveResult(
                 status="skipped",
                 title=normalized["title"],
-                document=None,
+                card=None,
                 path=None,
                 action="skip",
                 quality_score=normalized["quality_score"],
@@ -184,12 +197,16 @@ class ExperienceManager:
             normalized["related_versions"] = [path.name for path in related_versions[:5]]
         markdown = render_experience_markdown(normalized)
         path = self._write_markdown(normalized["title"], markdown)
-        document = await get_knowledge_store().add_document(str(path))
+        try:
+            card = await self.index.upsert(_experience_id(path), path, normalized)
+        except Exception:
+            path.unlink(missing_ok=True)
+            raise
         self.journal.checkpoint()
         return ExperienceSaveResult(
             status="saved",
             title=normalized["title"],
-            document=document,
+            card=card,
             path=path,
             action=normalized["persistence_action"],
             quality_score=normalized["quality_score"],
@@ -200,7 +217,7 @@ class ExperienceManager:
     def _write_markdown(self, title: str, markdown: str) -> Path:
         self.root.mkdir(parents=True, exist_ok=True)
         filename = _slugify(title)[:80] or "experience"
-        final_path = self.root / f"{int(time.time())}-{filename}.md"
+        final_path = self.root / f"{time.time_ns()}-{filename}.md"
         fd, tmp_name = tempfile.mkstemp(prefix=".experience-", suffix=".md", dir=str(self.root))
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
             handle.write(markdown)
@@ -216,21 +233,13 @@ class ExperienceManager:
     def list_entries(self) -> list[ExperienceEntry]:
         if not self.root.exists():
             return []
-        try:
-            store = get_knowledge_store()
-            documents = {
-                str(Path(doc.source_path).expanduser().resolve()): doc.id
-                for doc in store.list_documents()
-                if "experience" in doc.tags
-            }
-        except Exception:
-            documents = {}
+        cards = {str(Path(card.path).resolve()): card.id for card in self.index.list_cards()}
         return [
             ExperienceEntry(
                 id=_experience_id(path),
                 path=path,
                 title=_read_markdown_title(path),
-                document_id=documents.get(str(path.resolve())),
+                card_id=cards.get(str(path.resolve())),
             )
             for path in sorted(self.root.glob("*.md"), reverse=True)
         ]
@@ -251,11 +260,9 @@ class ExperienceManager:
     def delete_entry(self, raw_id: str) -> ExperienceDeleteResult:
         entry = self.get_entry(raw_id)
         warnings: list[str] = []
-        knowledge_removed = False
-        if entry.document_id:
-            knowledge_removed = get_knowledge_store().remove_document(entry.document_id)
-            if not knowledge_removed:
-                warnings.append(f"Knowledge document not found: {entry.document_id}")
+        index_removed = self.index.remove(entry.card_id or entry.id)
+        if entry.card_id and not index_removed:
+            warnings.append(f"Experience card not found: {entry.card_id}")
         try:
             entry.path.unlink()
         except FileNotFoundError:
@@ -263,7 +270,7 @@ class ExperienceManager:
         return ExperienceDeleteResult(
             deleted=True,
             entry=entry,
-            knowledge_removed=knowledge_removed,
+            index_removed=index_removed,
             warnings=tuple(warnings),
         )
 
@@ -275,7 +282,7 @@ class ExperienceManager:
         exact = [
             entry for entry in entries
             if query in {entry.id, entry.path.name, entry.path.stem}
-            or (entry.document_id and query == entry.document_id)
+            or (entry.card_id and query == entry.card_id)
         ]
         if exact:
             return exact
@@ -293,6 +300,7 @@ Return one JSON object only. Do not invent evidence.
 Required JSON shape:
 {
   "title": "short reusable title",
+  "description": "one concise retrieval description covering when to use it, key symptoms, file patterns, and validation commands",
   "persistence_action": "create|merge|skip",
   "start_turn_id": 1,
   "end_turn_id": 2,
@@ -380,6 +388,7 @@ def validate_experience_payload(payload: dict[str, Any], events: list[TaskEvent]
     payload["related_file_patterns"] = _clean_list(payload.get("related_file_patterns"), limit=12)
     payload["retrieval_queries"] = _clean_list(payload.get("retrieval_queries"), limit=8)
     payload["tags"] = _normalize_tags(payload.get("tags"))
+    payload["description"] = _experience_description(payload)
 
     referenced = _referenced_event_ids(payload)
     missing = sorted(event_id for event_id in referenced if event_id not in event_by_id)
@@ -422,15 +431,22 @@ def score_experience(events: list[TaskEvent], payload: dict[str, Any]) -> int:
 def render_experience_markdown(payload: dict[str, Any]) -> str:
     tags = _normalize_tags(payload.get("tags"))
     title = _clean_scalar(payload.get("title")) or "Reusable coding experience"
+    description = _experience_description(payload)
     lines = [
         "---",
         f"title: {json.dumps(title, ensure_ascii=False)}",
         "tags:",
         *[f"  - {tag}" for tag in tags],
-        f"description: {json.dumps(_frontmatter_description(payload), ensure_ascii=False)}",
+        f"description: {json.dumps(description, ensure_ascii=False)}",
         "---",
         "",
         f"# {title}",
+        "",
+        "## Description",
+        "",
+        description,
+        "",
+        "## Content",
         "",
         "## Scenario",
         _bullets(payload["scenario"].get("applies_when"), "Applies when"),
@@ -489,7 +505,7 @@ def _fallback_payload(events: list[TaskEvent]) -> dict[str, Any]:
         if event.tool_input and event.tool_input.get("file_path")
     })[:8]
     commands = [event.summary for event in tool_events if event.tool_name == "run_shell"][:3]
-    return {
+    payload = {
         "title": "Recovered coding workflow",
         "persistence_action": "create",
         "start_turn_id": turns[0] if turns else 0,
@@ -527,6 +543,8 @@ def _fallback_payload(events: list[TaskEvent]) -> dict[str, Any]:
         "retrieval_queries": files + [event.summary for event in events if event.event_type == "user_message"][:2],
         "tags": ["experience", "coding-agent", "unverified"],
     }
+    payload["description"] = _experience_description(payload)
+    return payload
 
 
 def _has_substantive_activity(events: list[TaskEvent]) -> bool:
@@ -729,8 +747,37 @@ def _bullets(values: object, label: str) -> str:
 
 
 def _frontmatter_description(payload: dict[str, Any]) -> str:
-    applies = _clean_list(payload.get("scenario", {}).get("applies_when"), limit=1)
-    return applies[0] if applies else _clean_scalar(payload.get("problem", {}).get("goal"))
+    return _experience_description(payload)
+
+
+def _experience_description(payload: dict[str, Any]) -> str:
+    explicit = _clean_scalar(payload.get("description"))
+    if explicit:
+        return explicit
+    scenario = payload.get("scenario") or {}
+    problem = payload.get("problem") or {}
+    validation = payload.get("validation") or []
+    parts: list[str] = []
+    applies = _clean_list(scenario.get("applies_when"), limit=2)
+    signals = _clean_list(scenario.get("signals"), limit=3) + _clean_list(problem.get("symptoms"), limit=2)
+    files = _clean_list(payload.get("related_file_patterns"), limit=4)
+    commands = [
+        _clean_scalar(item.get("method"))
+        for item in validation[:3]
+        if isinstance(item, dict) and item.get("method")
+    ]
+    goal = _clean_scalar(problem.get("goal"))
+    if applies:
+        parts.append("Applies when " + "; ".join(applies))
+    elif goal:
+        parts.append("Goal: " + goal)
+    if signals:
+        parts.append("Signals: " + "; ".join(signals[:4]))
+    if files:
+        parts.append("Files: " + "; ".join(files))
+    if commands:
+        parts.append("Validate with " + "; ".join(commands))
+    return _summarize_text(" ".join(parts) or _clean_scalar(payload.get("title")) or "Reusable coding experience.", 900)
 
 
 def _coerce_int(value: object, default: int) -> int:
@@ -769,3 +816,59 @@ def _project_hash(path: Path) -> str:
     import hashlib
 
     return hashlib.sha256(str(path.resolve()).encode()).hexdigest()[:16]
+
+
+_default_experience_manager: ExperienceManager | None = None
+_default_experience_project: Path | None = None
+
+
+def get_experience_manager() -> ExperienceManager:
+    global _default_experience_manager, _default_experience_project
+    project = Path.cwd().resolve()
+    if _default_experience_manager is None or _default_experience_project != project:
+        _default_experience_manager = ExperienceManager(TaskJournal("experience-tools"), project_root=project)
+        _default_experience_project = project
+    return _default_experience_manager
+
+
+def build_experience_prompt_section() -> str:
+    try:
+        manager = get_experience_manager()
+        if not manager.root.exists():
+            return ""
+        return manager.index.build_manifest()
+    except Exception:
+        return ""
+
+
+async def execute_experience_search(inp: dict[str, Any]) -> str:
+    query = str(inp.get("query") or "").strip()
+    if not query:
+        return "Error: experience_search requires a non-empty query."
+    try:
+        top_k = int(inp.get("top_k", 3))
+    except (TypeError, ValueError):
+        return "Error: experience_search top_k must be an integer."
+    manager = get_experience_manager()
+    hits = await manager.index.search(query, top_k=top_k)
+    return format_experience_hits(query, hits)
+
+
+def execute_experience_show(inp: dict[str, Any]) -> str:
+    experience_id = str(inp.get("experience_id") or "").strip()
+    if not experience_id:
+        return "Error: experience_show requires an experience_id."
+    manager = get_experience_manager()
+    try:
+        entry, content = manager.read_entry(experience_id)
+    except (OSError, ValueError) as exc:
+        return f"Error: {exc}"
+    card = manager.index.get(entry.card_id or entry.id)
+    if card is None:
+        return (
+            f'<experience id="{entry.id}" untrusted="true">\n'
+            "This historical experience has no retrieval card. Verify it against the current code before reuse.\n"
+            f"Source: {entry.path}\n\n{content.replace('</experience>', '&lt;/experience&gt;')}\n"
+            "</experience>"
+        )
+    return format_experience_body(card, content)

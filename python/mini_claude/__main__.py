@@ -248,9 +248,9 @@ async def run_repl(agent: Agent) -> None:
                     result = await agent.save_experience(from_turn=_parse_optional_from_turn(parts))
                     if result.status == "saved":
                         scope = f"turns {result.scope[0]}-{result.scope[1]}" if result.scope else "selected scope"
-                        doc = f", indexed as {result.document.id}" if result.document else ""
+                        card = f", card={result.card.id}" if result.card else ""
                         print_info(
-                            f"Experience saved: {result.title} ({scope}, score {result.quality_score}{doc})"
+                            f"Experience saved: {result.title} ({scope}, score {result.quality_score}{card})"
                         )
                         if result.path:
                             print(f"    {result.path}")
@@ -267,8 +267,8 @@ async def run_repl(agent: Agent) -> None:
                     else:
                         print_info(f"{len(entries)} saved experiences:")
                         for entry in entries[:20]:
-                            doc = f"  kb={entry.document_id}" if entry.document_id else ""
-                            print(f"    {entry.id}  {entry.title}{doc}")
+                            card = f"  card={entry.card_id}" if entry.card_id else "  unindexed"
+                            print(f"    {entry.id}  {entry.title}{card}")
                 elif action == "show":
                     if len(parts) != 3:
                         print_error("Usage: /experience show <id>")
@@ -282,8 +282,8 @@ async def run_repl(agent: Agent) -> None:
                     else:
                         result = agent.experience_manager.delete_entry(parts[2])
                         if result.deleted and result.entry:
-                            kb = " and knowledge index" if result.knowledge_removed else ""
-                            print_info(f"Deleted experience {result.entry.id}{kb}.")
+                            index = " and card index" if result.index_removed else ""
+                            print_info(f"Deleted experience {result.entry.id}{index}.")
                             agent.refresh_dynamic_system_context()
                         for warning in result.warnings:
                             print(f"    Warning: {warning}")
